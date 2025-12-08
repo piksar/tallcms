@@ -96,6 +96,11 @@ php artisan queue:work
 - Tailwind CSS configured with Vite plugin
 - Hot reload available during development
 
+### Development Guidelines
+- **Tailwind CSS**: Always use utility classes when building blocks and themes
+- **Native Approach**: Stay as native to Tailwind as possible, avoiding custom CSS
+- **Utility-First**: Prefer Tailwind utilities for styling consistency and maintainability
+
 ### Testing Environment
 - Uses array drivers for cache and session during tests
 - Database automatically resets between tests
