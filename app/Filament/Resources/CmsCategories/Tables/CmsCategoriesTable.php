@@ -19,8 +19,7 @@ class CmsCategoriesTable
         return $table
             ->columns([
                 ColorColumn::make('color')
-                    ->label('Color')
-                    ->size(30),
+                    ->label('Color'),
                     
                 TextColumn::make('name')
                     ->searchable()
