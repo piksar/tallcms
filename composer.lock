@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d06fce5a31d9da3c576b967652ed06de",
+    "content-hash": "fcff1aa40d20a6caa9da5803b4c1e50a",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -511,6 +511,77 @@
             "time": "2024-07-16T11:13:48+00:00"
         },
         {
+            "name": "codewithdennis/filament-select-tree",
+            "version": "v4.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CodeWithDennis/filament-select-tree.git",
+                "reference": "89e782165519823019e6e7594434cbacbe55688a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CodeWithDennis/filament-select-tree/zipball/89e782165519823019e6e7594434cbacbe55688a",
+                "reference": "89e782165519823019e6e7594434cbacbe55688a",
+                "shasum": ""
+            },
+            "require": {
+                "filament/forms": "^4.0",
+                "illuminate/contracts": "^10.0|^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^7.9||^8.0",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.7",
+                "pestphp/pest-plugin-arch": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CodeWithDennis\\FilamentSelectTree\\FilamentSelectTreeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CodeWithDennis\\FilamentSelectTree\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CodeWithDennis",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The multi-level select field enables you to make single selections from a predefined list of options that are organized into multiple levels or depths.",
+            "homepage": "https://github.com/codewithdennis/filament-select-tree",
+            "keywords": [
+                "CodeWithDennis",
+                "filament",
+                "filament-select-tree",
+                "laravel",
+                "tree"
+            ],
+            "support": {
+                "issues": "https://github.com/codewithdennis/filament-select-tree/issues",
+                "source": "https://github.com/codewithdennis/filament-select-tree"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/CodeWithDennis",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-10-26T15:25:43+00:00"
+        },
+        {
             "name": "danharrin/date-format-converter",
             "version": "v0.3.1",
             "source": {
@@ -990,16 +1061,16 @@
         },
         {
             "name": "filament/actions",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/actions.git",
-                "reference": "3dbe8d3f4dad4865923213bc04f76c45cb1579a5"
+                "reference": "8c436949d3fa5cc79a2aeb0b6d1741c5555e9d33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/actions/zipball/3dbe8d3f4dad4865923213bc04f76c45cb1579a5",
-                "reference": "3dbe8d3f4dad4865923213bc04f76c45cb1579a5",
+                "url": "https://api.github.com/repos/filamentphp/actions/zipball/8c436949d3fa5cc79a2aeb0b6d1741c5555e9d33",
+                "reference": "8c436949d3fa5cc79a2aeb0b6d1741c5555e9d33",
                 "shasum": ""
             },
             "require": {
@@ -1035,20 +1106,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-12-05T14:48:49+00:00"
+            "time": "2025-12-09T09:55:17+00:00"
         },
         {
             "name": "filament/filament",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/panels.git",
-                "reference": "61432a1c42c81e14a8af6a506450a49e02125ef5"
+                "reference": "2387e41380a304c411d420b17e965e11a8e24711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/panels/zipball/61432a1c42c81e14a8af6a506450a49e02125ef5",
-                "reference": "61432a1c42c81e14a8af6a506450a49e02125ef5",
+                "url": "https://api.github.com/repos/filamentphp/panels/zipball/2387e41380a304c411d420b17e965e11a8e24711",
+                "reference": "2387e41380a304c411d420b17e965e11a8e24711",
                 "shasum": ""
             },
             "require": {
@@ -1092,20 +1163,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-12-05T14:50:15+00:00"
+            "time": "2025-12-09T09:56:39+00:00"
         },
         {
             "name": "filament/forms",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
-                "reference": "eb7b20c4f09d8747cd6c08e980b672e60742b0f8"
+                "reference": "6f4843f45906e0583997d2543fb747e07720a774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/forms/zipball/eb7b20c4f09d8747cd6c08e980b672e60742b0f8",
-                "reference": "eb7b20c4f09d8747cd6c08e980b672e60742b0f8",
+                "url": "https://api.github.com/repos/filamentphp/forms/zipball/6f4843f45906e0583997d2543fb747e07720a774",
+                "reference": "6f4843f45906e0583997d2543fb747e07720a774",
                 "shasum": ""
             },
             "require": {
@@ -1142,11 +1213,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-12-05T14:53:39+00:00"
+            "time": "2025-12-09T09:53:27+00:00"
         },
         {
             "name": "filament/infolists",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/infolists.git",
@@ -1191,7 +1262,7 @@
         },
         {
             "name": "filament/notifications",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
@@ -1238,16 +1309,16 @@
         },
         {
             "name": "filament/query-builder",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/query-builder.git",
-                "reference": "0a21bf8bcacfad44cf0cd00b92f83dfb8c402714"
+                "reference": "2f7e138801e7630c56a7588651497a7f468a9149"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/query-builder/zipball/0a21bf8bcacfad44cf0cd00b92f83dfb8c402714",
-                "reference": "0a21bf8bcacfad44cf0cd00b92f83dfb8c402714",
+                "url": "https://api.github.com/repos/filamentphp/query-builder/zipball/2f7e138801e7630c56a7588651497a7f468a9149",
+                "reference": "2f7e138801e7630c56a7588651497a7f468a9149",
                 "shasum": ""
             },
             "require": {
@@ -1280,11 +1351,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-12-05T14:53:02+00:00"
+            "time": "2025-12-09T09:54:30+00:00"
         },
         {
             "name": "filament/schemas",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/schemas.git",
@@ -1329,7 +1400,7 @@
         },
         {
             "name": "filament/support",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
@@ -1387,16 +1458,16 @@
         },
         {
             "name": "filament/tables",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
-                "reference": "ef34c7026936d0d0f33e087d1dc25a23768b1af5"
+                "reference": "93227775fff27b0662c5f82e2e7ca6ad20cdf42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/tables/zipball/ef34c7026936d0d0f33e087d1dc25a23768b1af5",
-                "reference": "ef34c7026936d0d0f33e087d1dc25a23768b1af5",
+                "url": "https://api.github.com/repos/filamentphp/tables/zipball/93227775fff27b0662c5f82e2e7ca6ad20cdf42c",
+                "reference": "93227775fff27b0662c5f82e2e7ca6ad20cdf42c",
                 "shasum": ""
             },
             "require": {
@@ -1429,20 +1500,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-12-05T14:53:40+00:00"
+            "time": "2025-12-09T09:54:45+00:00"
         },
         {
             "name": "filament/widgets",
-            "version": "v4.3.0",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/widgets.git",
-                "reference": "495409437dfcd524313dcd6d605b97298fc487b2"
+                "reference": "555102cf4aea7f24977d24dd36f4bad0f7be528c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/widgets/zipball/495409437dfcd524313dcd6d605b97298fc487b2",
-                "reference": "495409437dfcd524313dcd6d605b97298fc487b2",
+                "url": "https://api.github.com/repos/filamentphp/widgets/zipball/555102cf4aea7f24977d24dd36f4bad0f7be528c",
+                "reference": "555102cf4aea7f24977d24dd36f4bad0f7be528c",
                 "shasum": ""
             },
             "require": {
@@ -1473,7 +1544,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-11-28T11:22:05+00:00"
+            "time": "2025-12-09T09:56:57+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -2018,6 +2089,69 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "kalnoy/nestedset",
+            "version": "v6.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lazychaser/laravel-nestedset.git",
+                "reference": "3cfc56a9759fb592bc903056166bfc0867f9e679"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lazychaser/laravel-nestedset/zipball/3cfc56a9759fb592bc903056166bfc0867f9e679",
+                "reference": "3cfc56a9759fb592bc903056166bfc0867f9e679",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/events": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "7.*|8.*|9.*|^10.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kalnoy\\Nestedset\\NestedSetServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "v5.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kalnoy\\Nestedset\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Kalnoy",
+                    "email": "lazychaser@gmail.com"
+                }
+            ],
+            "description": "Nested Set Model for Laravel 5.7 and up",
+            "keywords": [
+                "database",
+                "hierarchy",
+                "laravel",
+                "nested sets",
+                "nsm"
+            ],
+            "support": {
+                "issues": "https://github.com/lazychaser/laravel-nestedset/issues",
+                "source": "https://github.com/lazychaser/laravel-nestedset/tree/v6.0.6"
+            },
+            "time": "2025-04-22T19:38:02+00:00"
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
@@ -2957,20 +3091,20 @@
         },
         {
             "name": "league/uri",
-            "version": "7.6.0",
+            "version": "7.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri.git",
-                "reference": "f625804987a0a9112d954f9209d91fec52182344"
+                "reference": "8d587cddee53490f9b82bf203d3a9aa7ea4f9807"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri/zipball/f625804987a0a9112d954f9209d91fec52182344",
-                "reference": "f625804987a0a9112d954f9209d91fec52182344",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/8d587cddee53490f9b82bf203d3a9aa7ea4f9807",
+                "reference": "8d587cddee53490f9b82bf203d3a9aa7ea4f9807",
                 "shasum": ""
             },
             "require": {
-                "league/uri-interfaces": "^7.6",
+                "league/uri-interfaces": "^7.7",
                 "php": "^8.1",
                 "psr/http-factory": "^1"
             },
@@ -3043,7 +3177,7 @@
                 "docs": "https://uri.thephpleague.com",
                 "forum": "https://thephpleague.slack.com",
                 "issues": "https://github.com/thephpleague/uri-src/issues",
-                "source": "https://github.com/thephpleague/uri/tree/7.6.0"
+                "source": "https://github.com/thephpleague/uri/tree/7.7.0"
             },
             "funding": [
                 {
@@ -3051,24 +3185,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-18T12:17:23+00:00"
+            "time": "2025-12-07T16:02:06+00:00"
         },
         {
             "name": "league/uri-components",
-            "version": "7.6.0",
+            "version": "7.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri-components.git",
-                "reference": "ffa1215dbee72ee4b7bc08d983d25293812456c2"
+                "reference": "005f8693ce8c1f16f80e88a05cbf08da04c1c374"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri-components/zipball/ffa1215dbee72ee4b7bc08d983d25293812456c2",
-                "reference": "ffa1215dbee72ee4b7bc08d983d25293812456c2",
+                "url": "https://api.github.com/repos/thephpleague/uri-components/zipball/005f8693ce8c1f16f80e88a05cbf08da04c1c374",
+                "reference": "005f8693ce8c1f16f80e88a05cbf08da04c1c374",
                 "shasum": ""
             },
             "require": {
-                "league/uri": "^7.6",
+                "league/uri": "^7.7",
                 "php": "^8.1"
             },
             "suggest": {
@@ -3128,7 +3262,7 @@
                 "docs": "https://uri.thephpleague.com",
                 "forum": "https://thephpleague.slack.com",
                 "issues": "https://github.com/thephpleague/uri-src/issues",
-                "source": "https://github.com/thephpleague/uri-components/tree/7.6.0"
+                "source": "https://github.com/thephpleague/uri-components/tree/7.7.0"
             },
             "funding": [
                 {
@@ -3136,20 +3270,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-18T12:17:23+00:00"
+            "time": "2025-12-07T16:02:56+00:00"
         },
         {
             "name": "league/uri-interfaces",
-            "version": "7.6.0",
+            "version": "7.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri-interfaces.git",
-                "reference": "ccbfb51c0445298e7e0b7f4481b942f589665368"
+                "reference": "62ccc1a0435e1c54e10ee6022df28d6c04c2946c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/ccbfb51c0445298e7e0b7f4481b942f589665368",
-                "reference": "ccbfb51c0445298e7e0b7f4481b942f589665368",
+                "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/62ccc1a0435e1c54e10ee6022df28d6c04c2946c",
+                "reference": "62ccc1a0435e1c54e10ee6022df28d6c04c2946c",
                 "shasum": ""
             },
             "require": {
@@ -3212,7 +3346,7 @@
                 "docs": "https://uri.thephpleague.com",
                 "forum": "https://thephpleague.slack.com",
                 "issues": "https://github.com/thephpleague/uri-src/issues",
-                "source": "https://github.com/thephpleague/uri-interfaces/tree/7.6.0"
+                "source": "https://github.com/thephpleague/uri-interfaces/tree/7.7.0"
             },
             "funding": [
                 {
@@ -3220,7 +3354,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-18T12:17:23+00:00"
+            "time": "2025-12-07T16:03:21+00:00"
         },
         {
             "name": "livewire/livewire",
@@ -8186,6 +8320,90 @@
                 }
             ],
             "time": "2024-11-21T01:49:47+00:00"
+        },
+        {
+            "name": "wsmallnews/filament-nestedset",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wsmallnews/filament-nestedset.git",
+                "reference": "66c84878b0383df1a8c955ea2763b87c45cbc2b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wsmallnews/filament-nestedset/zipball/66c84878b0383df1a8c955ea2763b87c45cbc2b4",
+                "reference": "66c84878b0383df1a8c955ea2763b87c45cbc2b4",
+                "shasum": ""
+            },
+            "require": {
+                "codewithdennis/filament-select-tree": "^4.0",
+                "filament/filament": "^4.0",
+                "kalnoy/nestedset": "^6.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wsmallnews\\FilamentNestedset\\FilamentNestedsetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wsmallnews\\FilamentNestedset\\": "src/",
+                    "Wsmallnews\\FilamentNestedset\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "smallnews",
+                    "email": "1371606921@qq.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Filament nestedset build on kalnoy/nestedset",
+            "homepage": "https://github.com/wsmallnews/filament-nestedset",
+            "keywords": [
+                "Wsmallnews",
+                "filament",
+                "filament-nestedset",
+                "filament-plugin",
+                "filament-tree",
+                "laravel",
+                "nestedset",
+                "smallnews",
+                "tree"
+            ],
+            "support": {
+                "issues": "https://github.com/wsmallnews/filament-nestedset/issues",
+                "source": "https://github.com/wsmallnews/filament-nestedset"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Wsmallnews",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-17T08:17:12+00:00"
         }
     ],
     "packages-dev": [

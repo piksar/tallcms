@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('menu.url.resolver', \App\Services\MenuUrlResolver::class);
     }
 
     /**

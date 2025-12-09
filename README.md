@@ -28,6 +28,14 @@ A powerful, modern Content Management System built on the **TALL stack** (Tailwi
 - **Livewire Rendering** - dynamic, interactive page rendering
 - **SEO Optimized** - meta tags, Open Graph, Twitter Cards
 
+### 🧭 **Advanced Navigation System**
+- **Drag & Drop Menu Builder** - intuitive tree management with nested set architecture
+- **Multi-Menu Support** - header, footer, sidebar menus with tab-based editing
+- **SPA/Multi-Page Toggle** - site-level configuration for single-page or traditional navigation
+- **Smart URL Generation** - automatic URL resolution based on site type (/ vs # prefixes)
+- **Multiple Link Types** - page links, external URLs, custom URLs, headers, separators
+- **Visual Preview** - see complete menu structure with hierarchy indicators
+
 ### 🎯 **Developer Experience**
 - **TALL Stack Native** - leverages the full power of the stack
 - **Auto-Discovery** - blocks, pages, and content automatically registered
@@ -301,6 +309,37 @@ npm run dev
 - [ ] **E-commerce Blocks**: Shopping cart, product displays
 - [ ] **Analytics**: Built-in performance tracking
 
+## 🙏 Third-Party Plugins & Attribution
+
+TallCMS is built with love and powered by these amazing open-source packages:
+
+### 📦 **Core Dependencies**
+- **[Filament v4](https://filamentphp.com/)** - Modern admin panel framework
+- **[Laravel Framework](https://laravel.com/)** - The PHP framework for web artisans
+- **[Livewire](https://laravel-livewire.com/)** - Dynamic Laravel frontend framework
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Alpine.js](https://alpinejs.dev/)** - Lightweight JavaScript framework
+
+### 🌲 **Navigation & Tree Management**
+- **[wsmallnews/filament-nestedset](https://github.com/wsmallnews/filament-nestedset)** - Filament nested set plugin for drag-and-drop tree management
+- **[kalnoy/laravel-nestedset](https://github.com/lazychaser/laravel-nestedset)** - Laravel nested set implementation (used by filament-nestedset)
+
+### 🎨 **Rich Editor & Content**
+- **[FilamentTiptapEditor](https://filamentphp.com/plugins/awcodes-tiptap-editor)** - Rich text editor for Filament
+- **[TipTap](https://tiptap.dev/)** - Headless rich text editor
+
+### 🔧 **Development & Quality**
+- **[Laravel Pint](https://github.com/laravel/pint)** - Code style fixer
+- **[Laravel Sail](https://laravel.com/docs/sail)** - Docker development environment
+- **[PHPUnit](https://phpunit.de/)** - Testing framework
+
+### 🎯 **Special Thanks**
+- **[wsmallnews](https://github.com/wsmallnews)** for creating the excellent Filament nested set plugin that powers our navigation system
+- **[Filament Team](https://filamentphp.com/about)** for building an incredible admin framework
+- **Laravel Community** for continuous innovation and support
+
+---
+
 ## 📄 License
 
 TallCMS is open-sourced software licensed under the [MIT license](LICENSE).
@@ -310,3 +349,6 @@ TallCMS is open-sourced software licensed under the [MIT license](LICENSE).
 **Built with ❤️ using the TALL stack**
 
 *Tailwind CSS • Alpine.js • Laravel • Livewire • Filament*
+
+### 🌟 **Special Recognition**
+*This project demonstrates the power of the open-source ecosystem. Every plugin and package listed above contributes to making TallCMS possible.*

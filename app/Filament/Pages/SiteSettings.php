@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\SiteSetting;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -22,6 +23,11 @@ class SiteSettings extends Page implements HasForms
 
     public ?array $data = [];
 
+     public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-cog-8-tooth';
+    }
+
     public function mount(): void
     {
         $this->form->fill([
@@ -30,6 +36,7 @@ class SiteSettings extends Page implements HasForms
             'site_description' => SiteSetting::get('site_description'),
             'contact_email' => SiteSetting::get('contact_email'),
             'logo' => SiteSetting::get('logo'),
+            'site_type' => SiteSetting::get('site_type', 'multi-page'),
         ]);
     }
 
@@ -63,6 +70,16 @@ class SiteSettings extends Page implements HasForms
                 ->placeholder('hello@example.com')
                 ->helperText('Default email for contact forms'),
 
+            Select::make('site_type')
+                ->label('Site Type')
+                ->options([
+                    'multi-page' => 'Multi-Page Website',
+                    'single-page' => 'Single-Page Application (SPA)',
+                ])
+                ->default('multi-page')
+                ->required()
+                ->helperText('Multi-page: Traditional website with separate pages. SPA: One-page website with anchor navigation.'),
+
             FileUpload::make('logo')
                 ->label('Site Logo')
                 ->image()
@@ -91,7 +108,7 @@ class SiteSettings extends Page implements HasForms
                 };
                 
                 $group = match ($key) {
-                    'site_name', 'site_tagline', 'site_description' => 'general',
+                    'site_name', 'site_tagline', 'site_description', 'site_type' => 'general',
                     'contact_email' => 'contact',
                     'logo' => 'branding',
                     default => 'general',

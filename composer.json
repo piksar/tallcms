@@ -9,7 +9,8 @@
         "php": "^8.2",
         "filament/filament": "^4.0",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "wsmallnews/filament-nestedset": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -27,7 +28,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/SiteSettings.php"
+            "app/Helpers/SiteSettings.php",
+            "app/Helpers/MenuHelpers.php"
         ]
     },
     "autoload-dev": {
