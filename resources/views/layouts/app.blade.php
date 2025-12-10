@@ -48,20 +48,7 @@
                     </div>
 
                     <!-- Desktop Menu -->
-                    <div class="hidden md:flex items-center space-x-8">
-                        @php $headerMenu = menu('header'); @endphp
-                        @if($headerMenu)
-                            @foreach($headerMenu as $item)
-                                @if($item['url'] && !in_array($item['type'], ['header', 'separator']))
-                                    <a href="{{ $item['url'] }}" 
-                                       class="text-gray-700 hover:text-gray-900"
-                                       @if($item['target'] === '_blank') target="_blank" rel="noopener" @endif>
-                                        {{ $item['label'] }}
-                                    </a>
-                                @endif
-                            @endforeach
-                        @endif
-                    </div>
+                    <x-menu location="header" style="horizontal" class="hidden md:flex items-center space-x-8" />
 
                     <!-- Mobile Menu Button -->
                     <div class="md:hidden flex items-center">
@@ -80,18 +67,7 @@
             <!-- Mobile Menu -->
             <div x-show="open" x-cloak class="md:hidden border-t">
                 <div class="px-4 py-3 space-y-3">
-                    @php $headerMenu = menu('header'); @endphp
-                    @if($headerMenu)
-                        @foreach($headerMenu as $item)
-                            @if($item['url'] && !in_array($item['type'], ['header', 'separator']))
-                                <a href="{{ $item['url'] }}" 
-                                   class="block text-gray-700 hover:text-gray-900"
-                                   @if($item['target'] === '_blank') target="_blank" rel="noopener" @endif>
-                                    {{ $item['label'] }}
-                                </a>
-                            @endif
-                        @endforeach
-                    @endif
+                    <x-menu location="header" style="vertical" />
                 </div>
             </div>
         </nav>
@@ -110,20 +86,7 @@
                         <p class="text-sm mt-1">Powered by TallCMS</p>
                     </div>
                     
-                    <div class="flex items-center space-x-6">
-                        @php $footerMenu = menu('footer'); @endphp
-                        @if($footerMenu)
-                            @foreach($footerMenu as $item)
-                                @if($item['url'] && !in_array($item['type'], ['header', 'separator']))
-                                    <a href="{{ $item['url'] }}" 
-                                       class="text-sm text-gray-500 hover:text-gray-700"
-                                       @if($item['target'] === '_blank') target="_blank" rel="noopener" @endif>
-                                        {{ $item['label'] }}
-                                    </a>
-                                @endif
-                            @endforeach
-                        @endif
-                    </div>
+                    <x-menu location="footer" style="footer" class="flex items-center space-x-6" />
                 </div>
             </div>
         </footer>
