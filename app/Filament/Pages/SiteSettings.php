@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -37,6 +38,8 @@ class SiteSettings extends Page implements HasForms
             'contact_email' => SiteSetting::get('contact_email'),
             'logo' => SiteSetting::get('logo'),
             'site_type' => SiteSetting::get('site_type', 'multi-page'),
+            'maintenance_mode' => SiteSetting::get('maintenance_mode', false),
+            'maintenance_message' => SiteSetting::get('maintenance_message', 'We\'re currently performing scheduled maintenance. Please check back soon!'),
         ]);
     }
 
@@ -88,6 +91,21 @@ class SiteSettings extends Page implements HasForms
                 ->visibility('public')
                 ->helperText('Upload your site logo (PNG, JPG, or SVG)')
                 ->nullable(),
+
+            Toggle::make('maintenance_mode')
+                ->label('Maintenance Mode')
+                ->helperText('When enabled, all visitors will see a maintenance page. Administrators can still access the admin panel.')
+                ->live()
+                ->columnSpanFull(),
+
+            Textarea::make('maintenance_message')
+                ->label('Maintenance Message')
+                ->maxLength(500)
+                ->rows(3)
+                ->placeholder('We\'re currently performing scheduled maintenance. Please check back soon!')
+                ->helperText('Message shown to visitors during maintenance mode')
+                ->visible(fn ($get) => $get('maintenance_mode'))
+                ->columnSpanFull(),
         ];
     }
 
@@ -104,6 +122,7 @@ class SiteSettings extends Page implements HasForms
             if ($value !== null) {
                 $type = match ($key) {
                     'logo' => 'file',
+                    'maintenance_mode' => 'boolean',
                     default => 'text',
                 };
                 
@@ -111,6 +130,7 @@ class SiteSettings extends Page implements HasForms
                     'site_name', 'site_tagline', 'site_description', 'site_type' => 'general',
                     'contact_email' => 'contact',
                     'logo' => 'branding',
+                    'maintenance_mode', 'maintenance_message' => 'maintenance',
                     default => 'general',
                 };
 
