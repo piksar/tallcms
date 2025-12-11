@@ -15,11 +15,18 @@ class CmsPageRenderer extends Component
     
     public function mount(string $slug = '/')
     {
-        // Handle root URL - find homepage
+        // Handle root URL - find homepage or show welcome
         if ($slug === '/') {
-            $this->page = CmsPage::where('is_homepage', true)
+            $homepage = CmsPage::where('is_homepage', true)
                 ->published()
-                ->firstOrFail();
+                ->first();
+                
+            if (!$homepage) {
+                // No homepage exists - show welcome page for fresh installation
+                return $this->showWelcomePage();
+            }
+            
+            $this->page = $homepage;
         } else {
             // Try to find page by slug, also handle /page/slug format
             $cleanSlug = ltrim($slug, '/');
@@ -33,6 +40,22 @@ class CmsPageRenderer extends Component
         }
             
         $this->renderPageContent();
+    }
+    
+    protected function showWelcomePage(): void
+    {
+        // Create a virtual welcome page
+        $this->page = new CmsPage([
+            'title' => 'Welcome to TallCMS',
+            'slug' => '/',
+            'content' => '', // Will be handled by special template
+            'status' => 'published',
+            'meta_title' => 'Welcome to TallCMS',
+            'meta_description' => 'Get started with your new TallCMS installation',
+        ]);
+        
+        // Set a flag to render welcome content
+        $this->renderedContent = 'WELCOME_PAGE';
     }
     
     protected function renderPageContent(): void

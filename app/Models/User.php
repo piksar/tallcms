@@ -7,11 +7,12 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasAppAuthentication
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +23,7 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -46,12 +48,32 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'app_authentication_secret' => 'encrypted',
+            'is_active' => 'boolean',
         ];
     }
 
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        return true; // You can add your own access logic here
+        // Check if user is active
+        if (!($this->is_active ?? true)) {
+            return false;
+        }
+
+        // First-time setup: Allow access if this is the first user created
+        if ($this->isFirstUser()) {
+            return true;
+        }
+
+        // Allow access if user has any role (Shield will handle specific permissions)
+        return $this->hasAnyRole(['super_admin', 'administrator', 'editor', 'author']);
+    }
+
+    /**
+     * Check if this is the first user in the system
+     */
+    public function isFirstUser(): bool
+    {
+        return static::count() === 1 && $this->id === static::first()?->id;
     }
 
     public function getAppAuthenticationSecret(): ?string

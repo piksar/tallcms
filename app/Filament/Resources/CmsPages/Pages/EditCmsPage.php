@@ -12,7 +12,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditCmsPage extends EditRecord
 {
     protected static string $resource = CmsPageResource::class;
-
+    
     protected function getHeaderActions(): array
     {
         return [
@@ -29,4 +29,5 @@ class EditCmsPage extends EditRecord
             RestoreAction::make(),
         ];
     }
+
 }

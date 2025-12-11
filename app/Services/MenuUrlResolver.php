@@ -32,8 +32,8 @@ class MenuUrlResolver
             return $page->is_homepage ? '#top' : '#' . $page->slug;
         }
 
-        // Multi-page mode
-        return $page->slug === '/' ? '/' : '/' . $page->slug;
+        // Multi-page mode - homepage goes to root, others use their slug
+        return $page->is_homepage ? '/' : '/' . $page->slug;
     }
 
     public function shouldOpenInNewTab(TallcmsMenuItem $item): bool

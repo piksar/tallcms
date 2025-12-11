@@ -43,19 +43,8 @@ class CmsPageForm
                                             ->required()
                                             ->maxLength(255)
                                             ->unique(CmsPage::class, 'slug', ignoreRecord: true)
-                                            ->rules([
-                                                function () {
-                                                    return function (string $attribute, $value, \Closure $fail) {
-                                                        if ($value === '/') {
-                                                            return; // Allow "/" for homepage
-                                                        }
-                                                        if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $value)) {
-                                                            $fail('The slug may only contain letters, numbers, dashes, and underscores.');
-                                                        }
-                                                    };
-                                                }
-                                            ])
-                                            ->helperText('Used in the URL. Homepage will automatically use "/" as slug.')
+                                            ->rules(['alpha_dash'])
+                                            ->helperText('Used in the URL. Keep it simple and SEO-friendly.')
                                             ->columnSpan(1),
                                     ]),
                                     
@@ -96,12 +85,6 @@ class CmsPageForm
                                         Toggle::make('is_homepage')
                                             ->label('Set as Homepage')
                                             ->helperText('Only one page can be set as homepage. This will override any existing homepage setting.')
-                                            ->live()
-                                            ->afterStateUpdated(function (bool $state, callable $set) {
-                                                if ($state) {
-                                                    $set('slug', '/');
-                                                }
-                                            })
                                             ->columnSpan(2),
                                             
                                         Select::make('parent_id')

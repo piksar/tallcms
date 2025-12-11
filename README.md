@@ -328,6 +328,10 @@ TallCMS is built with love and powered by these amazing open-source packages:
 - **[FilamentTiptapEditor](https://filamentphp.com/plugins/awcodes-tiptap-editor)** - Rich text editor for Filament
 - **[TipTap](https://tiptap.dev/)** - Headless rich text editor
 
+### 🔐 **Security & Permissions**
+- **[Filament Shield](https://github.com/bezhanSalleh/filament-shield)** by Bezhan Salleh - Comprehensive role-based permission system for Filament
+- **[Spatie Laravel Permission](https://github.com/spatie/laravel-permission)** - Laravel package for managing user permissions and roles (used by Shield)
+
 ### 🔧 **Development & Quality**
 - **[Laravel Pint](https://github.com/laravel/pint)** - Code style fixer
 - **[Laravel Sail](https://laravel.com/docs/sail)** - Docker development environment
@@ -335,6 +339,7 @@ TallCMS is built with love and powered by these amazing open-source packages:
 
 ### 🎯 **Special Thanks**
 - **[wsmallnews](https://github.com/wsmallnews)** for creating the excellent Filament nested set plugin that powers our navigation system
+- **[Bezhan Salleh](https://github.com/bezhanSalleh)** for developing Filament Shield, the robust permission system that secures our CMS
 - **[Filament Team](https://filamentphp.com/about)** for building an incredible admin framework
 - **Laravel Community** for continuous innovation and support
 
