@@ -129,27 +129,53 @@ class InstallerRunner
     public function testDatabaseConnection(array $dbConfig): array
     {
         try {
-            $connection = [
+            // Debug: Log what we received
+            \Log::info('Database test config received:', $dbConfig);
+
+            // First connect without selecting the database to avoid failing when DB is absent.
+            $serverConnection = [
                 'driver' => 'mysql',
                 'host' => $dbConfig['host'],
                 'port' => $dbConfig['port'],
-                'database' => $dbConfig['database'],
                 'username' => $dbConfig['username'],
                 'password' => $dbConfig['password'],
                 'charset' => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
             ];
 
-            config(['database.connections.test' => $connection]);
-            
+            config(['database.connections.test_server' => $serverConnection]);
+            DB::purge('test_server');
+            DB::connection('test_server')->getPdo();
+
+            // Check if the target database exists.
+            $dbName = $dbConfig['database'];
+            $result = DB::connection('test_server')->select("SHOW DATABASES LIKE ?", [$dbName]);
+            $databaseExists = !empty($result);
+
+            if (!$databaseExists) {
+                return [
+                    'success' => true,
+                    'message' => "Connected to MySQL server, but database '{$dbName}' does not exist. It will be created during installation if permissions allow."
+                ];
+            }
+
+            // Now connect with the database selected.
+            $fullConnection = array_merge($serverConnection, ['database' => $dbName]);
+            config(['database.connections.test' => $fullConnection]);
+            DB::purge('test');
             DB::connection('test')->getPdo();
-            
+
             return [
                 'success' => true,
-                'message' => 'Database connection successful'
+                'message' => "Successfully connected to database '{$dbName}'"
             ];
-            
+
         } catch (\Exception $e) {
+            \Log::error('Database connection failed', [
+                'error' => $e->getMessage(),
+                'config' => $dbConfig ?? 'null'
+            ]);
+
             return [
                 'success' => false,
                 'message' => 'Database connection failed: ' . $e->getMessage()
