@@ -41,7 +41,7 @@ class CmsPost extends Model
         
         static::creating(function ($post) {
             if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
+                $post->slug = $post->generateUniqueSlug($post->title);
             }
             if (empty($post->author_id)) {
                 $post->author_id = auth()->id();
@@ -50,7 +50,7 @@ class CmsPost extends Model
         
         static::updating(function ($post) {
             if ($post->isDirty('title') && empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
+                $post->slug = $post->generateUniqueSlug($post->title);
             }
         });
     }
@@ -102,5 +102,36 @@ class CmsPost extends Model
     {
         $wordCount = str_word_count(strip_tags($this->excerpt . ' ' . json_encode($this->content)));
         return (int) ceil($wordCount / 200); // Assuming 200 words per minute
+    }
+    
+    /**
+     * Generate a unique slug from title
+     */
+    public function generateUniqueSlug(string $title): string
+    {
+        $baseSlug = Str::slug($title);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while ($this->slugExists($slug)) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * Check if slug already exists (excluding current record)
+     */
+    protected function slugExists(string $slug): bool
+    {
+        $query = static::where('slug', $slug);
+        
+        if ($this->exists) {
+            $query->where('id', '!=', $this->id);
+        }
+        
+        return $query->exists();
     }
 }

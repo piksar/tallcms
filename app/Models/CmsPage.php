@@ -42,25 +42,23 @@ class CmsPage extends Model
         
         static::creating(function ($page) {
             if (empty($page->slug)) {
-                $page->slug = Str::slug($page->title);
+                $page->slug = $page->generateUniqueSlug($page->title);
+            }
+            
+            // Ensure only one page can be marked as homepage
+            if ($page->is_homepage) {
+                static::where('is_homepage', true)->update(['is_homepage' => false]);
             }
         });
         
         static::updating(function ($page) {
             if ($page->isDirty('title') && empty($page->slug)) {
-                $page->slug = Str::slug($page->title);
+                $page->slug = $page->generateUniqueSlug($page->title);
             }
             
             // Ensure only one page can be marked as homepage
             if ($page->is_homepage && $page->isDirty('is_homepage')) {
                 static::where('id', '!=', $page->id)->update(['is_homepage' => false]);
-            }
-        });
-        
-        static::creating(function ($page) {
-            // Ensure only one page can be marked as homepage
-            if ($page->is_homepage) {
-                static::where('is_homepage', true)->update(['is_homepage' => false]);
             }
         });
     }
@@ -105,5 +103,36 @@ class CmsPage extends Model
     public static function getHomepage(): ?self
     {
         return static::homepage()->published()->first();
+    }
+    
+    /**
+     * Generate a unique slug from title
+     */
+    public function generateUniqueSlug(string $title): string
+    {
+        $baseSlug = Str::slug($title);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while ($this->slugExists($slug)) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * Check if slug already exists (excluding current record)
+     */
+    protected function slugExists(string $slug): bool
+    {
+        $query = static::where('slug', $slug);
+        
+        if ($this->exists) {
+            $query->where('id', '!=', $this->id);
+        }
+        
+        return $query->exists();
     }
 }

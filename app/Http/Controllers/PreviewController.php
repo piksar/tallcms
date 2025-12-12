@@ -42,8 +42,13 @@ class PreviewController extends Controller
         ]);
     }
 
-    private function renderContent(string $content, $model): string
+    private function renderContent($content, $model): string
     {
+        // Handle content that might be an array from Eloquent JSON casting
+        if (is_array($content)) {
+            $content = json_encode($content);
+        }
+        
         // Render rich content with auto-discovered custom blocks (same as CmsPageRenderer)
         $renderedContent = RichContentRenderer::make($content)
             ->customBlocks(CustomBlockDiscoveryService::getBlocksArray())

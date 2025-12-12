@@ -30,13 +30,13 @@ class CmsCategory extends Model
         
         static::creating(function ($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = $category->generateUniqueSlug($category->name);
             }
         });
         
         static::updating(function ($category) {
             if ($category->isDirty('name') && empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = $category->generateUniqueSlug($category->name);
             }
         });
     }
@@ -64,5 +64,36 @@ class CmsCategory extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+    
+    /**
+     * Generate a unique slug from name
+     */
+    public function generateUniqueSlug(string $name): string
+    {
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while ($this->slugExists($slug)) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * Check if slug already exists (excluding current record)
+     */
+    protected function slugExists(string $slug): bool
+    {
+        $query = static::where('slug', $slug);
+        
+        if ($this->exists) {
+            $query->where('id', '!=', $this->id);
+        }
+        
+        return $query->exists();
     }
 }

@@ -39,3 +39,23 @@ if (!function_exists('contact_email')) {
         return settings('contact_email', config('mail.from.address', 'hello@example.com'));
     }
 }
+
+if (!function_exists('company_name')) {
+    /**
+     * Get company name setting
+     */
+    function company_name(): string
+    {
+        return settings('company_name', settings('site_name', config('app.name', 'TallCMS')));
+    }
+}
+
+if (!function_exists('social_link')) {
+    /**
+     * Get social media link setting
+     */
+    function social_link(string $platform): string
+    {
+        return settings('social_' . $platform, '');
+    }
+}

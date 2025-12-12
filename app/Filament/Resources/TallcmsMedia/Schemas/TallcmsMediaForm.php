@@ -41,30 +41,40 @@ class TallcmsMediaForm
                         $url = \Storage::disk($record->disk)->url($record->path);
                         
                         if ($record->is_image) {
+                            $altText = e($record->alt_text ?? '');
+                            $fileName = e($record->file_name ?? '');
+                            $humanSize = e($record->human_size ?? '');
+                            $mimeType = e($record->mime_type ?? '');
+                            $dimensions = $record->dimensions ? e($record->dimensions) : '';
+                            
                             return new HtmlString("
                                 <div class='space-y-2'>
-                                    <img src='{$url}' alt='{$record->alt_text}' class='max-w-xs max-h-48 rounded-lg border'>
+                                    <img src='" . e($url) . "' alt='{$altText}' class='max-w-xs max-h-48 rounded-lg border'>
                                     <div class='text-sm text-gray-600'>
-                                        <div>File: {$record->file_name}</div>
-                                        <div>Size: {$record->human_size}</div>
-                                        <div>Type: {$record->mime_type}</div>
-                                        " . ($record->dimensions ? "<div>Dimensions: {$record->dimensions}</div>" : "") . "
+                                        <div>File: {$fileName}</div>
+                                        <div>Size: {$humanSize}</div>
+                                        <div>Type: {$mimeType}</div>
+                                        " . ($dimensions ? "<div>Dimensions: {$dimensions}</div>" : "") . "
                                     </div>
-                                    <a href='{$url}' target='_blank' class='inline-flex items-center text-sm text-blue-600 hover:text-blue-800'>
+                                    <a href='" . e($url) . "' target='_blank' class='inline-flex items-center text-sm text-blue-600 hover:text-blue-800'>
                                         View Full Size
                                     </a>
                                 </div>
                             ");
                         }
                         
+                        $fileName = e($record->file_name ?? '');
+                        $humanSize = e($record->human_size ?? '');
+                        $mimeType = e($record->mime_type ?? '');
+                        
                         return new HtmlString("
                             <div class='space-y-2'>
                                 <div class='text-sm text-gray-600'>
-                                    <div>File: {$record->file_name}</div>
-                                    <div>Size: {$record->human_size}</div>
-                                    <div>Type: {$record->mime_type}</div>
+                                    <div>File: {$fileName}</div>
+                                    <div>Size: {$humanSize}</div>
+                                    <div>Type: {$mimeType}</div>
                                 </div>
-                                <a href='{$url}' target='_blank' class='inline-flex items-center text-sm text-blue-600 hover:text-blue-800'>
+                                <a href='" . e($url) . "' target='_blank' class='inline-flex items-center text-sm text-blue-600 hover:text-blue-800'>
                                     Download File
                                 </a>
                             </div>

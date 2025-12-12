@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\CmsPage;
 use App\Models\CmsPost;
+use Illuminate\Support\Facades\Storage;
 
 class MergeTagService
 {
@@ -15,10 +16,22 @@ class MergeTagService
         $tags = self::getTagValues($record);
         
         foreach ($tags as $tag => $value) {
-            $content = str_replace('{{' . $tag . '}}', $value, $content);
+            // Skip empty values to avoid replacing tags with empty strings unless intended
+            if ($value !== null && $value !== '') {
+                $content = str_replace('{{' . $tag . '}}', $value, $content);
+            }
         }
         
         return $content;
+    }
+    
+    /**
+     * Get a specific tag value
+     */
+    public static function getTag(string $tag, $record = null): string
+    {
+        $tags = self::getTagValues($record);
+        return $tags[$tag] ?? '';
     }
     
     /**
@@ -27,24 +40,32 @@ class MergeTagService
     protected static function getTagValues($record = null): array
     {
         $tags = [
-            // Site-wide tags
-            'site_name' => config('app.name', 'TallCMS'),
+            // Site-wide tags from settings
+            'site_name' => settings('site_name', config('app.name', 'TallCMS')),
+            'site_tagline' => settings('site_tagline', ''),
+            'site_description' => settings('site_description', ''),
             'site_url' => config('app.url', url('/')),
             'current_year' => date('Y'),
             'current_date' => now()->format('F j, Y'),
             
-            // Contact & Company info (these would typically come from settings)
-            'contact_email' => 'info@' . parse_url(config('app.url'), PHP_URL_HOST),
-            'contact_phone' => '+1 (555) 123-4567',
-            'company_name' => config('app.name', 'TallCMS'),
-            'company_address' => '123 Main St, City, State 12345',
+            // Contact info from settings
+            'contact_email' => settings('contact_email', config('mail.from.address', 'hello@example.com')),
+            'contact_phone' => settings('contact_phone', ''),
+            'company_name' => settings('company_name', settings('site_name', config('app.name', 'TallCMS'))),
+            'company_address' => settings('company_address', ''),
             
-            // Social media (these would typically come from settings)
-            'social_facebook' => 'https://facebook.com/yourcompany',
-            'social_twitter' => 'https://twitter.com/yourcompany',
-            'social_linkedin' => 'https://linkedin.com/company/yourcompany',
-            'social_instagram' => 'https://instagram.com/yourcompany',
-            'newsletter_signup' => '#newsletter',
+            // Social media from settings
+            'social_facebook' => settings('social_facebook', ''),
+            'social_twitter' => settings('social_twitter', ''),
+            'social_linkedin' => settings('social_linkedin', ''),
+            'social_instagram' => settings('social_instagram', ''),
+            'social_youtube' => settings('social_youtube', ''),
+            'social_tiktok' => settings('social_tiktok', ''),
+            'newsletter_signup' => settings('newsletter_signup_url', '#newsletter'),
+            
+            // SEO and branding from settings
+            'logo_url' => settings('logo') ? Storage::url(settings('logo')) : '',
+            'favicon_url' => settings('favicon') ? Storage::url(settings('favicon')) : '',
         ];
         
         // Add record-specific tags if record is provided
@@ -64,7 +85,7 @@ class MergeTagService
     {
         return [
             'page_title' => $page->title ?? '',
-            'page_url' => url('/page/' . $page->slug),
+            'page_url' => url('/' . ltrim($page->slug, '/')),
             'page_author' => 'Admin', // Pages don't have authors, could be site admin
         ];
     }
@@ -76,7 +97,7 @@ class MergeTagService
     {
         return [
             'post_title' => $post->title ?? '',
-            'post_url' => url('/blog/' . $post->slug),
+            'post_url' => url('/post/' . $post->slug), // TODO: Implement post routing or update when blog routing is added
             'post_excerpt' => $post->excerpt ?? '',
             'post_author' => $post->author->name ?? 'Unknown Author',
             'post_author_email' => $post->author->email ?? '',
@@ -93,18 +114,25 @@ class MergeTagService
     public static function getAvailableTags($type = 'all'): array
     {
         $siteTags = [
-            'site_name' => 'Site Name',
+            'site_name' => 'Site Name (from settings)',
+            'site_tagline' => 'Site Tagline (from settings)',
+            'site_description' => 'Site Description (from settings)',
             'site_url' => 'Site URL',
             'current_year' => 'Current Year',
             'current_date' => 'Current Date',
-            'contact_email' => 'Contact Email',
-            'contact_phone' => 'Contact Phone',
-            'company_name' => 'Company Name',
-            'company_address' => 'Company Address',
-            'social_facebook' => 'Facebook URL',
-            'social_twitter' => 'Twitter URL',
-            'social_linkedin' => 'LinkedIn URL',
-            'social_instagram' => 'Instagram URL',
+            'contact_email' => 'Contact Email (from settings)',
+            'contact_phone' => 'Contact Phone (from settings)',
+            'company_name' => 'Company Name (from settings)',
+            'company_address' => 'Company Address (from settings)',
+            'social_facebook' => 'Facebook URL (from settings)',
+            'social_twitter' => 'Twitter URL (from settings)',
+            'social_linkedin' => 'LinkedIn URL (from settings)',
+            'social_instagram' => 'Instagram URL (from settings)',
+            'social_youtube' => 'YouTube URL (from settings)',
+            'social_tiktok' => 'TikTok URL (from settings)',
+            'newsletter_signup' => 'Newsletter Signup URL (from settings)',
+            'logo_url' => 'Logo URL (from settings)',
+            'favicon_url' => 'Favicon URL (from settings)',
         ];
         
         $pageTags = [

@@ -1,24 +1,25 @@
-{{-- Full page layout rendering - mimics layouts.app exactly --}}
-<div class="font-sans antialiased bg-gray-50">
+{{-- Full page layout rendering - using modern fluid design system --}}
+<div class="font-inter antialiased bg-white">
     <div class="min-h-screen">
-        <!-- Navigation -->
-        <nav x-data="{ open: false }" class="bg-white shadow">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
+        <!-- Modern Glassmorphism Navigation -->
+        <nav x-data="{ open: false }" class="absolute top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+            <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+                <div class="flex justify-between h-20">
                     
                     <!-- Logo -->
                     <div class="flex items-center">
-                        <a href="{{ url('/') }}" class="text-xl font-bold text-gray-900">
+                        <a href="{{ url('/') }}" class="text-xl font-bold text-gray-900"
+                           style="font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: bold; color: #111827;">
                             {{ config('app.name') }}
                         </a>
                     </div>
 
                     <!-- Desktop Menu -->
-                    <x-menu location="header" style="horizontal" class="preview-desktop-menu items-center space-x-8" />
+                    <x-menu location="header" style="horizontal" class="preview-desktop-menu hidden md:flex items-center space-x-8" />
 
                     <!-- Mobile Menu Button -->
-                    <div class="preview-mobile-menu-btn flex items-center">
-                        <button @click="open = !open" class="text-gray-700 p-2">
+                    <div class="preview-mobile-menu-btn md:hidden flex items-center">
+                        <button @click="open = !open" class="text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors">
                             <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
@@ -30,34 +31,40 @@
                 </div>
             </div>
 
-            <!-- Mobile Menu -->
-            <div x-show="open" x-cloak class="preview-mobile-menu border-t">
-                <div class="px-4 py-3 space-y-3">
+            <!-- Mobile Menu with Backdrop -->
+            <div x-show="open" x-cloak 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform translate-y-2"
+                 class="preview-mobile-menu absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg md:hidden">
+                <div class="px-4 sm:px-6 py-6 space-y-4">
                     <x-menu location="header" style="vertical" />
                 </div>
             </div>
         </nav>
         
-        <!-- Main Content -->
-        <main class="py-8">
-            {{-- Page Content - exactly like livewire.page --}}
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                {{-- Page Content --}}
-                <article class="prose prose-lg max-w-none">
-                    {!! $renderedContent !!}
-                </article>
-                
+        <!-- Main Content with Navigation Offset -->
+        <main class="w-full">
+            {{-- Page Content - using modern fluid design --}}
+            <div class="w-full">
+                {!! $renderedContent !!}
             </div>
         </main>
         
-        <!-- Footer -->
-        <footer class="bg-white border-t mt-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Modern Footer -->
+        <footer class="bg-gray-50">
+            <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-16">
                 <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <div class="text-gray-600">
-                        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
-                        <p class="text-sm mt-1">Powered by TallCMS</p>
+                        <p style="font-size: clamp(0.875rem, 2vw, 1rem); color: #6b7280;">
+                            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+                        </p>
+                        <p class="text-sm mt-1" style="font-size: clamp(0.75rem, 1.5vw, 0.875rem); color: #9ca3af; margin-top: 0.25rem;">
+                            Powered by TallCMS
+                        </p>
                     </div>
                     
                     <x-menu location="footer" style="footer" class="flex items-center space-x-6" />
