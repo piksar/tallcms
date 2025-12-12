@@ -85,6 +85,32 @@ Queue worker runs automatically with `composer dev`. For manual queue work:
 php artisan queue:work
 ```
 
+### Web Installer
+TallCMS includes a user-friendly web installer for non-technical users:
+```bash
+# Access installer at /install when:
+# - No .env file exists, OR
+# - INSTALLER_ENABLED=true in .env, OR  
+# - No storage/installer.lock file exists
+```
+
+**Installer Features:**
+- System requirements check (PHP version, extensions, permissions)
+- Database configuration and testing
+- Admin user creation
+- Mail settings (optional)
+- Automatic .env generation
+- Security lockdown after completion
+
+**Manual Installation Alternative:**
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --force
+php artisan storage:link
+php artisan make:user  # Interactive admin user creation
+```
+
 ## Key Conventions
 
 ### Service Providers

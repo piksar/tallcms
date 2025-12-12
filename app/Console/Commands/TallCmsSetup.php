@@ -17,7 +17,10 @@ class TallCmsSetup extends Command
      * @var string
      */
     protected $signature = 'tallcms:setup 
-                            {--force : Force setup even if already configured}';
+                            {--force : Force setup even if already configured}
+                            {--name= : Admin full name}
+                            {--email= : Admin email address}
+                            {--password= : Admin password (min 8 chars)}';
 
     /**
      * The console command description.
@@ -93,13 +96,13 @@ class TallCmsSetup extends Command
     protected function createAdminUser(): void
     {
         $this->info('👤 Setting up admin user...');
-        
+
         // Check if we have an existing user
         $existingUser = User::first();
-        
+
         if ($existingUser && !$this->option('force')) {
             $makeAdmin = $this->confirm("Found existing user ({$existingUser->email}). Make them super admin?", true);
-            
+
             if ($makeAdmin) {
                 $existingUser->assignRole('super_admin');
                 $this->info("✅ {$existingUser->email} is now a super admin!");
@@ -107,11 +110,18 @@ class TallCmsSetup extends Command
             }
         }
 
-        // Create new admin user
-        $name = $this->ask('Admin full name', 'Admin User');
-        
-        $email = $this->ask('Admin email address');
+        // Use provided options when available (non-interactive safe)
+        $name = $this->option('name') ?: $this->ask('Admin full name', 'Admin User');
+
+        $email = $this->option('email');
+        if ($email === null) {
+            $email = $this->ask('Admin email address');
+        }
         while (!$email || !$this->isValidEmail($email) || User::where('email', $email)->exists()) {
+            if (!$this->input->isInteractive()) {
+                throw new \RuntimeException('Valid admin email is required for non-interactive setup.');
+            }
+
             if (!$email) {
                 $this->error('Email address is required.');
             } elseif (!$this->isValidEmail($email)) {
@@ -121,9 +131,16 @@ class TallCmsSetup extends Command
             }
             $email = $this->ask('Admin email address');
         }
-        
-        $password = $this->secret('Admin password');
-        while (strlen($password) < 8) {
+
+        $password = $this->option('password');
+        if ($password === null) {
+            $password = $this->secret('Admin password');
+        }
+        while (strlen((string) $password) < 8) {
+            if (!$this->input->isInteractive()) {
+                throw new \RuntimeException('Admin password must be at least 8 characters for non-interactive setup.');
+            }
+
             $this->error('Password must be at least 8 characters.');
             $password = $this->secret('Admin password');
         }

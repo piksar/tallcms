@@ -4,6 +4,8 @@ use App\Http\Controllers\PreviewController;
 use App\Livewire\CmsPageRenderer;
 use Illuminate\Support\Facades\Route;
 
+// Normal application routes
+
 // Preview routes (admin only, can view drafts) - MUST be defined before catch-all route
 Route::middleware(['auth'])->group(function () {
     Route::get('/preview/page/{page}', [PreviewController::class, 'page'])->name('preview.page');
@@ -11,8 +13,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Clean CMS routing - all pages handled by one route with maintenance mode check
+// Maintenance middleware now handles installation checks internally
 Route::middleware('maintenance.mode')->group(function () {
     Route::get('/', CmsPageRenderer::class)->defaults('slug', '/');
-    // Exclude preview, admin, livewire, storage, and other system routes
-    Route::get('/{slug}', CmsPageRenderer::class)->where('slug', '^(?!preview|admin|livewire|storage|api).*');
+    // Exclude preview, admin, livewire, storage, api, and install routes
+    Route::get('/{slug}', CmsPageRenderer::class)->where('slug', '^(?!preview|admin|livewire|storage|api|install).*');
 });
