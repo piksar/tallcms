@@ -18,6 +18,8 @@
 /public/storage
 /storage/*.key
 /storage/pail
+# Installer lock
+storage/installer.lock
 /vendor
 Homestead.json
 Homestead.yaml
