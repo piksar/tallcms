@@ -357,12 +357,145 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle mail settings
+    // State tracking
+    let dbConnectionTested = false;
+    let dbConnectionValid = false;
+    let passwordsMatch = false;
+    
+    // Elements
+    const form = document.getElementById('installation-form');
+    const installButton = document.getElementById('install-button');
+    const installText = document.getElementById('install-text');
+    const installIcon = document.getElementById('install-icon');
+    const installSpinner = document.getElementById('install-spinner');
+    
+    // Password elements
+    const adminPassword = document.getElementById('admin_password');
+    const adminPasswordConfirmation = document.getElementById('admin_password_confirmation');
+    
+    // Database elements
+    const testDbButton = document.getElementById('test-db-connection');
+    const dbTestResult = document.getElementById('db-test-result');
+    const dbFields = ['db_host', 'db_port', 'db_database', 'db_username', 'db_password'];
+    
+    // Mail settings
     const toggleMailButton = document.getElementById('toggle-mail-settings');
     const mailSettings = document.getElementById('mail-settings');
     const mailMailer = document.getElementById('mail_mailer');
     const smtpSettings = document.getElementById('smtp-settings');
 
+    // Initialize install button state
+    updateInstallButtonState();
+
+    // Password confirmation validation
+    function validatePasswords() {
+        const password = adminPassword.value;
+        const confirmation = adminPasswordConfirmation.value;
+        
+        // Clear previous validation messages
+        clearPasswordValidation();
+        
+        if (password && confirmation) {
+            passwordsMatch = password === confirmation;
+            
+            if (!passwordsMatch) {
+                showPasswordError('Passwords do not match');
+            } else {
+                showPasswordSuccess('Passwords match');
+            }
+        } else {
+            passwordsMatch = false;
+        }
+        
+        updateInstallButtonState();
+    }
+    
+    function clearPasswordValidation() {
+        const existingError = document.getElementById('password-match-error');
+        const existingSuccess = document.getElementById('password-match-success');
+        if (existingError) existingError.remove();
+        if (existingSuccess) existingSuccess.remove();
+    }
+    
+    function showPasswordError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'password-match-error';
+        errorDiv.className = 'mt-1 text-sm text-red-600';
+        errorDiv.textContent = message;
+        adminPasswordConfirmation.parentNode.appendChild(errorDiv);
+    }
+    
+    function showPasswordSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.id = 'password-match-success';
+        successDiv.className = 'mt-1 text-sm text-green-600';
+        successDiv.textContent = '✓ ' + message;
+        adminPasswordConfirmation.parentNode.appendChild(successDiv);
+    }
+
+    // Database connection validation
+    function markDatabaseAsUntested() {
+        dbConnectionTested = false;
+        dbConnectionValid = false;
+        
+        // Clear any existing results
+        dbTestResult.classList.add('hidden');
+        
+        // Show warning that database needs to be tested
+        if (!document.getElementById('db-test-warning')) {
+            const warningDiv = document.createElement('div');
+            warningDiv.id = 'db-test-warning';
+            warningDiv.className = 'mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-sm';
+            warningDiv.textContent = '⚠ Database configuration changed. Please test connection before installing.';
+            testDbButton.parentNode.appendChild(warningDiv);
+        }
+        
+        updateInstallButtonState();
+    }
+    
+    function clearDatabaseWarning() {
+        const warning = document.getElementById('db-test-warning');
+        if (warning) warning.remove();
+    }
+
+    // Update install button state
+    function updateInstallButtonState() {
+        const canInstall = passwordsMatch && dbConnectionTested && dbConnectionValid;
+        
+        installButton.disabled = !canInstall;
+        
+        if (!canInstall) {
+            installButton.className = 'bg-gray-400 text-white px-6 py-3 rounded-lg font-medium cursor-not-allowed inline-flex items-center';
+            
+            let reason = '';
+            if (!passwordsMatch) {
+                reason = 'Passwords must match';
+            } else if (!dbConnectionTested) {
+                reason = 'Database connection must be tested';
+            } else if (!dbConnectionValid) {
+                reason = 'Database connection must be successful';
+            }
+            
+            installButton.title = reason;
+        } else {
+            installButton.className = 'bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors inline-flex items-center';
+            installButton.title = '';
+        }
+    }
+
+    // Event listeners for password validation
+    adminPassword.addEventListener('input', validatePasswords);
+    adminPasswordConfirmation.addEventListener('input', validatePasswords);
+
+    // Event listeners for database fields
+    dbFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', markDatabaseAsUntested);
+        }
+    });
+
+    // Toggle mail settings
     toggleMailButton.addEventListener('click', function() {
         mailSettings.classList.toggle('hidden');
         if (mailSettings.classList.contains('hidden')) {
@@ -382,15 +515,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Test database connection
-    const testDbButton = document.getElementById('test-db-connection');
-    const dbTestResult = document.getElementById('db-test-result');
-
     testDbButton.addEventListener('click', function() {
         const button = this;
         const originalText = button.textContent;
         
         button.textContent = 'Testing...';
         button.disabled = true;
+        clearDatabaseWarning();
         
         const formData = new FormData();
         formData.append('db_host', document.getElementById('db_host').value);
@@ -410,6 +541,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             dbTestResult.classList.remove('hidden');
+            dbConnectionTested = true;
+            dbConnectionValid = data.success;
+            
             if (data.success) {
                 dbTestResult.className = 'mt-2 p-3 bg-green-50 border border-green-200 rounded text-green-800 text-sm';
                 dbTestResult.textContent = '✓ ' + data.message;
@@ -417,11 +551,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 dbTestResult.className = 'mt-2 p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm';
                 dbTestResult.textContent = '✗ ' + data.message;
             }
+            
+            updateInstallButtonState();
         })
         .catch(error => {
             dbTestResult.classList.remove('hidden');
             dbTestResult.className = 'mt-2 p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm';
             dbTestResult.textContent = '✗ Connection test failed';
+            dbConnectionTested = true;
+            dbConnectionValid = false;
+            updateInstallButtonState();
         })
         .finally(() => {
             button.textContent = originalText;
@@ -430,18 +569,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle form submission
-    const form = document.getElementById('installation-form');
-    const installButton = document.getElementById('install-button');
-    const installText = document.getElementById('install-text');
-    const installIcon = document.getElementById('install-icon');
-    const installSpinner = document.getElementById('install-spinner');
-
-    form.addEventListener('submit', function() {
+    form.addEventListener('submit', function(e) {
+        // Double-check validation before submission
+        if (!passwordsMatch) {
+            e.preventDefault();
+            alert('Passwords do not match. Please check your admin password fields.');
+            return false;
+        }
+        
+        if (!dbConnectionTested || !dbConnectionValid) {
+            e.preventDefault();
+            alert('Database connection must be tested and successful before installation.');
+            return false;
+        }
+        
+        // If validation passes, proceed with installation
         installButton.disabled = true;
         installText.textContent = 'Installing...';
         installIcon.classList.add('hidden');
         installSpinner.classList.remove('hidden');
     });
+    
+    // Initial validation check
+    validatePasswords();
 });
 </script>
 @endsection
