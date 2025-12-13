@@ -264,25 +264,41 @@ class InstallerController extends Controller
     {
         $lockPath = base_path('installer.lock');
         
-        // Check if base directory is writable
-        if (!is_writable(base_path())) {
-            throw new \Exception('Base directory is not writable. Cannot create installer lock file.');
+        try {
+            // Try to create lock file first - this is the most reliable test
+            $success = File::put($lockPath, now()->toDateTimeString());
+            
+            if ($success === false) {
+                throw new \Exception('Failed to write installer lock file');
+            }
+            
+            \Log::info('Installer locked successfully. Lock file created at: ' . $lockPath);
+            
+        } catch (\Exception $e) {
+            // If we can't create the lock file, try alternative approaches
+            \Log::warning('Cannot create installer lock file in project root: ' . $e->getMessage());
+            
+            // Fallback: Try to use .env to disable installer
+            try {
+                $this->envWriter->disableInstaller()->save();
+                \Log::info('Installer disabled via .env file as fallback');
+            } catch (\Exception $envError) {
+                // If both methods fail, throw a comprehensive error
+                throw new \Exception(
+                    "Cannot lock installer: Unable to create lock file ({$e->getMessage()}) " .
+                    "and unable to update .env file ({$envError->getMessage()}). " .
+                    "Please ensure web server has write permissions to either the project root " .
+                    "or the .env file to prevent reinstallation."
+                );
+            }
+            return;
         }
         
-        // Create lock file with timestamp
-        $success = File::put($lockPath, now()->toDateTimeString());
-        
-        if ($success === false) {
-            throw new \Exception('Failed to create installer lock file. Check permissions.');
-        }
-        
-        \Log::info('Installer locked successfully. Lock file created at: ' . $lockPath);
-        
-        // Disable installer in .env (optional - lock file is primary indicator)
+        // Primary lock successful - also try to disable in .env as secondary measure
         try {
             $this->envWriter->disableInstaller()->save();
         } catch (\Exception $e) {
-            // .env update failed, but lock file created successfully
+            // .env update failed, but lock file created successfully - this is acceptable
             \Log::warning('Failed to update .env file during installer lock: ' . $e->getMessage());
         }
     }

@@ -149,9 +149,12 @@ $lockPath = __DIR__ . '/../installer.lock';
 // Check if installation is complete
 $installationComplete = file_exists($lockPath);
 
-// If installation is complete and not explicitly enabled, skip installer logic
-if ($installationComplete) {
-    $envContents = file_exists($envPath) ? file_get_contents($envPath) : '';
+// Also check for .env-based lock (fallback method)
+$envContents = file_exists($envPath) ? file_get_contents($envPath) : '';
+$installerDisabledInEnv = str_contains($envContents, 'INSTALLER_ENABLED=false');
+
+// If installation is complete (either method) and not explicitly enabled, skip installer logic
+if ($installationComplete || $installerDisabledInEnv) {
     $installerEnabled = str_contains($envContents, 'INSTALLER_ENABLED=true');
     
     if (!$installerEnabled && $isInstallerRequest) {

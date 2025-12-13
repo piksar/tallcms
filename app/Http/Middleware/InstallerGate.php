@@ -34,12 +34,17 @@ class InstallerGate
             return env('INSTALLER_ENABLED', false);
         }
 
+        // Block if installer is disabled in .env (fallback lock method)
+        if (env('INSTALLER_ENABLED', null) === false) {
+            return false;
+        }
+
         // Allow if .env doesn't exist (fresh installation)
         if (!File::exists(base_path('.env'))) {
             return true;
         }
 
-        // Allow if no lock file exists (installation incomplete)
+        // Allow if no lock mechanism active (installation incomplete)
         return true;
     }
 }
