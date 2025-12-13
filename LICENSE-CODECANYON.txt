@@ -1,0 +1,34 @@
+TallCMS - CodeCanyon License
+=============================
+
+This product is licensed under the Envato Market License.
+
+IMPORTANT: This license applies only to the CodeCanyon version of TallCMS.
+The GitHub version is separately licensed under MIT License.
+
+LICENSE TERMS:
+- This license is automatically applied when purchased from CodeCanyon
+- Regular License: Single end product use
+- Extended License: Products sold to end users
+
+For complete license terms, visit:
+https://codecanyon.net/licenses/standard
+
+THIRD-PARTY COMPONENTS:
+This product includes open-source components that retain their original licenses:
+- Laravel Framework (MIT License)
+- Filament Admin Panel (MIT License)  
+- Livewire (MIT License)
+- Tailwind CSS (MIT License)
+- Alpine.js (MIT License)
+- Spatie Laravel Permission (MIT License)
+- Filament Shield (MIT License)
+
+All third-party components are compatible with commercial use.
+See vendor/ directory for individual package licenses.
+
+COPYRIGHT:
+© 2024 Vibe Coding. All rights reserved.
+
+For support and documentation, visit:
+https://codecanyon.net/item/tallcms/[item-id]

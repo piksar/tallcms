@@ -267,6 +267,15 @@ TallCMS is powered by these amazing open-source packages:
 
 ## 📄 License
 
-TallCMS is open-sourced software licensed under the [MIT license](LICENSE).
+**CodeCanyon Version**: Licensed under [Envato Market License](https://codecanyon.net/licenses/standard)
+- Regular License: Single end product use
+- Extended License: Products sold to end users
+
+**GitHub Version**: Open-source under [MIT License](https://opensource.org/licenses/MIT)
+
+For commercial projects, we recommend the CodeCanyon version for legal compliance and included support.
+
+### Third-Party Licenses
+TallCMS includes open-source packages (Laravel, Filament, etc.) that retain their original licenses. All third-party components are compatible with commercial use. See `vendor/` directory for individual package licenses.
 
 **Built with ❤️ using the TALL stack**
