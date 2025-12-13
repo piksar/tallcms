@@ -62,7 +62,7 @@ class TallCmsSetup extends Command
         try {
             return Role::where('name', 'super_admin')->exists() && 
                    User::role('super_admin')->exists();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Tables don't exist yet, so setup is not complete
             return false;
         }
@@ -80,14 +80,21 @@ class TallCmsSetup extends Command
             'author' => 'Author - Create and edit own content',
         ];
 
-        foreach ($roles as $roleName => $description) {
+        foreach (array_keys($roles) as $roleName) {
             Role::firstOrCreate(['name' => $roleName]);
             $this->line("  ✓ Created role: {$roleName}");
         }
 
-        // Run Shield's seeder to create permissions and assign to roles
+        // Generate Shield permissions first, then run seeder
         // Credit: Using Filament Shield by Bezhan Salleh for role-based permissions
         // https://github.com/bezhanSalleh/filament-shield
+        $this->info('🛡️  Generating Shield permissions...');
+        $this->call('shield:generate', [
+            '--all' => true,
+            '--panel' => 'admin',
+            '--option' => 'policies_and_permissions'
+        ]);
+        
         $this->info('🛡️  Running Shield seeder for permissions...');
         $this->call('db:seed', ['--class' => 'ShieldSeeder']);
         
@@ -115,39 +122,65 @@ class TallCmsSetup extends Command
             }
         }
 
-        // Use provided options when available (non-interactive safe)
-        $name = $this->option('name') ?: $this->ask('Admin full name', 'Admin User');
+        // Get admin name
+        $name = $this->option('name');
+        if ($this->option('no-interaction')) {
+            if (!$name) {
+                throw new \RuntimeException('Admin name is required when using --no-interaction. Use --name="Your Name"');
+            }
+        } else {
+            $name = $name ?: $this->ask('Admin full name', 'Admin User');
+        }
 
         $email = $this->option('email');
-        if ($email === null) {
-            $email = $this->ask('Admin email address');
-        }
-        while (!$email || !$this->isValidEmail($email) || User::where('email', $email)->exists()) {
-            if (!$this->input->isInteractive()) {
-                throw new \RuntimeException('Valid admin email is required for non-interactive setup.');
-            }
-
+        
+        // Validate email in non-interactive mode
+        if ($this->option('no-interaction')) {
             if (!$email) {
-                $this->error('Email address is required.');
-            } elseif (!$this->isValidEmail($email)) {
-                $this->error('Please enter a valid email address.');
-            } else {
-                $this->error('This email already exists.');
+                throw new \RuntimeException('Admin email is required when using --no-interaction. Use --email="your@email.com"');
             }
-            $email = $this->ask('Admin email address');
+            if (!$this->isValidEmail($email)) {
+                throw new \RuntimeException("Invalid email format: {$email}. Please provide a valid email address.");
+            }
+            if (User::where('email', $email)->exists()) {
+                throw new \RuntimeException("Email already exists: {$email}. Please use a different email address.");
+            }
+        } else {
+            // Interactive mode - ask for email if not provided
+            if ($email === null) {
+                $email = $this->ask('Admin email address');
+            }
+            while (!$email || !$this->isValidEmail($email) || User::where('email', $email)->exists()) {
+                if (!$email) {
+                    $this->error('Email address is required.');
+                } elseif (!$this->isValidEmail($email)) {
+                    $this->error('Please enter a valid email address.');
+                } else {
+                    $this->error('This email already exists.');
+                }
+                $email = $this->ask('Admin email address');
+            }
         }
 
         $password = $this->option('password');
-        if ($password === null) {
-            $password = $this->secret('Admin password');
-        }
-        while (strlen((string) $password) < 8) {
-            if (!$this->input->isInteractive()) {
-                throw new \RuntimeException('Admin password must be at least 8 characters for non-interactive setup.');
+        
+        // Validate password in non-interactive mode
+        if ($this->option('no-interaction')) {
+            if (!$password) {
+                throw new \RuntimeException('Admin password is required when using --no-interaction. Use --password="your-password"');
             }
-
-            $this->error('Password must be at least 8 characters.');
-            $password = $this->secret('Admin password');
+            if (strlen((string) $password) < 8) {
+                throw new \RuntimeException('Admin password must be at least 8 characters when using --no-interaction.');
+            }
+        } else {
+            // Interactive mode - ask for password if not provided
+            if ($password === null) {
+                $password = $this->secret('Admin password');
+            }
+            while (strlen((string) $password) < 8) {
+                $this->error('Password must be at least 8 characters.');
+                $password = $this->secret('Admin password');
+            }
         }
 
         // Create the user

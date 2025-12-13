@@ -45,20 +45,12 @@ class InstallerRunner
                 return 'Storage symlink created';
             });
 
-            // Step 5: Seed initial data (if requested)
-            if ($config['seed_demo_data'] ?? false) {
-                $this->runStep('Seeding demo data', function() {
-                    Artisan::call('db:seed', ['--force' => true]);
-                    return 'Demo data seeded';
-                });
-            }
-
-            // Step 6: Setup TallCMS (roles, permissions, admin user)
+            // Step 5: Setup TallCMS (roles, permissions, admin user)
             $this->runStep('Setting up TallCMS roles and admin user', function() use ($config) {
                 return $this->runTallCmsSetup($config['admin']);
             });
 
-            // Step 7: Clear all caches
+            // Step 6: Clear all caches
             $this->runStep('Optimizing application', function() {
                 Artisan::call('config:cache');
                 Artisan::call('route:cache');
@@ -109,7 +101,7 @@ class InstallerRunner
     private function runTallCmsSetup(array $adminConfig): string
     {
         try {
-            Artisan::call('tallcms:setup', [
+            $exitCode = Artisan::call('tallcms:setup', [
                 '--force' => true,
                 '--name' => $adminConfig['name'] ?? null,
                 '--email' => $adminConfig['email'] ?? null,
@@ -117,8 +109,24 @@ class InstallerRunner
                 '--no-interaction' => true,
             ]);
 
+            // Check if command failed
+            if ($exitCode !== 0) {
+                $output = Artisan::output();
+                throw new \Exception("TallCMS setup command failed with exit code {$exitCode}. Output: {$output}");
+            }
+
             return 'TallCMS setup completed';
         } catch (\Exception $e) {
+            // Log the full error for debugging
+            \Log::error('TallCMS setup failed', [
+                'error' => $e->getMessage(),
+                'admin_config' => [
+                    'name' => $adminConfig['name'] ?? 'null',
+                    'email' => $adminConfig['email'] ?? 'null',
+                    'password_length' => isset($adminConfig['password']) ? strlen($adminConfig['password']) : 0,
+                ]
+            ]);
+            
             throw new \Exception("TallCMS setup failed: " . $e->getMessage());
         }
     }

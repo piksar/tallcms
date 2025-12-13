@@ -325,30 +325,6 @@
                     </div>
                 </div>
 
-                <!-- Options -->
-                <div class="border border-gray-200 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                        <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
-                        </svg>
-                        Installation Options
-                    </h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="checkbox" 
-                                   id="seed_demo_data" 
-                                   name="seed_demo_data" 
-                                   value="1"
-                                   {{ old('seed_demo_data') ? 'checked' : '' }}
-                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="seed_demo_data" class="ml-2 block text-sm font-medium text-gray-700">
-                                Install demo content
-                            </label>
-                        </div>
-                        <p class="text-xs text-gray-500 ml-6">Includes sample pages and posts to help you get started</p>
-                    </div>
-                </div>
             </div>
 
             <div class="mt-8 flex justify-between">

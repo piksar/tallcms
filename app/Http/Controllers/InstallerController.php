@@ -131,9 +131,6 @@ class InstallerController extends Controller
             'mail_encryption' => 'nullable|in:tls,ssl',
             'mail_from_address' => 'nullable|email|max:255',
             'mail_from_name' => 'nullable|string|max:255',
-            
-            // Options
-            'seed_demo_data' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -217,7 +214,6 @@ class InstallerController extends Controller
                     'email' => $request->input('admin_email'),
                     'password' => $request->input('admin_password'),
                 ],
-                'seed_demo_data' => $request->boolean('seed_demo_data'),
             ];
 
             $result = $this->installerRunner->runInstallation($config);
