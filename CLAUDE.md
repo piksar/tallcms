@@ -44,7 +44,7 @@ php artisan pint       # Laravel Pint code formatter (included in dev deps)
 ### Filament Admin Panel
 - **Path**: `/admin` (accessible at `/admin` URL)
 - **Provider**: `app/Providers/Filament/AdminPanelProvider.php`
-- **Theme**: Amber primary color scheme
+- **Theme**: Amber primary color scheme with custom CSS architecture
 - **Authentication**: Built-in login system with full middleware stack
 
 ### Auto-Discovery Paths
@@ -52,6 +52,14 @@ Filament automatically discovers components in these directories (create as need
 - **Resources**: `app/Filament/Resources/` (CRUD interfaces)
 - **Pages**: `app/Filament/Pages/` (custom admin pages)
 - **Widgets**: `app/Filament/Widgets/` (dashboard components)
+
+### Block Styling System
+TallCMS implements a unified block styling system that ensures consistency between admin preview and frontend display:
+
+- **Admin Theme**: `resources/css/filament/admin/theme.css` - Custom Filament theme
+- **Shared Blocks**: `resources/css/blocks.css` - Unified block styles for both admin and frontend
+- **CSS Custom Properties**: Theme integration using `--block-*` custom properties
+- **Build Process**: Both admin and frontend CSS are compiled via Vite, sharing the same blocks.css
 
 ### Database
 - **Default**: SQLite (`database/database.sqlite`)
@@ -62,9 +70,10 @@ Filament automatically discovers components in these directories (create as need
 - **CSS**: Tailwind CSS 4.0 (latest)
 - **Build Tool**: Vite 7.0.7
 - **Entry Points**: 
-  - `resources/css/app.css`
+  - `resources/css/app.css` (frontend)
+  - `resources/css/filament/admin/theme.css` (admin panel)
   - `resources/js/app.js`
-- **Compiled Assets**: `public/css/` and `public/js/`
+- **Compiled Assets**: `public/build/`
 
 ## Development Workflow
 
@@ -124,8 +133,10 @@ php artisan make:user  # Interactive admin user creation
 
 ### Development Guidelines
 - **Tailwind CSS**: Always use utility classes when building blocks and themes
-- **Native Approach**: Stay as native to Tailwind as possible, avoiding custom CSS
+- **Block Styling**: Use centralized blocks.css files with CSS custom properties for theme integration
+- **Admin/Frontend Consistency**: Ensure styling works in both admin preview and frontend
 - **Utility-First**: Prefer Tailwind utilities for styling consistency and maintainability
+- **Custom CSS**: When needed, use CSS custom properties to maintain theme compatibility
 
 ### Testing Environment
 - Uses array drivers for cache and session during tests
@@ -143,9 +154,17 @@ This is a Laravel 12 application with a complete TallCMS implementation using Fi
 - **Post-Category Relationship** (`tallcms_post_category`) - Many-to-many pivot table
 
 ### Custom Blocks for Rich Editor
+- **ContentBlock** - Article/blog content with subtitle, content width options, and heading levels
 - **HeroBlock** - Hero sections with background images and CTAs
 - **CallToActionBlock** - Styled promotional sections with buttons  
 - **ImageGalleryBlock** - Professional galleries with lightbox functionality
+
+#### Block Development Guidelines
+- Use CSS custom properties (`--block-*`) for theme integration
+- Mirror styling between admin (`blocks.css`) and frontend for consistency
+- Follow semantic HTML structure with proper heading hierarchy (H2/H3/H4)
+- Leverage Tailwind utility classes for responsive design
+- Test both admin preview and frontend display during development
 
 ### Merge Tags System
 Dynamic content insertion using `{{tag_name}}` syntax:
@@ -161,3 +180,78 @@ Dynamic content insertion using `{{tag_name}}` syntax:
 - **CategoryResource** - Manages hierarchical categories for posts
 
 All tables use `tallcms_` prefix for future plugin compatibility.
+
+## CSS Architecture & Theme Development
+
+### Overview
+TallCMS uses a unified CSS architecture that ensures consistent styling between the Filament admin panel and frontend. This architecture leverages CSS custom properties for theme integration and centralized block styling.
+
+### File Structure
+```
+resources/css/
+├── app.css                          # Frontend entry point
+├── blocks.css                       # Shared block styles for both admin and frontend
+└── filament/admin/
+    └── theme.css                    # Admin panel entry point (imports shared blocks.css)
+```
+
+### CSS Custom Properties System
+All blocks use CSS custom properties for theme integration:
+
+```css
+:root {
+    --block-heading-color: #111827;
+    --block-text-color: #374151;
+    --block-link-color: #2563eb;
+    --block-link-hover-color: #1d4ed8;
+    --block-border-color: #e5e7eb;
+    --block-background-light: #f9fafb;
+}
+```
+
+### Block Template Integration
+Block templates set theme-specific custom properties as inline styles to avoid conflicts:
+
+```php
+@php
+    // Build inline CSS custom properties for this block instance
+    $customProperties = collect([
+        '--block-heading-color: ' . $textPreset['heading'],
+        '--block-text-color: ' . $textPreset['description'], 
+        '--block-link-color: ' . ($textPreset['link'] ?? '#2563eb'),
+        '--block-link-hover-color: ' . ($textPreset['link_hover'] ?? '#1d4ed8')
+    ])->join('; ') . ';';
+@endphp
+
+<article style="{{ $customProperties }}">
+    <!-- block content -->
+</article>
+```
+
+### Development Workflow
+
+#### Creating New Blocks
+1. **Create Block Component**: Use Filament form components with theme integration
+2. **Create Template**: Build responsive template with semantic HTML
+3. **Add Block Styles**: Update both `blocks.css` files with consistent styling
+4. **Use Custom Properties**: Integrate with theme system via `--block-*` properties
+5. **Build Assets**: Run `npm run build` to compile both admin and frontend CSS
+6. **Test Consistency**: Verify styling in both admin preview and frontend
+
+#### Modifying Existing Blocks  
+1. **Update Template**: Modify the block template file
+2. **Update Styles**: Sync changes in both admin and frontend `blocks.css` files
+3. **Build & Test**: Compile assets and test in both contexts
+
+#### Adding Theme Integration
+- Use `theme_text_presets()` helper to get current theme colors
+- Set CSS custom properties in block templates
+- Reference custom properties in CSS classes
+- Ensure fallback values for all custom properties
+
+### Build Process
+- **Frontend**: `resources/css/app.css` imports shared `blocks.css` and compiles to `public/build/assets/app-*.css`
+- **Admin**: `resources/css/filament/admin/theme.css` imports shared `blocks.css` and compiles to `public/build/assets/theme-*.css`
+- **Shared CSS**: Both builds use the same `blocks.css` ensuring perfect consistency
+- **Vite Configuration**: Automatically detects and processes both entry points
+- **Hot Reload**: Changes to the shared blocks.css file update both admin and frontend automatically
