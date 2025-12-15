@@ -10,6 +10,102 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Unified Color System - matches Filament colors exactly */
+    /* Amber/Yellow Primary (matching Filament's Color::Amber) */
+    --color-primary-50: rgb(255, 251, 235);
+    --color-primary-100: rgb(254, 243, 199);
+    --color-primary-200: rgb(253, 230, 138);
+    --color-primary-300: rgb(252, 211, 77);
+    --color-primary-400: rgb(251, 191, 36);
+    --color-primary-500: rgb(245, 158, 11);
+    --color-primary-600: rgb(217, 119, 6);
+    --color-primary-700: rgb(180, 83, 9);
+    --color-primary-800: rgb(146, 64, 14);
+    --color-primary-900: rgb(120, 53, 15);
+    --color-primary-950: rgb(69, 26, 3);
+
+    /* Secondary/Slate */
+    --color-secondary-50: rgb(248, 250, 252);
+    --color-secondary-100: rgb(241, 245, 249);
+    --color-secondary-200: rgb(226, 232, 240);
+    --color-secondary-300: rgb(203, 213, 225);
+    --color-secondary-400: rgb(148, 163, 184);
+    --color-secondary-500: rgb(100, 116, 139);
+    --color-secondary-600: rgb(71, 85, 105);
+    --color-secondary-700: rgb(51, 65, 85);
+    --color-secondary-800: rgb(30, 41, 59);
+    --color-secondary-900: rgb(15, 23, 42);
+    --color-secondary-950: rgb(2, 6, 23);
+
+    /* Success/Green */
+    --color-success-50: rgb(240, 253, 244);
+    --color-success-100: rgb(220, 252, 231);
+    --color-success-200: rgb(187, 247, 208);
+    --color-success-300: rgb(134, 239, 172);
+    --color-success-400: rgb(74, 222, 128);
+    --color-success-500: rgb(34, 197, 94);
+    --color-success-600: rgb(22, 163, 74);
+    --color-success-700: rgb(21, 128, 61);
+    --color-success-800: rgb(22, 101, 52);
+    --color-success-900: rgb(20, 83, 45);
+    --color-success-950: rgb(5, 46, 22);
+
+    /* Warning/Orange */
+    --color-warning-50: rgb(255, 247, 237);
+    --color-warning-100: rgb(255, 237, 213);
+    --color-warning-200: rgb(254, 215, 170);
+    --color-warning-300: rgb(253, 186, 116);
+    --color-warning-400: rgb(251, 146, 60);
+    --color-warning-500: rgb(249, 115, 22);
+    --color-warning-600: rgb(234, 88, 12);
+    --color-warning-700: rgb(194, 65, 12);
+    --color-warning-800: rgb(154, 52, 18);
+    --color-warning-900: rgb(124, 45, 18);
+    --color-warning-950: rgb(67, 20, 7);
+
+    /* Danger/Red */
+    --color-danger-50: rgb(254, 242, 242);
+    --color-danger-100: rgb(254, 226, 226);
+    --color-danger-200: rgb(254, 202, 202);
+    --color-danger-300: rgb(252, 165, 165);
+    --color-danger-400: rgb(248, 113, 113);
+    --color-danger-500: rgb(239, 68, 68);
+    --color-danger-600: rgb(220, 38, 38);
+    --color-danger-700: rgb(185, 28, 28);
+    --color-danger-800: rgb(153, 27, 27);
+    --color-danger-900: rgb(127, 29, 29);
+    --color-danger-950: rgb(69, 10, 10);
+
+    /* Neutral/Gray */
+    --color-neutral-50: rgb(248, 250, 252);
+    --color-neutral-100: rgb(241, 245, 249);
+    --color-neutral-200: rgb(226, 232, 240);
+    --color-neutral-300: rgb(203, 213, 225);
+    --color-neutral-400: rgb(148, 163, 184);
+    --color-neutral-500: rgb(100, 116, 139);
+    --color-neutral-600: rgb(71, 85, 105);
+    --color-neutral-700: rgb(51, 65, 85);
+    --color-neutral-800: rgb(30, 41, 59);
+    --color-neutral-900: rgb(15, 23, 42);
+    --color-neutral-950: rgb(2, 6, 23);
+
+    /* Semantic Text Colors */
+    --color-text-primary: var(--color-neutral-900);
+    --color-text-secondary: var(--color-neutral-600);
+    --color-text-muted: var(--color-neutral-500);
+    --color-bg-primary: var(--color-neutral-50);
+    --color-bg-secondary: var(--color-neutral-100);
+}
+
+@media (prefers-color-scheme: dark) {
+    @theme {
+        --color-text-primary: var(--color-neutral-50);
+        --color-text-secondary: var(--color-neutral-100);
+        --color-text-muted: var(--color-neutral-500);
+        --color-bg-primary: var(--color-neutral-900);
+        --color-bg-secondary: var(--color-neutral-700);
+    }
 }
 
 /* Fluid Typography */

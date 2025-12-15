@@ -12,6 +12,7 @@ use Filament\Navigation\MenuItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use App\Support\ThemeColors;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -37,7 +38,11 @@ class AdminPanelProvider extends PanelProvider
                 AppAuthentication::make(),
             ])
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => ThemeColors::getPrimaryColor(),
+                'secondary' => ThemeColors::getFilamentColors()['secondary'],
+                'success' => ThemeColors::getFilamentColors()['success'],
+                'warning' => ThemeColors::getFilamentColors()['warning'],
+                'danger' => ThemeColors::getFilamentColors()['danger'],
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
