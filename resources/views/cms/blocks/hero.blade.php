@@ -14,6 +14,49 @@
         'right' => 'text-right'
     ];
     
+    // Primary button color presets
+    $primaryButtonPresets = [
+        'white' => ['bg' => '#ffffff', 'text' => '#111827'],
+        'primary' => ['bg' => '#3b82f6', 'text' => '#ffffff'],
+        'success' => ['bg' => '#10b981', 'text' => '#ffffff'],
+        'warning' => ['bg' => '#f59e0b', 'text' => '#111827'],
+        'danger' => ['bg' => '#ef4444', 'text' => '#ffffff'],
+        'dark' => ['bg' => '#111827', 'text' => '#ffffff'],
+    ];
+    
+    // Secondary button color presets
+    $secondaryButtonPresets = [
+        'outline-white' => ['bg' => '#ffffff00', 'text' => '#ffffff', 'border' => '#ffffff'],
+        'outline-primary' => ['bg' => '#ffffff00', 'text' => '#3b82f6', 'border' => '#3b82f6'],
+        'outline-success' => ['bg' => '#ffffff00', 'text' => '#10b981', 'border' => '#10b981'],
+        'outline-warning' => ['bg' => '#ffffff00', 'text' => '#f59e0b', 'border' => '#f59e0b'],
+        'outline-danger' => ['bg' => '#ffffff00', 'text' => '#ef4444', 'border' => '#ef4444'],
+        'filled-white' => ['bg' => '#ffffff', 'text' => '#111827', 'border' => '#ffffff'],
+        'filled-primary' => ['bg' => '#3b82f6', 'text' => '#ffffff', 'border' => '#3b82f6'],
+    ];
+    
+    // Resolve primary button colors
+    if (($primary_button_style ?? 'preset') === 'preset') {
+        $primaryPreset = $primaryButtonPresets[$primary_button_preset ?? 'white'] ?? $primaryButtonPresets['white'];
+        $primaryBgColor = $primaryPreset['bg'];
+        $primaryTextColor = $primaryPreset['text'];
+    } else {
+        $primaryBgColor = $primary_button_bg_color ?? '#ffffff';
+        $primaryTextColor = $primary_button_text_color ?? '#111827';
+    }
+    
+    // Resolve secondary button colors
+    if (($secondary_button_style ?? 'preset') === 'preset') {
+        $secondaryPreset = $secondaryButtonPresets[$secondary_button_preset ?? 'outline-white'] ?? $secondaryButtonPresets['outline-white'];
+        $secondaryBgColor = $secondaryPreset['bg'];
+        $secondaryTextColor = $secondaryPreset['text'];
+        $secondaryBorderColor = $secondaryPreset['border'];
+    } else {
+        $secondaryBgColor = $secondary_button_bg_color ?? '#ffffff00';
+        $secondaryTextColor = $secondary_button_text_color ?? '#ffffff';
+        $secondaryBorderColor = $secondary_button_border_color ?? '#ffffff';
+    }
+    
     $heightClass = $heightClasses[$height] ?? 'min-h-[70vh]';
     $alignmentClass = $alignmentClasses[$text_alignment] ?? 'text-center';
     $overlayOpacity = ($overlay_opacity ?? 40) / 100;
@@ -82,8 +125,8 @@
                     
                     {{-- Primary Button --}}
                     <a href="{{ e($button_url) }}" 
-                       class="inline-flex justify-center items-center bg-white text-gray-900 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-                       style="display: inline-flex; justify-content: center; align-items: center; background-color: white; color: #111827; padding: 1rem 2rem; border-radius: 0.75rem; font-weight: 600; font-size: clamp(1rem, 2vw, 1.125rem); text-decoration: none; transition: all 0.3s ease; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);">
+                       class="inline-flex justify-center items-center px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                       style="display: inline-flex; justify-content: center; align-items: center; background-color: {{ $primaryBgColor }}; color: {{ $primaryTextColor }}; padding: 1rem 2rem; border-radius: 0.75rem; font-weight: 600; font-size: clamp(1rem, 2vw, 1.125rem); text-decoration: none; transition: all 0.3s ease; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);">
                         {{ $button_text }}
                         <svg class="ml-3 w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -93,8 +136,8 @@
                     {{-- Secondary Button (if secondary text exists) --}}
                     @if($secondary_button_text && $secondary_button_url && $secondary_button_url !== '#')
                         <a href="{{ e($secondary_button_url) }}" 
-                           class="inline-flex justify-center items-center border-2 border-white text-white px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-semibold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300"
-                           style="display: inline-flex; justify-content: center; align-items: center; border: 2px solid white; color: white; padding: 1rem 2rem; border-radius: 0.75rem; font-weight: 600; font-size: clamp(1rem, 2vw, 1.125rem); text-decoration: none; transition: all 0.3s ease;">
+                           class="inline-flex justify-center items-center border-2 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-semibold text-lg hover:opacity-80 transition-all duration-300"
+                           style="display: inline-flex; justify-content: center; align-items: center; background-color: {{ $secondaryBgColor }}; color: {{ $secondaryTextColor }}; border: 2px solid {{ $secondaryBorderColor }}; padding: 1rem 2rem; border-radius: 0.75rem; font-weight: 600; font-size: clamp(1rem, 2vw, 1.125rem); text-decoration: none; transition: all 0.3s ease;">
                             {{ $secondary_button_text }}
                         </a>
                     @endif
