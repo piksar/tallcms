@@ -88,7 +88,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "hexadog/laravel-theme-installer": true
         }
     },
     "minimum-stability": "stable",

@@ -49,3 +49,56 @@ if (!function_exists('theme_padding_presets')) {
         return theme()->getPaddingPresets();
     }
 }
+
+// Multi-Theme System Helper Functions
+
+if (!function_exists('theme_manager')) {
+    /**
+     * Get the theme manager instance
+     */
+    function theme_manager(): \App\Services\ThemeManager
+    {
+        return app(\App\Services\ThemeManager::class);
+    }
+}
+
+if (!function_exists('active_theme')) {
+    /**
+     * Get the active theme instance
+     */
+    function active_theme(): \App\Models\Theme
+    {
+        return theme_manager()->getActiveTheme();
+    }
+}
+
+if (!function_exists('theme_asset')) {
+    /**
+     * Get theme asset URL with fallback
+     */
+    function theme_asset(string $path): string
+    {
+        return theme_manager()->themeAsset($path);
+    }
+}
+
+if (!function_exists('theme_vite_assets')) {
+    /**
+     * Get theme Vite assets from manifest
+     */
+    function theme_vite_assets(array $entrypoints): array
+    {
+        return theme_manager()->getThemeViteAssets($entrypoints);
+    }
+}
+
+
+if (!function_exists('has_theme_override')) {
+    /**
+     * Check if current theme has override for specific view
+     */
+    function has_theme_override(string $viewPath): bool
+    {
+        return active_theme()->hasViewOverride($viewPath);
+    }
+}

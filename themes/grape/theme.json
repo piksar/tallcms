@@ -1,0 +1,35 @@
+{
+    "name": "grape",
+    "slug": "grape",
+    "version": "1.0.0",
+    "description": "A beautiful and modern theme for TallCMS",
+    "author": "Theme Developer",
+    "tailwind": {
+        "colors": {
+            "primary": {
+                "50": "#f8f5fb",
+                "100": "#f1eaf6",
+                "200": "#e2d5ee",
+                "300": "#c5abdc",
+                "400": "#a981cb",
+                "500": "#6F2DA8",
+                "600": "#642997",
+                "700": "#592486",
+                "800": "#4e2076",
+                "900": "#431b65",
+                "950": "#381754"
+            }
+        }
+    },
+    "supports": {
+        "dark_mode": true,
+        "responsive": true,
+        "animations": true,
+        "custom_fonts": false
+    },
+    "build": {
+        "css": "resources/css/app.css",
+        "js": "resources/js/app.js",
+        "output": "public"
+    }
+}
