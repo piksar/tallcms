@@ -203,6 +203,17 @@ class HeroBlock extends RichContentCustomBlock
                         Tab::make('Background & Layout')
                             ->icon('heroicon-m-photo')
                             ->schema([
+                                Select::make('height')
+                                    ->label('Section Height')
+                                    ->options([
+                                        'small' => 'Small (50vh)',
+                                        'medium' => 'Medium (70vh)',
+                                        'large' => 'Large (90vh)',
+                                        'full' => 'Full screen (100vh)',
+                                    ])
+                                    ->default('medium')
+                                    ->live(),
+
                                 FileUpload::make('background_image')
                                     ->image()
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
@@ -216,12 +227,12 @@ class HeroBlock extends RichContentCustomBlock
                                         'medium' => 'Recommended: 2560×1100px (21:9). Keep focal point centered. Max 5MB.',
                                         default => 'Recommended: 2560×1440px (16:9). Keep focal point centered. Max 5MB.',
                                     }),
-                                    
+
                                 Toggle::make('parallax_effect')
                                     ->label('Enable Parallax Effect')
                                     ->default(true)
                                     ->helperText('Creates a scrolling effect where the background moves slower than content'),
-                                    
+
                                 Slider::make('overlay_opacity')
                                     ->label('Background Overlay Opacity')
                                     ->range(minValue: 0, maxValue: 100)
@@ -231,26 +242,15 @@ class HeroBlock extends RichContentCustomBlock
                                     ->pipsValues([0, 25, 50, 75, 100])
                                     ->fillTrack()
                                     ->helperText('Controls the darkness of the overlay on background images (0% = no overlay, 100% = full dark)'),
-                                    
+
                                 Select::make('text_alignment')
                                     ->label('Text Alignment')
                                     ->options([
                                         'left' => 'Left',
-                                        'center' => 'Center', 
+                                        'center' => 'Center',
                                         'right' => 'Right',
                                     ])
                                     ->default('center'),
-                                    
-                                Select::make('height')
-                                    ->label('Section Height')
-                                    ->options([
-                                        'small' => 'Small (50vh)',
-                                        'medium' => 'Medium (70vh)',
-                                        'large' => 'Large (90vh)',
-                                        'full' => 'Full screen (100vh)',
-                                    ])
-                                    ->default('medium')
-                                    ->live(),
                             ]),
                     ]),
             ])->slideOver();

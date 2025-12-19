@@ -1,0 +1,17 @@
+{
+    "name": "tallcms-theme-military",
+    "version": "1.0.0",
+    "description": "a classic army green theme",
+    "author": "Dan",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.18",
+        "laravel-vite-plugin": "^2.0.0",
+        "tailwindcss": "^4.1.18",
+        "vite": "^7.0.7"
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "gold",
+    "slug": "gold",
+    "version": "1.0.0",
+    "description": "A beautiful and modern theme for TallCMS",
+    "author": "Dan Aquino",
+    "tailwind": {
+        "colors": {
+            "primary": {
+                "50": "#fffdf2",
+                "100": "#fffbe6",
+                "200": "#fff7cc",
+                "300": "#ffef99",
+                "400": "#ffe766",
+                "500": "#FFD700",
+                "600": "#e6c200",
+                "700": "#ccac00",
+                "800": "#b39700",
+                "900": "#998100",
+                "950": "#806c00"
+            }
+        }
+    },
+    "supports": {
+        "dark_mode": true,
+        "responsive": true,
+        "animations": true,
+        "custom_fonts": false
+    },
+    "build": {
+        "css": "resources/css/app.css",
+        "js": "resources/js/app.js",
+        "output": "public"
+    }
+}

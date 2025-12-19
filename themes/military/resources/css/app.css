@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/* Theme-specific styles */
+:root {
+    --theme-primary: theme('colors.primary.600');
+    --theme-primary-hover: theme('colors.primary.700');
+}
+
+/* Custom theme utilities */
+.theme-gradient {
+    background: linear-gradient(135deg, theme('colors.primary.500'), theme('colors.primary.600'));
+}
+
+.theme-text-gradient {
+    background: linear-gradient(135deg, theme('colors.primary.500'), theme('colors.primary.700'));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

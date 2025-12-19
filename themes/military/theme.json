@@ -1,0 +1,35 @@
+{
+    "name": "military",
+    "slug": "military",
+    "version": "1.0.0",
+    "description": "a classic army green theme",
+    "author": "Dan",
+    "tailwind": {
+        "colors": {
+            "primary": {
+                "50": "#f6f6f4",
+                "100": "#edeee9",
+                "200": "#dbddd2",
+                "300": "#b7baa6",
+                "400": "#939879",
+                "500": "#4B5320",
+                "600": "#444b1d",
+                "700": "#3c421a",
+                "800": "#353a16",
+                "900": "#2d3213",
+                "950": "#262a10"
+            }
+        }
+    },
+    "supports": {
+        "dark_mode": true,
+        "responsive": true,
+        "animations": true,
+        "custom_fonts": false
+    },
+    "build": {
+        "css": "resources/css/app.css",
+        "js": "resources/js/app.js",
+        "output": "public"
+    }
+}
