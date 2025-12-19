@@ -211,7 +211,11 @@ class HeroBlock extends RichContentCustomBlock
                                     ->disk('public')
                                     ->visibility('public')
                                     ->nullable()
-                                    ->helperText('Recommended: 2560×1440px (16:9). Keep focal point centered to avoid cropping. Max 5MB. Formats: JPEG, PNG, WebP.'),
+                                    ->helperText(fn (Get $get): string => match($get('height')) {
+                                        'small' => 'Recommended: 2560×800px (21:9 panoramic). Keep focal point centered. Max 5MB.',
+                                        'medium' => 'Recommended: 2560×1100px (21:9). Keep focal point centered. Max 5MB.',
+                                        default => 'Recommended: 2560×1440px (16:9). Keep focal point centered. Max 5MB.',
+                                    }),
                                     
                                 Toggle::make('parallax_effect')
                                     ->label('Enable Parallax Effect')
@@ -240,12 +244,13 @@ class HeroBlock extends RichContentCustomBlock
                                 Select::make('height')
                                     ->label('Section Height')
                                     ->options([
-                                        'small' => 'Small (40vh)',
-                                        'medium' => 'Medium (60vh)',
-                                        'large' => 'Large (80vh)', 
+                                        'small' => 'Small (50vh)',
+                                        'medium' => 'Medium (70vh)',
+                                        'large' => 'Large (90vh)',
                                         'full' => 'Full screen (100vh)',
                                     ])
-                                    ->default('medium'),
+                                    ->default('medium')
+                                    ->live(),
                             ]),
                     ]),
             ])->slideOver();
