@@ -6,5 +6,5 @@ return array (
   'cache_ttl' => 3600,
   'preview_duration' => 30,
   'rollback_duration' => 24,
-  'allow_uploads' => false,
+  'allow_uploads' => true,
 );

@@ -15,6 +15,7 @@ use App\Events\ThemeActivating;
 use App\Events\ThemeActivated;
 use App\Events\ThemeInstalling;
 use App\Events\ThemeInstalled;
+use ZipArchive;
 
 class ThemeManager
 {
@@ -357,9 +358,13 @@ class ThemeManager
      */
     public function installTheme(string $slug): bool
     {
+        // Refresh cache to discover newly extracted themes
+        $this->refreshCache();
+
         $theme = Theme::find($slug);
-        
+
         if (!$theme) {
+            Log::error("installTheme: Theme '{$slug}' not found after cache refresh");
             return false;
         }
 
@@ -370,13 +375,18 @@ class ThemeManager
 
         // Create public symlink
         if (!$this->publishThemeAssets($theme)) {
+            Log::error("installTheme: Failed to publish theme assets for '{$slug}'");
             $success = false;
         }
 
-        // Build theme assets if package.json exists
+        // Build theme assets only if package.json exists AND theme is not already built
+        // Pre-built themes (uploaded ZIPs) should already have public/build/manifest.json
         $packageJsonPath = $theme->path . '/package.json';
-        if (File::exists($packageJsonPath)) {
+        $manifestPath = $theme->path . '/public/build/manifest.json';
+
+        if (File::exists($packageJsonPath) && !File::exists($manifestPath)) {
             if (!$this->buildThemeAssets($theme)) {
+                Log::error("installTheme: Failed to build theme assets for '{$slug}'");
                 $success = false;
             }
         }
@@ -388,6 +398,162 @@ class ThemeManager
         Event::dispatch(new ThemeInstalled($theme, $success));
 
         return $success;
+    }
+
+    /**
+     * Extract a theme from a validated ZIP file
+     *
+     * @param string $zipPath Path to the ZIP file
+     * @param string $slug Theme slug (from validated theme.json)
+     * @return array{success: bool, error: ?string}
+     */
+    public function extractTheme(string $zipPath, string $slug): array
+    {
+        $targetPath = base_path("themes/{$slug}");
+
+        // Prevent overwriting existing themes
+        if (File::exists($targetPath)) {
+            return [
+                'success' => false,
+                'error' => "Theme '{$slug}' already exists. Please remove it first or choose a different slug.",
+            ];
+        }
+
+        $zip = new ZipArchive();
+        $openResult = $zip->open($zipPath);
+
+        if ($openResult !== true) {
+            return [
+                'success' => false,
+                'error' => "Failed to open ZIP file (error code: {$openResult}).",
+            ];
+        }
+
+        try {
+            // Determine extraction mode: root or subdirectory
+            // Some ZIPs have theme.json at root, others have it inside a single folder
+            $themeJsonIndex = $this->findThemeJsonInZip($zip);
+
+            if ($themeJsonIndex === null) {
+                return [
+                    'success' => false,
+                    'error' => 'Could not locate theme.json in ZIP file.',
+                ];
+            }
+
+            $themeJsonPath = $zip->getNameIndex($themeJsonIndex);
+            $prefix = dirname($themeJsonPath);
+            $hasSubdirectory = $prefix !== '.' && $prefix !== '';
+
+            // Create target directory
+            File::makeDirectory($targetPath, 0755, true, true);
+
+            // Extract files
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
+
+                // Skip directories (they're created automatically)
+                if (str_ends_with($filename, '/')) {
+                    continue;
+                }
+
+                // Calculate target path
+                $relativePath = $filename;
+                if ($hasSubdirectory && str_starts_with($filename, $prefix . '/')) {
+                    $relativePath = substr($filename, strlen($prefix) + 1);
+                }
+
+                // Skip if path is empty after prefix removal
+                if (empty($relativePath)) {
+                    continue;
+                }
+
+                $destPath = $targetPath . '/' . $relativePath;
+
+                // Ensure destination directory exists
+                $destDir = dirname($destPath);
+                if (!File::exists($destDir)) {
+                    File::makeDirectory($destDir, 0755, true, true);
+                }
+
+                // Extract file
+                $content = $zip->getFromIndex($i);
+                if ($content === false) {
+                    // Cleanup on failure
+                    File::deleteDirectory($targetPath);
+                    return [
+                        'success' => false,
+                        'error' => "Failed to extract file: {$filename}",
+                    ];
+                }
+
+                File::put($destPath, $content);
+            }
+
+            return ['success' => true, 'error' => null];
+
+        } finally {
+            $zip->close();
+        }
+    }
+
+    /**
+     * Find theme.json location in ZIP (root or single subdirectory)
+     */
+    protected function findThemeJsonInZip(ZipArchive $zip): ?int
+    {
+        // First try root level
+        $index = $zip->locateName('theme.json');
+        if ($index !== false) {
+            return $index;
+        }
+
+        // Try single subdirectory pattern: {folder}/theme.json
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $name = $zip->getNameIndex($i);
+            if (preg_match('#^[^/]+/theme\.json$#', $name)) {
+                return $i;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Delete an uploaded/extracted theme
+     */
+    public function deleteTheme(string $slug): array
+    {
+        $themePath = base_path("themes/{$slug}");
+        $publicPath = public_path("themes/{$slug}");
+
+        // Prevent deleting active theme
+        $activeTheme = $this->getActiveTheme();
+        if ($activeTheme->slug === $slug) {
+            return [
+                'success' => false,
+                'error' => 'Cannot delete the currently active theme.',
+            ];
+        }
+
+        // Remove theme directory
+        if (File::exists($themePath)) {
+            File::deleteDirectory($themePath);
+        }
+
+        // Remove public symlink/directory
+        if (File::exists($publicPath)) {
+            if (is_link($publicPath)) {
+                unlink($publicPath);
+            } else {
+                File::deleteDirectory($publicPath);
+            }
+        }
+
+        // Clear cache
+        $this->clearCache();
+
+        return ['success' => true, 'error' => null];
     }
 
     /**

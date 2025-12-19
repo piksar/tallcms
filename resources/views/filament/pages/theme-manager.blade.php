@@ -178,6 +178,14 @@
                         >
                             Preview
                         </x-filament::button>
+                        <x-filament::button
+                            wire:click="mountAction('delete', { slug: '{{ $themeDetails['slug'] }}', name: '{{ addslashes($themeDetails['name']) }}' })"
+                            color="danger"
+                            size="sm"
+                            outlined
+                        >
+                            Delete
+                        </x-filament::button>
                     </div>
                 @endunless
 

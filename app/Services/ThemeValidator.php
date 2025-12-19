@@ -211,6 +211,16 @@ class ThemeValidator
                         }
                     }
 
+                    // Validate slug format (prevent path traversal via slug)
+                    if (!empty($themeData['slug'])) {
+                        if (!preg_match('/^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/', $themeData['slug'])) {
+                            $errors[] = 'Slug must contain only lowercase letters, numbers, and hyphens (cannot start or end with hyphen)';
+                        }
+                        if (strlen($themeData['slug']) > 64) {
+                            $errors[] = 'Slug must be 64 characters or less';
+                        }
+                    }
+
                     // Check compatibility
                     $compatResult = $this->checkCompatibility($themeData);
                     $errors = array_merge($errors, $compatResult->errors);
@@ -279,10 +289,13 @@ class ThemeValidator
                     }
                 }
 
-                // Validate slug format
+                // Validate slug format (prevent path traversal via slug)
                 if (!empty($themeData['slug'])) {
-                    if (!preg_match('/^[a-z0-9-]+$/', $themeData['slug'])) {
-                        $errors[] = 'Slug must contain only lowercase letters, numbers, and hyphens';
+                    if (!preg_match('/^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/', $themeData['slug'])) {
+                        $errors[] = 'Slug must contain only lowercase letters, numbers, and hyphens (cannot start or end with hyphen)';
+                    }
+                    if (strlen($themeData['slug']) > 64) {
+                        $errors[] = 'Slug must be 64 characters or less';
                     }
                 }
 
