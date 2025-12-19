@@ -46,7 +46,7 @@ class ImageGalleryBlock extends RichContentCustomBlock
                         '1:1',
                     ])
                     ->required()
-                    ->helperText('Upload up to 12 images (max 5MB each). Accepted formats: JPEG, PNG, WebP. Drag to reorder.'),
+                    ->helperText('Recommended: 1200×800px or larger. Up to 12 images, max 5MB each. Formats: JPEG, PNG, WebP. Drag to reorder.'),
                     
                 Select::make('layout')
                     ->options([

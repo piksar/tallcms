@@ -42,7 +42,6 @@ class HeroBlock extends RichContentCustomBlock
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->required()
                                     ->maxLength(255)
                                     ->placeholder('Enter hero heading'),
                                     
@@ -212,7 +211,7 @@ class HeroBlock extends RichContentCustomBlock
                                     ->disk('public')
                                     ->visibility('public')
                                     ->nullable()
-                                    ->helperText('Maximum file size: 5MB. Accepted formats: JPEG, PNG, WebP'),
+                                    ->helperText('Recommended: 2560×1440px (16:9). Keep focal point centered to avoid cropping. Max 5MB. Formats: JPEG, PNG, WebP.'),
                                     
                                 Toggle::make('parallax_effect')
                                     ->label('Enable Parallax Effect')
