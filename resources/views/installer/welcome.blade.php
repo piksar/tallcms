@@ -34,25 +34,19 @@
             @endif
 
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 class="font-semibold text-blue-900 mb-2">Before you begin</h3>
+                <h3 class="font-semibold text-blue-900 mb-2">Before you begin, make sure you have:</h3>
                 <ul class="text-sm text-blue-800 space-y-1">
                     <li class="flex items-center">
                         <svg class="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Run <code class="bg-blue-100 px-1 rounded">composer install</code> to install dependencies
+                        Your database credentials (host, database name, username, password)
                     </li>
                     <li class="flex items-center">
                         <svg class="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Run <code class="bg-blue-100 px-1 rounded">npm install && npm run build</code> for assets
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Have your database credentials ready
+                        An email address and password for your admin account
                     </li>
                 </ul>
             </div>
