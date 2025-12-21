@@ -401,6 +401,66 @@ Themes can override any template by creating files in the same relative path str
 - Override block: `themes/my-theme/resources/views/cms/blocks/content-block.blade.php`
 - Override component: `themes/my-theme/resources/views/components/hero-section.blade.php`
 
+### Menu System
+
+TallCMS provides a flexible menu system with multiple locations. Themes should implement these menu locations for a complete user experience.
+
+#### Menu Locations
+| Location | Purpose | Recommended Style |
+|----------|---------|------------------|
+| `header` | Main navigation in the header | `horizontal` |
+| `footer` | Footer navigation links | `footer` |
+| `mobile` | Mobile navigation (falls back to header if not defined) | `mobile` |
+| `sidebar` | Sidebar navigation for layouts with sidebars | `sidebar` |
+
+#### Using Menus in Themes
+```blade
+{{-- Header menu (horizontal style) --}}
+<x-menu location="header" style="horizontal" />
+
+{{-- Footer menu --}}
+<x-menu location="footer" style="footer" />
+
+{{-- Mobile menu with fallback to header --}}
+@if(menu('mobile'))
+    <x-menu location="mobile" style="mobile" />
+@else
+    <x-menu location="header" style="mobile" />
+@endif
+
+{{-- Sidebar menu --}}
+<x-menu location="sidebar" style="sidebar" />
+```
+
+#### Available Menu Styles
+- **horizontal**: Inline menu items with dropdown support (for headers)
+- **vertical**: Stacked menu items with nesting (for sidebars)
+- **footer**: Compact inline links (for footers)
+- **mobile**: Touch-optimized with larger tap targets
+- **sidebar**: Collapsible sections with icons
+
+#### Menu Helper Function
+```php
+// Get menu data by location
+$menuItems = menu('header');
+
+// Check if menu exists before rendering
+if (menu('mobile')) {
+    // Mobile menu exists
+}
+```
+
+#### Menu Item Structure
+Each menu item has these properties:
+- `id` - Unique identifier
+- `label` - Display text
+- `url` - Resolved URL
+- `type` - Item type (`link`, `page`, `header`, `separator`)
+- `target` - Link target (`_self`, `_blank`)
+- `icon` - Icon class (e.g., Heroicon class)
+- `css_class` - Custom CSS classes
+- `children` - Nested menu items (array)
+
 ### Asset Management
 
 #### Vite Integration

@@ -67,17 +67,22 @@
             </div>
 
             <!-- Mobile Menu -->
-            <div x-show="open" 
+            <div x-show="open"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform -translate-y-2"
                  x-transition:enter-end="opacity-100 transform translate-y-0"
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 transform translate-y-0"
                  x-transition:leave-end="opacity-0 transform -translate-y-2"
-                 x-cloak 
+                 x-cloak
                  class="md:hidden bg-white/95 backdrop-blur-md shadow-lg border-t border-gray-100">
                 <div class="px-4 py-4 space-y-3">
-                    <x-menu location="header" style="vertical" />
+                    {{-- Use mobile menu if available, fallback to header menu --}}
+                    @if(menu('mobile'))
+                        <x-menu location="mobile" style="mobile" />
+                    @else
+                        <x-menu location="header" style="mobile" />
+                    @endif
                 </div>
             </div>
         </nav>
@@ -90,16 +95,27 @@
         <!-- Theme Footer -->
         <footer class="bg-gray-50">
             <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-16">
-                <div class="text-center">
-                    <h4 class="text-lg font-bold text-gray-900 mb-4">{{ config('app.name') }}</h4>
-                    <p class="text-gray-600 text-sm mb-6">
-                        Powered by TallCMS with Blue Theme
-                    </p>
-                    <div class="mt-8 pt-8 border-t border-gray-200">
-                        <p class="text-sm text-gray-500">
-                            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                    <!-- Brand Column -->
+                    <div class="md:col-span-1">
+                        <h4 class="text-lg font-bold text-gray-900 mb-4">{{ config('app.name') }}</h4>
+                        <p class="text-gray-600 text-sm">
+                            Powered by TallCMS
                         </p>
                     </div>
+
+                    <!-- Footer Menu -->
+                    <div class="md:col-span-3">
+                        <div class="flex flex-wrap justify-end gap-8">
+                            <x-menu location="footer" style="footer" class="flex flex-wrap items-center gap-6" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-gray-200 text-center">
+                    <p class="text-sm text-gray-500">
+                        &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+                    </p>
                 </div>
             </div>
         </footer>
