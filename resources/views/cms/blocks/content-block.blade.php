@@ -19,10 +19,11 @@
     };
     
     // Simple spacing system using Tailwind classes
+    // Note: main has pt-20 to clear nav, so first_section only needs extra visual spacing
     $sectionClasses = collect([
         'w-full',
         'px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16',
-        $first_section ? 'pt-32 sm:pt-36 pb-12 sm:pb-16' : 'py-12 sm:py-16'
+        $first_section ? 'pt-12 sm:pt-16 pb-12 sm:pb-16' : 'py-12 sm:py-16'
     ])->filter()->join(' ');
 
     // Build inline CSS custom properties for this block instance

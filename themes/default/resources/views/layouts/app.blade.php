@@ -87,8 +87,8 @@
             </div>
         </nav>
         
-        <!-- Main Content -->
-        <main>
+        <!-- Main Content - pt-20 clears the fixed nav (h-20) -->
+        <main class="pt-20">
             {{ $slot }}
         </main>
         
