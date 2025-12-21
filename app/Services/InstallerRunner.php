@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CmsPage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
@@ -50,7 +51,12 @@ class InstallerRunner
                 return $this->runTallCmsSetup($config['admin']);
             });
 
-            // Step 6: Clear all caches
+            // Step 6: Create default homepage
+            $this->runStep('Creating default homepage', function() {
+                return $this->createDefaultHomepage();
+            });
+
+            // Step 7: Clear all caches
             $this->runStep('Optimizing application', function() {
                 Artisan::call('config:cache');
                 Artisan::call('route:cache');
@@ -129,6 +135,33 @@ class InstallerRunner
             
             throw new \Exception("TallCMS setup failed: " . $e->getMessage());
         }
+    }
+
+    /**
+     * Create default homepage with hero block
+     */
+    private function createDefaultHomepage(): string
+    {
+        // Check if a homepage already exists
+        if (CmsPage::where('is_homepage', true)->exists()) {
+            return 'Homepage already exists, skipping';
+        }
+
+        // Hero block content showcasing TallCMS
+        $heroContent = '<div data-type="customBlock" data-config="{&quot;heading&quot;:&quot;TALLcms&quot;,&quot;subheading&quot;:&quot;The CMS for Web Artisans&quot;,&quot;button_text&quot;:&quot;Get Started&quot;,&quot;button_link_type&quot;:&quot;custom&quot;,&quot;button_url&quot;:&quot;/admin&quot;,&quot;secondary_button_text&quot;:null,&quot;primary_button_style&quot;:&quot;preset&quot;,&quot;primary_button_preset&quot;:&quot;white&quot;,&quot;height&quot;:&quot;large&quot;,&quot;background_image&quot;:null,&quot;parallax_effect&quot;:true,&quot;overlay_opacity&quot;:0,&quot;text_alignment&quot;:&quot;center&quot;}" data-id="hero"></div>';
+
+        CmsPage::create([
+            'title' => 'Home',
+            'slug' => 'home',
+            'content' => $heroContent,
+            'status' => 'published',
+            'is_homepage' => true,
+            'published_at' => now(),
+            'meta_title' => 'Welcome to TallCMS',
+            'meta_description' => 'TallCMS - The modern content management system built for web artisans.',
+        ]);
+
+        return 'Default homepage created';
     }
 
     /**
