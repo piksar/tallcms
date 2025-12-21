@@ -350,7 +350,8 @@
                                 <select id="s3_provider"
                                         name="s3_provider"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="aws" {{ old('s3_provider', 'aws') === 'aws' ? 'selected' : '' }}>Amazon S3</option>
+                                    <option value="local" {{ old('s3_provider', 'local') === 'local' ? 'selected' : '' }}>Local Storage (default)</option>
+                                    <option value="aws" {{ old('s3_provider') === 'aws' ? 'selected' : '' }}>Amazon S3</option>
                                     <option value="digitalocean" {{ old('s3_provider') === 'digitalocean' ? 'selected' : '' }}>DigitalOcean Spaces</option>
                                     <option value="minio" {{ old('s3_provider') === 'minio' ? 'selected' : '' }}>MinIO</option>
                                     <option value="backblaze" {{ old('s3_provider') === 'backblaze' ? 'selected' : '' }}>Backblaze B2</option>
@@ -360,6 +361,7 @@
                                 </select>
                             </div>
 
+                            <div id="cloud-storage-fields" class="contents hidden">
                             <div>
                                 <label for="aws_access_key_id" class="block text-sm font-medium text-gray-700 mb-2">Access Key ID</label>
                                 <input type="text"
@@ -411,9 +413,20 @@
                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <p class="mt-1 text-xs text-gray-500">Required for non-AWS providers</p>
                             </div>
+                            </div><!-- end cloud-storage-fields -->
+
+                            <div id="local-storage-info" class="md:col-span-2 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Files will be stored on the server's local filesystem.</span>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">This is the simplest option and works well for most sites. You can switch to cloud storage later by updating your .env file.</p>
+                            </div>
                         </div>
 
-                        <div id="ses-tip" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-blue-800 text-sm">
+                        <div id="ses-tip" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-blue-800 text-sm hidden">
                             <strong>Tip:</strong> If you selected "Amazon SES" as your mailer above, these credentials will be used for email delivery.
                             Make sure your SES account is out of sandbox mode for production use.
                         </div>
@@ -626,43 +639,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const awsSettings = document.getElementById('aws-settings');
     const s3Provider = document.getElementById('s3_provider');
     const endpointField = document.getElementById('endpoint-field');
+    const cloudStorageFields = document.getElementById('cloud-storage-fields');
+    const localStorageInfo = document.getElementById('local-storage-info');
     const sesTip = document.getElementById('ses-tip');
     const providerTip = document.getElementById('provider-tip');
     const providerTipText = document.getElementById('provider-tip-text');
 
     // Provider configurations
     const providerConfig = {
+        local: {
+            isLocal: true,
+            needsEndpoint: false,
+            showSesTip: false,
+            tip: null
+        },
         aws: {
+            isLocal: false,
             needsEndpoint: false,
             showSesTip: true,
             tip: null
         },
         digitalocean: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'DigitalOcean Spaces endpoint format: https://{region}.digitaloceanspaces.com (e.g., https://nyc3.digitaloceanspaces.com)'
         },
         minio: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'Enter your MinIO server endpoint URL (e.g., https://minio.example.com:9000)'
         },
         backblaze: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'Backblaze B2 S3-compatible endpoint format: https://s3.{region}.backblazeb2.com'
         },
         cloudflare: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'Cloudflare R2 endpoint format: https://{account_id}.r2.cloudflarestorage.com. Use "auto" as the region.'
         },
         wasabi: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'Wasabi endpoint format: https://s3.{region}.wasabisys.com (e.g., https://s3.us-east-1.wasabisys.com)'
         },
         custom: {
+            isLocal: false,
             needsEndpoint: true,
             showSesTip: false,
             tip: 'Enter the S3-compatible endpoint URL for your storage provider.'
@@ -671,6 +699,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateProviderUI(provider) {
         const config = providerConfig[provider] || providerConfig.custom;
+
+        // Show/hide local storage info vs cloud storage fields
+        if (config.isLocal) {
+            localStorageInfo.classList.remove('hidden');
+            cloudStorageFields.classList.add('hidden');
+            endpointField.classList.add('hidden');
+            sesTip.classList.add('hidden');
+            providerTip.classList.add('hidden');
+            return;
+        }
+
+        // Cloud storage selected
+        localStorageInfo.classList.add('hidden');
+        cloudStorageFields.classList.remove('hidden');
 
         // Show/hide endpoint field
         if (config.needsEndpoint) {

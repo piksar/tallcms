@@ -133,20 +133,20 @@ class InstallerController extends Controller
             'mail_from_name' => 'nullable|string|max:255',
 
             // Cloud storage settings (optional, S3-compatible)
-            's3_provider' => 'nullable|string|in:aws,digitalocean,minio,backblaze,cloudflare,wasabi,custom',
+            's3_provider' => 'nullable|string|in:local,aws,digitalocean,minio,backblaze,cloudflare,wasabi,custom',
             'aws_access_key_id' => 'nullable|string|max:255',
             'aws_secret_access_key' => 'nullable|string|max:255',
             'aws_region' => 'nullable|string|max:50',
             'aws_bucket' => 'nullable|string|max:255',
-            // Endpoint required for non-AWS providers when bucket is specified
+            // Endpoint required for non-AWS/non-local providers when bucket is specified
             'aws_endpoint' => [
                 'nullable',
                 'url',
                 'max:255',
                 function ($attribute, $value, $fail) use ($request) {
-                    $provider = $request->input('s3_provider', 'aws');
+                    $provider = $request->input('s3_provider', 'local');
                     $bucket = $request->input('aws_bucket');
-                    $needsEndpoint = !in_array($provider, ['aws', '', null]);
+                    $needsEndpoint = !in_array($provider, ['local', 'aws', '', null]);
 
                     if ($needsEndpoint && !empty($bucket) && empty($value)) {
                         $fail('Endpoint URL is required for ' . ucfirst($provider) . ' when a bucket is specified.');
@@ -206,11 +206,12 @@ class InstallerController extends Controller
 
             // Handle cloud storage configuration
             // Supports: static credentials, IAM roles (no keys), or pre-configured environments
-            $hasCloudStorage = $request->filled('aws_bucket') || $request->filled('aws_access_key_id');
+            $provider = $request->input('s3_provider', 'local');
+            $isLocalStorage = $provider === 'local' || $provider === '' || $provider === null;
+            $hasCloudStorage = !$isLocalStorage && ($request->filled('aws_bucket') || $request->filled('aws_access_key_id'));
 
             if ($hasCloudStorage) {
-                $provider = $request->input('s3_provider', 'aws');
-                $needsEndpoint = !in_array($provider, ['aws', '', null]);
+                $needsEndpoint = !in_array($provider, ['aws']);
                 $usePathStyle = in_array($provider, ['minio', 'custom']);
 
                 $this->envWriter->setS3Config([
@@ -224,7 +225,7 @@ class InstallerController extends Controller
                 ]);
             } else {
                 // Clear any existing S3 config and revert to local storage
-                // This handles the case where user previously had S3 configured but now wants local
+                // This handles: explicit "local" selection, or cloud provider without bucket/keys
                 $this->envWriter->clearS3Config();
             }
 
