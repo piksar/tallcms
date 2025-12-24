@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\PreviewController;
 use App\Livewire\CmsPageRenderer;
 use Illuminate\Support\Facades\Route;
+
+// Contact form submission (AJAX endpoint)
+Route::post('/api/contact', [ContactFormController::class, 'submit'])->name('contact.submit');
 
 // Normal application routes
 

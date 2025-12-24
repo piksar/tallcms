@@ -61,10 +61,12 @@ class CmsPageRenderer extends Component
     protected function renderPageContent(): void
     {
         // Render rich content with auto-discovered custom blocks
+        // Use toUnsafeHtml() to preserve Alpine.js attributes (x-data, x-model, etc.)
+        // that would otherwise be stripped by Str::sanitizeHtml()
         $renderedContent = RichContentRenderer::make($this->page->content)
             ->customBlocks(CustomBlockDiscoveryService::getBlocksArray())
-            ->toHtml();
-            
+            ->toUnsafeHtml();
+
         // Process merge tags in the rendered content
         $this->renderedContent = MergeTagService::replaceTags($renderedContent, $this->page);
     }

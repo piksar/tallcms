@@ -50,9 +50,10 @@ class PreviewController extends Controller
         }
         
         // Render rich content with auto-discovered custom blocks (same as CmsPageRenderer)
+        // Use toUnsafeHtml() to preserve Alpine.js attributes (x-data, x-model, etc.)
         $renderedContent = RichContentRenderer::make($content)
             ->customBlocks(CustomBlockDiscoveryService::getBlocksArray())
-            ->toHtml();
+            ->toUnsafeHtml();
             
         // Process merge tags in the rendered content
         return MergeTagService::replaceTags($renderedContent, $model);
