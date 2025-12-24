@@ -51,29 +51,29 @@
 
         @if($isPreview)
             {{-- Static Preview for Admin Editor --}}
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="flex flex-col gap-4">
                 @foreach($fields as $field)
                     <div>
-                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
                             {{ $field['label'] }}
                             @if($field['required'] ?? false)
-                                <span style="color: #ef4444;">*</span>
+                                <span class="text-red-500">*</span>
                             @endif
                         </label>
 
                         @if($field['type'] === 'textarea')
-                            <div style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; background-color: #f9fafb; color: #9ca3af; font-size: 0.875rem; min-height: 80px;">
+                            <div class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 text-gray-400 text-sm min-h-[80px]">
                                 Text area input...
                             </div>
                         @elseif($field['type'] === 'select')
-                            <div style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; background-color: #f9fafb; color: #9ca3af; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 text-gray-400 text-sm flex justify-between items-center">
                                 <span>Select {{ strtolower($field['label']) }}...</span>
-                                <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                         @else
-                            <div style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; background-color: #f9fafb; color: #9ca3af; font-size: 0.875rem;">
+                            <div class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 text-gray-400 text-sm">
                                 @if($field['type'] === 'email')
                                     email@example.com
                                 @elseif($field['type'] === 'tel')
@@ -86,8 +86,8 @@
                     </div>
                 @endforeach
 
-                <div style="padding-top: 0.5rem;">
-                    <span style="display: inline-block; padding: 0.625rem 1.5rem; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; background-color: var(--block-button-bg, #2563eb); color: var(--block-button-text, white);">
+                <div class="pt-2">
+                    <span class="inline-block px-6 py-2.5 rounded-lg font-medium text-sm bg-primary-600 text-white">
                         {{ $submitButtonText }}
                     </span>
                 </div>
@@ -114,7 +114,8 @@
 
             <div
                 id="{{ $formId }}"
-                x-data="contactFormHandler_{{ str_replace('-', '_', $formId) }}()"
+                x-data="contactForm"
+                data-contact-form-config='@json($jsConfig)'
                 x-cloak
             >
                 <div x-show="formError" x-cloak class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700" role="alert" x-text="formError"></div>
@@ -201,94 +202,6 @@
                 </form>
             </div>
 
-            <script>
-                // Scoped Alpine component for this specific form instance
-                (function() {
-                    const config = {{ Js::from($jsConfig) }};
-                    const handlerName = 'contactFormHandler_{{ str_replace('-', '_', $formId) }}';
-
-                    // Register as a global function that Alpine can call
-                    window[handlerName] = function() {
-                        return {
-                            formData: config.fieldNames.reduce((acc, name) => ({ ...acc, [name]: '' }), { _honeypot: '' }),
-                            errors: {},
-                            formError: '',
-                            submitted: false,
-                            submitting: false,
-                            successMessage: config.successMessage,
-                            submitUrl: config.submitUrl,
-                            fullConfig: config.config,
-                            signature: config.signature,
-                            pageUrl: config.pageUrl,
-
-                            async submit() {
-                                this.submitting = true;
-                                this.errors = {};
-                                this.formError = '';
-
-                                // Check for CSRF token
-                                const csrfMeta = document.querySelector('meta[name=csrf-token]');
-                                if (!csrfMeta) {
-                                    this.formError = 'Security token missing. Please refresh the page.';
-                                    this.submitting = false;
-                                    return;
-                                }
-
-                                try {
-                                    const response = await fetch(this.submitUrl, {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': csrfMeta.content,
-                                            'Accept': 'application/json'
-                                        },
-                                        body: JSON.stringify({
-                                            ...this.formData,
-                                            _config: this.fullConfig,
-                                            _signature: this.signature,
-                                            _pageUrl: this.pageUrl
-                                        })
-                                    });
-
-                                    // Handle non-JSON responses gracefully
-                                    let data;
-                                    const contentType = response.headers.get('content-type');
-                                    if (contentType && contentType.includes('application/json')) {
-                                        try {
-                                            data = await response.json();
-                                        } catch (parseError) {
-                                            console.error('Failed to parse JSON response:', parseError);
-                                            this.formError = 'Server returned an invalid response. Please try again.';
-                                            return;
-                                        }
-                                    } else {
-                                        console.error('Non-JSON response received:', response.status);
-                                        this.formError = 'Server returned an unexpected response. Please try again.';
-                                        return;
-                                    }
-
-                                    if (response.ok) {
-                                        this.submitted = true;
-                                    } else if (response.status === 422) {
-                                        this.errors = data.errors || {};
-                                    } else if (response.status === 429) {
-                                        this.formError = data.message || 'Too many submissions. Please try again later.';
-                                    } else if (response.status === 400) {
-                                        this.formError = data.message || 'Invalid request. Please refresh the page and try again.';
-                                    } else {
-                                        this.formError = data.message || 'An error occurred. Please try again.';
-                                    }
-                                } catch (error) {
-                                    console.error('Contact form submission error:', error);
-                                    this.formError = 'A network error occurred. Please check your connection and try again.';
-                                } finally {
-                                    this.submitting = false;
-                                }
-                            }
-                        };
-                    };
-                })();
-            </script>
         @endif
     </div>
 </section>
