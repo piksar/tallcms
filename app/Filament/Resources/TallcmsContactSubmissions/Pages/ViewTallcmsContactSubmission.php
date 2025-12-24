@@ -3,27 +3,24 @@
 namespace App\Filament\Resources\TallcmsContactSubmissions\Pages;
 
 use App\Filament\Resources\TallcmsContactSubmissions\TallcmsContactSubmissionResource;
-use App\Models\TallcmsContactSubmission;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
-use Filament\Resources\Pages\Page;
+use Filament\Resources\Pages\ViewRecord;
 
-class ViewTallcmsContactSubmission extends Page
+class ViewTallcmsContactSubmission extends ViewRecord
 {
     protected static string $resource = TallcmsContactSubmissionResource::class;
 
     protected string $view = 'filament.resources.tallcms-contact-submissions.pages.view-tallcms-contact-submission';
 
-    public TallcmsContactSubmission $record;
-
-    public function mount(int|string $record): void
+    protected function mutateFormDataBeforeFill(array $data): array
     {
-        $this->record = TallcmsContactSubmission::findOrFail($record);
-
         // Mark as read when viewing
         if (! $this->record->is_read) {
             $this->record->markAsRead();
         }
+
+        return $data;
     }
 
     public function getTitle(): string
@@ -47,9 +44,7 @@ class ViewTallcmsContactSubmission extends Page
                     $this->record = $this->record->fresh();
                 }),
 
-            DeleteAction::make()
-                ->record($this->record)
-                ->successRedirectUrl(TallcmsContactSubmissionResource::getUrl()),
+            DeleteAction::make(),
         ];
     }
 }

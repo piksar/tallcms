@@ -1,4 +1,4 @@
 import './bootstrap';
 
-// Alpine.js Components
-import './components/contact-form';
+// TallCMS Core Alpine Components
+import './tallcms';

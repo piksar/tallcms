@@ -377,14 +377,12 @@ CSS;
         $appJs = <<<'JS'
 // Theme-specific JavaScript
 
-console.log('Theme loaded successfully!');
+// TallCMS Core Components - Required for native blocks (contact form, galleries, etc.)
+// Do not remove this import unless you're providing your own implementations
+import '../../../../resources/js/tallcms';
 
 // Add any theme-specific functionality here
-// For example: animations, interactions, etc.
-
-// Alpine.js plugins or custom directives
-// Theme-specific event listeners
-// Custom component initialization
+// For example: animations, interactions, custom Alpine components, etc.
 JS;
 
         File::put("{$themePath}/resources/js/app.js", $appJs);
@@ -461,7 +459,10 @@ GITIGNORE;
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ \$title ?? config('app.name') }}">
     <meta name="twitter:description" content="{{ \$description ?? '' }}">
-    
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />

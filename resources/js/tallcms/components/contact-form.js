@@ -4,7 +4,9 @@
  * Handles form submission with CSRF protection, validation errors,
  * rate limiting, and signature verification.
  */
-document.addEventListener('alpine:init', () => {
+function registerContactForm() {
+    if (typeof Alpine === 'undefined') return false;
+
     Alpine.data('contactForm', () => ({
         // State
         formData: {},
@@ -123,4 +125,12 @@ document.addEventListener('alpine:init', () => {
             return !!this.errors[fieldName];
         }
     }));
-});
+
+    return true;
+}
+
+// Try to register immediately if Alpine is already loaded
+if (!registerContactForm()) {
+    // Otherwise wait for Alpine to initialize
+    document.addEventListener('alpine:init', registerContactForm);
+}

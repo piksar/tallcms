@@ -54,12 +54,9 @@
             <div class="flex flex-col gap-4">
                 @foreach($fields as $field)
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                        <x-form.label :required="$field['required'] ?? false" class="text-gray-700 mb-1">
                             {{ $field['label'] }}
-                            @if($field['required'] ?? false)
-                                <span class="text-red-500">*</span>
-                            @endif
-                        </label>
+                        </x-form.label>
 
                         @if($field['type'] === 'textarea')
                             <div class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 text-gray-400 text-sm min-h-[80px]">
@@ -130,50 +127,40 @@
                 <form x-show="!submitted" x-on:submit.prevent="submit" class="space-y-6">
                     @foreach($fields as $field)
                         <div>
-                            <label for="{{ $formId }}-{{ $field['name'] }}" class="mb-2 block text-sm font-medium" style="color: var(--block-text-color, #374151);">
+                            <x-form.label
+                                :for="$formId . '-' . $field['name']"
+                                :required="$field['required'] ?? false"
+                                style="color: var(--block-text-color, #374151);"
+                            >
                                 {{ $field['label'] }}
-                                @if($field['required'] ?? false)
-                                    <span class="text-red-500">*</span>
-                                @endif
-                            </label>
+                            </x-form.label>
 
                             @if($field['type'] === 'textarea')
-                                <textarea
-                                    id="{{ $formId }}-{{ $field['name'] }}"
+                                <x-form.textarea
+                                    :id="$formId . '-' . $field['name']"
                                     x-model="formData.{{ $field['name'] }}"
-                                    rows="5"
-                                    class="w-full rounded-lg border px-4 py-3 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                                     x-bind:class="errors.{{ $field['name'] }} ? 'border-red-500' : 'border-gray-300'"
-                                    style="background-color: white;"
-                                    @if($field['required'] ?? false) required @endif
-                                ></textarea>
+                                    :required="$field['required'] ?? false"
+                                />
                             @elseif($field['type'] === 'select')
-                                <select
-                                    id="{{ $formId }}-{{ $field['name'] }}"
+                                <x-form.select
+                                    :id="$formId . '-' . $field['name']"
+                                    :options="$field['options'] ?? []"
                                     x-model="formData.{{ $field['name'] }}"
-                                    class="w-full rounded-lg border px-4 py-3 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                                     x-bind:class="errors.{{ $field['name'] }} ? 'border-red-500' : 'border-gray-300'"
-                                    style="background-color: white;"
-                                    @if($field['required'] ?? false) required @endif
-                                >
-                                    <option value="">Select...</option>
-                                    @foreach($field['options'] ?? [] as $option)
-                                        <option value="{{ $option }}">{{ $option }}</option>
-                                    @endforeach
-                                </select>
+                                    :required="$field['required'] ?? false"
+                                />
                             @else
-                                <input
-                                    type="{{ $field['type'] }}"
-                                    id="{{ $formId }}-{{ $field['name'] }}"
+                                <x-form.input
+                                    :type="$field['type']"
+                                    :id="$formId . '-' . $field['name']"
                                     x-model="formData.{{ $field['name'] }}"
-                                    class="w-full rounded-lg border px-4 py-3 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                                     x-bind:class="errors.{{ $field['name'] }} ? 'border-red-500' : 'border-gray-300'"
-                                    style="background-color: white;"
-                                    @if($field['required'] ?? false) required @endif
-                                >
+                                    :required="$field['required'] ?? false"
+                                />
                             @endif
 
-                            <p x-show="errors.{{ $field['name'] }}" x-cloak class="mt-1 text-sm text-red-600" x-text="errors.{{ $field['name'] }} ? errors.{{ $field['name'] }}[0] : ''"></p>
+                            <x-form.error :field="$field['name']" />
                         </div>
                     @endforeach
 

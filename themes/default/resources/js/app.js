@@ -1,10 +1,7 @@
 // Theme-specific JavaScript
 
-console.log('Theme loaded successfully!');
+// TallCMS Core Components - Required for native blocks (contact form, etc.)
+import '../../../../resources/js/tallcms';
 
 // Add any theme-specific functionality here
 // For example: animations, interactions, etc.
-
-// Alpine.js plugins or custom directives
-// Theme-specific event listeners
-// Custom component initialization

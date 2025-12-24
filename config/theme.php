@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'active' => 'default',
+  'active' => 'gold',
   'cache_enabled' => false,
   'cache_ttl' => 3600,
   'preview_duration' => 30,

@@ -546,6 +546,24 @@ $buttonPresets = theme_button_presets();
 $colorPalette = theme_color_palette();
 ```
 
+### TallCMS Core Components (JavaScript)
+
+Native Alpine.js components for built-in blocks live in `resources/js/tallcms/`. Themes import this bundle to enable interactive blocks (contact forms, galleries, etc.).
+
+```
+resources/js/tallcms/
+├── index.js              # Core bundle entry point
+└── components/
+    └── contact-form.js   # Contact form component
+```
+
+**Adding new components:**
+1. Create component in `resources/js/tallcms/components/`
+2. Import it in `resources/js/tallcms/index.js`
+3. Rebuild main app and all themes
+
+See `themes/README.md` for full theme developer documentation.
+
 ### CSS Architecture & Block Styling
 
 #### Unified Block Styling
