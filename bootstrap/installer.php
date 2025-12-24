@@ -95,7 +95,7 @@ if (!function_exists('createMinimalEnvForInstaller')) {
             $content .= "SESSION_DOMAIN=null\n\n";
             $content .= "BROADCAST_CONNECTION=log\n";
             $content .= "FILESYSTEM_DISK=local\n";
-            $content .= "QUEUE_CONNECTION=database\n\n";
+            $content .= "QUEUE_CONNECTION=sync\n\n";
             $content .= "# Use file cache during installation to avoid database dependency\n";
             $content .= "CACHE_STORE=file\n\n";
             $content .= "# Database settings will be configured during installation\n";
