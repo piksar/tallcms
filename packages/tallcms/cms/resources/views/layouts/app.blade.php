@@ -70,7 +70,7 @@
 </head>
 <body class="font-inter antialiased bg-white">
     <x-tallcms::code-injection zone="body_start" />
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
         @if(!($minimalChrome ?? false))
         <!-- Navigation -->
         <nav x-data="{ open: false }" class="absolute top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -176,7 +176,7 @@
         @endif
 
         <!-- Main Content -->
-        <main>
+        <main class="flex-1">
             {{ $slot ?? '' }}
             @yield('content')
         </main>

@@ -57,7 +57,7 @@
     <style>[x-cloak] { display: none !important; }</style>
     <x-tallcms::code-injection zone="head" />
 </head>
-<body class="min-h-screen bg-base-100 text-base-content">
+<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <x-tallcms::code-injection zone="body_start" />
 
     {{-- Site-wide variables. Defined at layout scope so both the header
@@ -141,7 +141,7 @@
     @endif
 
     <!-- Main Content -->
-    <main>
+    <main class="flex-1">
         {{ $slot ?? '' }}
         @yield('content')
     </main>
