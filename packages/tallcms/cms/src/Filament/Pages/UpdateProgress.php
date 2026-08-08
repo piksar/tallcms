@@ -13,15 +13,21 @@ class UpdateProgress extends Page
 
     protected string $view = 'tallcms::filament.pages.update-progress';
 
-    protected static ?string $navigationLabel = 'Update Progress';
-
-    protected static ?string $title = 'Update Progress';
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.update_progress.title');
+    }
 
     protected static bool $shouldRegisterNavigation = false;
 
     public static function getNavigationIcon(): string
     {
         return 'heroicon-o-arrow-path';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('tallcms::pages.update_progress.navigation');
     }
 
     #[Computed]

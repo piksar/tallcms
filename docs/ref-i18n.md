@@ -19,8 +19,9 @@ TallCMS provides comprehensive multilingual support:
 - Translate pages, posts, categories, and menu items
 - Locale-prefixed URLs (e.g., `/zh-CN/about`)
 - Hide default locale from URLs
-- Admin panel locale switcher
+- Admin panel **content** locale switcher
 - Frontend language switchers and hreflang tags
+- Admin panel **chrome** language via `APP_LOCALE` (see [Admin UI locale](#admin-ui-locale))
 
 Built on [Spatie Laravel Translatable](https://github.com/spatie/laravel-translatable).
 
@@ -337,6 +338,63 @@ Sitemap includes all localized URLs with `xhtml:link` alternate references.
 ### Meta Tags
 
 Meta title and description are translatable and output in current locale.
+
+---
+
+## Admin UI locale
+
+Content i18n (above) and **admin panel language** are separate.
+
+| Concern | Mechanism |
+|---------|-----------|
+| Editing page/post translations | Spatie / LaraZeus **content** locale switcher (`activeLocale`) |
+| Admin chrome language (nav, resource names, page titles) | Laravel **`APP_LOCALE`** (and Filament’s own lang files) |
+
+TallCMS ships package translations under `resources/lang/{locale}/` (`en`, `de`) and resolves labels via:
+
+- `tallcms_label('pages', 'singular')` — resource labels
+- `tallcms_nav_group('content')` — sidebar groups
+- `__('tallcms::pages.*')` / `__('tallcms::fields.*')` — custom pages and shared field labels
+
+### Renaming resources (white-label)
+
+Literal overrides still win over translations:
+
+```php
+// Plugin mode
+TallCmsPlugin::make()->pageLabel('Articles', 'Article');
+
+// Or in config/tallcms.php
+'labels' => [
+    'pages' => [
+        'singular' => 'Article',
+        'plural' => 'Articles',
+        'navigation' => 'Articles',
+    ],
+],
+```
+
+Leave config values `null` to use package translations for the current `APP_LOCALE`.
+
+**Do not** resolve labels with `config('tallcms.navigation.groups.*', 'English')` or `config('tallcms.labels.*', 'English')`. Laravel does not apply that default when the value is explicitly `null`, and Filament requires a real string for navigation group labels. Always use `tallcms_nav_group()` / `tallcms_label()`.
+
+Package translations are registered during the service provider **register** phase (not only `boot`) so Filament plugins and nested providers can resolve `tallcms::` keys without poisoning Laravel’s translator cache with empty groups.
+
+Prefer deferred Filament labels where groups are registered early:
+
+```php
+NavigationGroup::make(fn (): string => tallcms_nav_group('content'));
+```
+
+### Overriding package strings from an app
+
+Publish or place files at `lang/vendor/tallcms/{locale}/*.php` (Laravel’s package lang override path).
+
+### Not in scope (yet)
+
+- Per-user admin language preference / panel language switcher
+- Translating public frontend theme chrome
+- Plugin package UI strings (follow the same `vendor::key` pattern later)
 
 ---
 

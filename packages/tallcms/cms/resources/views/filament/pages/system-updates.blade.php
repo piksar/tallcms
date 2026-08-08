@@ -1,36 +1,36 @@
 <x-filament-panels::page>
     {{-- Current Version Info --}}
     <x-filament::section>
-        <x-slot name="heading">TallCMS Core</x-slot>
+        <x-slot name="heading">{{ __('tallcms::ui.tallcms_core') }}</x-slot>
 
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Current version</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('tallcms::ui.current_version_label') }}</p>
                     <p class="text-2xl font-bold text-gray-900 dark:text-white">v{{ $currentVersion }}</p>
                 </div>
 
                 @if($updateAvailable && $latestRelease)
                     <div class="text-right">
                         <x-filament::badge color="success" size="lg">
-                            Update available: v{{ $latestRelease['version'] }}
+                            {{ __('tallcms::ui.update_available_version', ['version' => $latestRelease['version']]) }}
                         </x-filament::badge>
                         @if($latestRelease['published_at'])
                             <p class="text-xs text-gray-500 mt-1">
-                                Released: {{ \Carbon\Carbon::parse($latestRelease['published_at'])->format('M j, Y') }}
+                                {{ __('tallcms::ui.released_on', ['date' => \Carbon\Carbon::parse($latestRelease['published_at'])->translatedFormat('j M Y')]) }}
                             </p>
                         @endif
                     </div>
                 @else
                     <x-filament::badge color="gray" size="lg">
-                        Up to date
+                        {{ __('tallcms::ui.up_to_date') }}
                     </x-filament::badge>
                 @endif
             </div>
 
             @if($updateAvailable && $latestRelease && $latestRelease['body'])
                 <div class="pt-4 border-t border-gray-200 dark:border-white/10">
-                    <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">What's new:</h4>
+                    <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">{{ __('tallcms::ui.whats_new') }}</h4>
                     <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
                         {!! \Illuminate\Support\Str::markdown($latestRelease['body']) !!}
                     </div>
@@ -199,9 +199,9 @@
             <div class="rounded-full bg-green-100 dark:bg-green-900/20 p-3 mb-4">
                 <x-heroicon-o-check-circle class="w-8 h-8 text-green-500" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-950 dark:text-white">You're up to date!</h3>
+            <h3 class="text-lg font-semibold text-gray-950 dark:text-white">{{ __('tallcms::ui.youre_up_to_date') }}</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                TallCMS v{{ $currentVersion }} is the latest version.
+                {{ __('tallcms::ui.latest_version_message', ['version' => 'v'.$currentVersion]) }}
             </p>
         </div>
     @endif

@@ -45,7 +45,7 @@ class TimelineBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Chronological events or milestones';
+        return __('tallcms::blocks.descriptions.timeline');
     }
 
     public static function getKeywords(): array
@@ -65,54 +65,54 @@ class TimelineBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Timeline';
+        return __('tallcms::blocks.labels.timeline');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Display chronological events, process steps, or milestones')
-            ->modalHeading('Configure Timeline Block')
+            ->modalDescription(__('tallcms::ui.t_display_chronological_events_process_steps_or_milestones'))
+            ->modalHeading(__('tallcms::ui.t_configure_timeline_block'))
             ->modalWidth('6xl')
             ->schema([
                 Tabs::make('Timeline Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-queue-list')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Our Journey')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_our_journey'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Section Subheading')
-                                    ->placeholder('Key milestones in our history')
+                                    ->label(__('tallcms::fields.section_subheading'))
+                                    ->placeholder(__('tallcms::ui.t_key_milestones_in_our_history'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Repeater::make('items')
-                                    ->label('Timeline Items')
+                                    ->label(__('tallcms::fields.timeline_items'))
                                     ->schema([
                                         TextInput::make('title')
-                                            ->label('Title')
+                                            ->label(__('tallcms::fields.title'))
                                             ->required()
-                                            ->placeholder('Company Founded')
+                                            ->placeholder(__('tallcms::ui.t_company_founded'))
                                             ->maxLength(200),
 
                                         Textarea::make('description')
-                                            ->label('Description')
-                                            ->placeholder('Describe this milestone or step...')
+                                            ->label(__('tallcms::fields.description'))
+                                            ->placeholder(__('tallcms::ui.t_describe_this_milestone_or_step'))
                                             ->maxLength(1000)
                                             ->rows(3),
 
                                         TextInput::make('date')
-                                            ->label('Date / Step Label')
-                                            ->placeholder('2020 or Step 1')
+                                            ->label(__('tallcms::fields.date_step_label'))
+                                            ->placeholder(__('tallcms::ui.t_2020_or_step_1'))
                                             ->maxLength(50),
 
                                         Select::make('icon')
-                                            ->label('Icon (Optional)')
+                                            ->label(__('tallcms::fields.icon_optional'))
                                             ->searchable()
                                             ->options([
                                                 '' => 'No Icon',
@@ -134,7 +134,7 @@ class TimelineBlock extends RichContentCustomBlock
                                             ]),
 
                                         FileUpload::make('image')
-                                            ->label('Image (Optional)')
+                                            ->label(__('tallcms::fields.image_optional'))
                                             ->image()
                                             ->disk(\cms_media_disk())
                                             ->directory('timeline')
@@ -152,13 +152,13 @@ class TimelineBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Display Options')
+                                Section::make(__('tallcms::ui.t_display_options'))
                                     ->schema([
                                         Select::make('style')
-                                            ->label('Layout Style')
+                                            ->label(__('tallcms::fields.layout_style'))
                                             ->options([
                                                 'vertical' => 'Vertical',
                                                 'horizontal' => 'Horizontal',
@@ -167,77 +167,77 @@ class TimelineBlock extends RichContentCustomBlock
                                             ->live(),
 
                                         Toggle::make('alternating')
-                                            ->label('Alternating Layout')
-                                            ->helperText('Alternate items left and right (vertical only)')
+                                            ->label(__('tallcms::fields.alternating_layout'))
+                                            ->helperText(__('tallcms::ui.t_alternate_items_left_and_right_vertical_only'))
                                             ->default(true),
 
                                         Toggle::make('show_connector')
-                                            ->label('Show Connecting Line')
+                                            ->label(__('tallcms::fields.show_connecting_line'))
                                             ->default(true),
 
                                         Toggle::make('numbered')
-                                            ->label('Show Step Numbers')
-                                            ->helperText('Display numbers instead of icons')
+                                            ->label(__('tallcms::fields.show_step_numbers'))
+                                            ->helperText(__('tallcms::ui.t_display_numbers_instead_of_icons'))
                                             ->default(false),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('text_alignment')
-                                            ->label('Header Alignment')
+                                            ->label(__('tallcms::fields.header_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for timeline node markers and date labels'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_timeline_node_markers_and_date_labels')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(3),
                             ]),
 
-                        Tab::make('Animation')
+                        Tab::make(__('tallcms::ui.t_animation'))
                             ->icon('heroicon-m-sparkles')
                             ->schema([
                                 Select::make('animation_type')
-                                    ->label('Entrance Animation')
+                                    ->label(__('tallcms::fields.entrance_animation'))
                                     ->options(static::getAnimationTypeOptions())
                                     ->default('')
-                                    ->helperText('Animation plays when block scrolls into view'),
+                                    ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
                                 Select::make('animation_duration')
-                                    ->label('Animation Speed')
+                                    ->label(__('tallcms::fields.animation_speed'))
                                     ->options(static::getAnimationDurationOptions())
                                     ->default('anim-duration-700'),
 
                                 Toggle::make('animation_stagger')
-                                    ->label('Stagger Items')
-                                    ->helperText('Animate timeline items sequentially instead of all at once')
+                                    ->label(__('tallcms::fields.stagger_items'))
+                                    ->helperText(__('tallcms::ui.t_animate_timeline_items_sequentially_instead_of_all_at_once'))
                                     ->default(false)
                                     ->live()
                                     ->visible(fn (): bool => static::hasPro()),
 
                                 Select::make('animation_stagger_delay')
-                                    ->label('Stagger Delay')
+                                    ->label(__('tallcms::fields.stagger_delay'))
                                     ->options(static::getStaggerDelayOptions())
                                     ->default('100')
                                     ->visible(fn (Get $get): bool => static::hasPro() && $get('animation_stagger') === true),

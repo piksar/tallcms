@@ -43,7 +43,7 @@ class DocumentListBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'List of downloadable documents from a collection';
+        return __('tallcms::blocks.descriptions.document_list');
     }
 
     public static function getKeywords(): array
@@ -63,32 +63,32 @@ class DocumentListBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Document List';
+        return __('tallcms::blocks.labels.document_list');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
             ->modalWidth('4xl')
-            ->modalDescription('Display a list of downloadable documents')
+            ->modalDescription(__('tallcms::ui.t_display_a_list_of_downloadable_documents'))
             ->schema([
                 Tabs::make('Document List Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('title')
-                                    ->label('Section Title')
+                                    ->label(__('tallcms::fields.section_title'))
                                     ->maxLength(255)
-                                    ->placeholder('e.g., Downloads, Resources, Attachments'),
+                                    ->placeholder(__('tallcms::ui.t_e_g_downloads_resources_attachments')),
 
                                 TextInput::make('description')
-                                    ->label('Description')
+                                    ->label(__('tallcms::fields.description'))
                                     ->maxLength(500)
-                                    ->placeholder('Optional description text'),
+                                    ->placeholder(__('tallcms::ui.t_optional_description_text')),
 
                                 Select::make('collection_ids')
-                                    ->label('Collections')
+                                    ->label(__('tallcms::fields.collections'))
                                     ->multiple()
                                     ->options(function () {
                                         $query = MediaCollection::query();
@@ -101,10 +101,10 @@ class DocumentListBlock extends RichContentCustomBlock
                                     })
                                     ->searchable()
                                     ->required()
-                                    ->helperText('Select collections containing documents'),
+                                    ->helperText(__('tallcms::ui.t_select_collections_containing_documents')),
 
                                 Select::make('file_types')
-                                    ->label('File Types')
+                                    ->label(__('tallcms::fields.file_types'))
                                     ->multiple()
                                     ->options([
                                         'application/pdf' => 'PDF',
@@ -114,11 +114,11 @@ class DocumentListBlock extends RichContentCustomBlock
                                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'Excel (XLSX)',
                                         'application/zip' => 'ZIP',
                                     ])
-                                    ->placeholder('All document types')
-                                    ->helperText('Leave empty to show all documents'),
+                                    ->placeholder(__('tallcms::ui.t_all_document_types'))
+                                    ->helperText(__('tallcms::ui.t_leave_empty_to_show_all_documents')),
 
                                 Select::make('order')
-                                    ->label('Order')
+                                    ->label(__('tallcms::fields.order'))
                                     ->options([
                                         'newest' => 'Newest First',
                                         'oldest' => 'Oldest First',
@@ -127,18 +127,18 @@ class DocumentListBlock extends RichContentCustomBlock
                                     ->default('newest'),
 
                                 TextInput::make('max_items')
-                                    ->label('Maximum Items')
+                                    ->label(__('tallcms::fields.maximum_items'))
                                     ->numeric()
                                     ->minValue(1)
                                     ->maxValue(100)
-                                    ->placeholder('No limit'),
+                                    ->placeholder(__('tallcms::ui.t_no_limit')),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
                                 Select::make('layout')
-                                    ->label('Layout')
+                                    ->label(__('tallcms::fields.layout'))
                                     ->options([
                                         'list' => 'Simple List',
                                         'cards' => 'Cards',
@@ -147,57 +147,57 @@ class DocumentListBlock extends RichContentCustomBlock
                                     ->default('list'),
 
                                 Toggle::make('show_file_size')
-                                    ->label('Show File Size')
+                                    ->label(__('tallcms::fields.show_file_size'))
                                     ->default(true),
 
                                 Toggle::make('show_file_type')
-                                    ->label('Show File Type Badge')
+                                    ->label(__('tallcms::fields.show_file_type_badge'))
                                     ->default(true),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
                                             ->default(false),
                                     ])
                                     ->columns(4),
                             ]),
 
-                        Tab::make('Animation')
+                        Tab::make(__('tallcms::ui.t_animation'))
                             ->icon('heroicon-m-sparkles')
                             ->schema([
                                 Select::make('animation_type')
-                                    ->label('Entrance Animation')
+                                    ->label(__('tallcms::fields.entrance_animation'))
                                     ->options(static::getAnimationTypeOptions())
                                     ->default('')
-                                    ->helperText('Animation plays when block scrolls into view'),
+                                    ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
                                 Select::make('animation_duration')
-                                    ->label('Animation Speed')
+                                    ->label(__('tallcms::fields.animation_speed'))
                                     ->options(static::getAnimationDurationOptions())
                                     ->default('anim-duration-700'),
 
                                 Toggle::make('animation_stagger')
-                                    ->label('Stagger Items')
-                                    ->helperText('Animate items sequentially instead of all at once')
+                                    ->label(__('tallcms::fields.stagger_items'))
+                                    ->helperText(__('tallcms::ui.t_animate_items_sequentially_instead_of_all_at_once'))
                                     ->default(false)
                                     ->live()
                                     ->visible(fn (): bool => static::hasPro()),
 
                                 Select::make('animation_stagger_delay')
-                                    ->label('Stagger Delay')
+                                    ->label(__('tallcms::fields.stagger_delay'))
                                     ->options(static::getStaggerDelayOptions())
                                     ->default('100')
                                     ->visible(fn (Get $get): bool => static::hasPro() && $get('animation_stagger') === true),

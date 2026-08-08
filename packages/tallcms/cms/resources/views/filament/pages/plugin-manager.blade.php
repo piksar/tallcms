@@ -10,7 +10,7 @@
             <x-slot name="heading">
                 <div class="flex items-center gap-2 text-warning-700 dark:text-warning-300">
                     <x-heroicon-o-arrow-path class="w-5 h-5" />
-                    {{ $pluginsWithUpdates->count() }} Update{{ $pluginsWithUpdates->count() > 1 ? 's' : '' }} Available
+                    {{ trans_choice('tallcms::ui.updates_available', $pluginsWithUpdates->count(), ['count' => $pluginsWithUpdates->count()]) }}
                 </div>
             </x-slot>
 
@@ -30,7 +30,7 @@
                                 size="sm"
                                 icon="heroicon-o-arrow-path"
                             >
-                                Update
+                                {{ __('tallcms::ui.update') }}
                             </x-filament::button>
                         @endif
                     </div>
@@ -46,11 +46,11 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <x-heroicon-o-sparkles class="w-5 h-5 text-primary-500" />
-                        From the Marketplace
+                        {{ __('tallcms::ui.from_the_marketplace') }}
                     </div>
                     @if(config('tallcms.plugins.marketplace_url'))
                         <a href="{{ config('tallcms.plugins.marketplace_url') }}" target="_blank" class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
-                            Browse Marketplace &rarr;
+                            {{ __('tallcms::ui.browse_marketplace') }}
                         </a>
                     @endif
                 </div>
@@ -61,7 +61,7 @@
                     <x-filament::section class="!p-0 overflow-hidden relative">
                         @if($plugin['featured'] ?? false)
                             <x-filament::badge color="primary" class="absolute top-2 right-2 z-10">
-                                Featured
+                                {{ __('tallcms::ui.featured') }}
                             </x-filament::badge>
                         @endif
 
@@ -95,7 +95,7 @@
                                         size="xs"
                                         icon="heroicon-o-shopping-cart"
                                     >
-                                        Purchase
+                                        {{ __('tallcms::ui.purchase') }}
                                     </x-filament::button>
                                 @endif
                                 @if($plugin['download_url'] ?? null)
@@ -108,7 +108,7 @@
                                         icon="heroicon-o-arrow-down-tray"
                                         :outlined="(bool) ($plugin['purchase_url'] ?? null)"
                                     >
-                                        Download
+                                        {{ __('tallcms::ui.download') }}
                                     </x-filament::button>
                                 @endif
                             </div>
@@ -123,7 +123,7 @@
     @if($this->plugins->isNotEmpty())
         <div class="flex items-center gap-2 mb-4">
             <x-heroicon-o-check-circle class="w-5 h-5 text-success-500" />
-            <h2 class="text-lg font-semibold">Installed Plugins</h2>
+            <h2 class="text-lg font-semibold">{{ __('tallcms::ui.installed_plugins') }}</h2>
         </div>
     @endif
 
@@ -134,7 +134,7 @@
                 <x-filament::input
                     wire:model.live.debounce.300ms="search"
                     type="search"
-                    placeholder="Search plugins by name, description, author, or tag..."
+                    placeholder="{{ __('tallcms::ui.search_plugins') }}"
                 />
             </x-filament::input.wrapper>
         </div>
@@ -170,7 +170,7 @@
                         </div>
 
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
-                            {{ $plugin['description'] ?: 'No description available.' }}
+                            {{ $plugin['description'] ?: __('tallcms::ui.no_description_available') }}
                         </p>
 
                         {{-- Feature Badges --}}
@@ -321,7 +321,7 @@
                                         outlined
                                         icon="heroicon-o-shopping-cart"
                                     >
-                                        Purchase
+                                        {{ __('tallcms::ui.purchase') }}
                                     </x-filament::button>
                                 @endif
                             @endif
@@ -333,7 +333,7 @@
                             size="sm"
                             outlined
                         >
-                            Details
+                            {{ __('tallcms::ui.details') }}
                         </x-filament::button>
 
                         <x-filament::button
@@ -342,7 +342,7 @@
                             size="sm"
                             outlined
                         >
-                            Uninstall
+                            {{ __('tallcms::ui.uninstall') }}
                         </x-filament::button>
                     </div>
                 </div>
@@ -449,7 +449,7 @@
             <div class="space-y-4 text-sm">
                 {{-- Description --}}
                 <p class="text-gray-600 dark:text-gray-300">
-                    {{ $pluginDetails['description'] ?: 'No description available.' }}
+                    {{ $pluginDetails['description'] ?: __('tallcms::ui.no_description_available') }}
                 </p>
 
                 {{-- Quick Actions --}}
@@ -519,7 +519,7 @@
                         size="sm"
                         outlined
                     >
-                        Uninstall
+                        {{ __('tallcms::ui.uninstall') }}
                     </x-filament::button>
                 </div>
 

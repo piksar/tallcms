@@ -44,11 +44,14 @@ class NewCommentNotification extends Notification
         return FilamentNotification::make()
             ->warning()
             ->icon('heroicon-o-chat-bubble-left-right')
-            ->title("New comment on: {$postTitle}")
-            ->body("{$authorName}: ".\Illuminate\Support\Str::limit($this->comment->content, 80))
+            ->title(__('tallcms::ui.n_new_comment_on', ['title' => $postTitle]))
+            ->body(__('tallcms::ui.n_comment_author_excerpt', [
+                'author' => $authorName,
+                'excerpt' => \Illuminate\Support\Str::limit($this->comment->content, 80),
+            ]))
             ->actions([
                 FilamentAction::make('review')
-                    ->label('Review')
+                    ->label(__('tallcms::ui.t_review'))
                     ->url($this->getViewUrl())
                     ->markAsRead(),
             ])

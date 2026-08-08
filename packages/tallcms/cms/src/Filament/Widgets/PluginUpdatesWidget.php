@@ -43,13 +43,13 @@ class PluginUpdatesWidget extends Widget
 
         if (empty($this->updates)) {
             Notification::make()
-                ->title('All plugins are up to date')
+                ->title(__('tallcms::widgets.plugin_updates.all_up_to_date'))
                 ->success()
                 ->send();
         } else {
             Notification::make()
-                ->title('Update check complete')
-                ->body(count($this->updates).' update(s) available')
+                ->title(__('tallcms::widgets.plugin_updates.check_complete'))
+                ->body(__('tallcms::widgets.plugin_updates.updates_available', ['count' => count($this->updates)]))
                 ->info()
                 ->send();
         }

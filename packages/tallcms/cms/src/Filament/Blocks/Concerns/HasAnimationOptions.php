@@ -96,13 +96,13 @@ trait HasAnimationOptions
     {
         $schema = [
             Select::make('animation_type')
-                ->label('Entrance Animation')
+                ->label(__('tallcms::fields.entrance_animation'))
                 ->options(static::getAnimationTypeOptions())
                 ->default('')
-                ->helperText('Animation plays when block scrolls into view'),
+                ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
             Select::make('animation_duration')
-                ->label('Animation Speed')
+                ->label(__('tallcms::fields.animation_speed'))
                 ->options(static::getAnimationDurationOptions())
                 ->default('anim-duration-700'),
         ];
@@ -110,19 +110,19 @@ trait HasAnimationOptions
         // Add stagger options for Pro users on blocks that support it
         if ($supportsStagger && static::hasPro()) {
             $schema[] = Toggle::make('animation_stagger')
-                ->label('Stagger Items')
-                ->helperText('Animate items sequentially instead of all at once')
+                ->label(__('tallcms::fields.stagger_items'))
+                ->helperText(__('tallcms::ui.t_animate_items_sequentially_instead_of_all_at_once'))
                 ->default(false)
                 ->live();
 
             $schema[] = Select::make('animation_stagger_delay')
-                ->label('Stagger Delay')
+                ->label(__('tallcms::fields.stagger_delay'))
                 ->options(static::getStaggerDelayOptions())
                 ->default('100')
                 ->visible(fn ($get): bool => $get('animation_stagger') === true);
         }
 
-        return Section::make('Animation')
+        return Section::make(__('tallcms::ui.t_animation'))
             ->schema($schema)
             ->columns(2)
             ->collapsed()
@@ -138,13 +138,13 @@ trait HasAnimationOptions
     {
         $schema = [
             Select::make('animation_type')
-                ->label('Entrance Animation')
+                ->label(__('tallcms::fields.entrance_animation'))
                 ->options(static::getAnimationTypeOptions())
                 ->default('')
-                ->helperText('Animation plays when block scrolls into view'),
+                ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
             Select::make('animation_duration')
-                ->label('Animation Speed')
+                ->label(__('tallcms::fields.animation_speed'))
                 ->options(static::getAnimationDurationOptions())
                 ->default('anim-duration-700'),
         ];
@@ -152,19 +152,19 @@ trait HasAnimationOptions
         // Add stagger options for Pro users on blocks that support it
         if ($supportsStagger && static::hasPro()) {
             $schema[] = Toggle::make('animation_stagger')
-                ->label('Stagger Items')
-                ->helperText('Animate items sequentially instead of all at once')
+                ->label(__('tallcms::fields.stagger_items'))
+                ->helperText(__('tallcms::ui.t_animate_items_sequentially_instead_of_all_at_once'))
                 ->default(false)
                 ->live();
 
             $schema[] = Select::make('animation_stagger_delay')
-                ->label('Stagger Delay')
+                ->label(__('tallcms::fields.stagger_delay'))
                 ->options(static::getStaggerDelayOptions())
                 ->default('100')
                 ->visible(fn ($get): bool => $get('animation_stagger') === true);
         }
 
-        return Tab::make('Animation')
+        return Tab::make(__('tallcms::ui.t_animation'))
             ->icon('heroicon-m-sparkles')
             ->schema($schema);
     }

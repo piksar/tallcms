@@ -45,7 +45,7 @@ class LogosBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Client or partner logo showcase';
+        return __('tallcms::blocks.descriptions.logos');
     }
 
     public static function getKeywords(): array
@@ -65,38 +65,38 @@ class LogosBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Logos';
+        return __('tallcms::blocks.labels.logos');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Display client or partner logos in a grid or inline layout')
-            ->modalHeading('Configure Logos Block')
+            ->modalDescription(__('tallcms::ui.t_display_client_or_partner_logos_in_a_grid_or_inline_layout'))
+            ->modalHeading(__('tallcms::ui.t_configure_logos_block'))
             ->modalWidth('5xl')
             ->schema([
                 Tabs::make('Logos Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-photo')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Trusted by leading companies')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_trusted_by_leading_companies'))
                                     ->maxLength(255),
 
                                 Select::make('source')
-                                    ->label('Logo Source')
+                                    ->label(__('tallcms::fields.logo_source'))
                                     ->options([
                                         'manual' => 'Manual Upload',
                                         'collection' => 'Media Collection',
                                     ])
                                     ->default('manual')
                                     ->live()
-                                    ->helperText('Use a media collection for easier management'),
+                                    ->helperText(__('tallcms::ui.t_use_a_media_collection_for_easier_management')),
 
                                 Select::make('collection_id')
-                                    ->label('Media Collection')
+                                    ->label(__('tallcms::fields.media_collection'))
                                     ->options(function () {
                                         $query = MediaCollection::query();
                                         if (auth()->check() && ! auth()->user()->hasRole('super_admin')
@@ -108,14 +108,14 @@ class LogosBlock extends RichContentCustomBlock
                                     })
                                     ->searchable()
                                     ->visible(fn (Get $get): bool => $get('source') === 'collection')
-                                    ->helperText('Select a collection containing logo images'),
+                                    ->helperText(__('tallcms::ui.t_select_a_collection_containing_logo_images')),
 
                                 Repeater::make('logos')
-                                    ->label('Logos')
+                                    ->label(__('tallcms::fields.logos'))
                                     ->visible(fn (Get $get): bool => $get('source') !== 'collection')
                                     ->schema([
                                         FileUpload::make('image')
-                                            ->label('Logo Image')
+                                            ->label(__('tallcms::fields.logo_image'))
                                             ->required()
                                             ->image()
                                             ->disk(\cms_media_disk())
@@ -123,14 +123,14 @@ class LogosBlock extends RichContentCustomBlock
                                             ->visibility(\cms_media_visibility()),
 
                                         TextInput::make('alt')
-                                            ->label('Company Name')
+                                            ->label(__('tallcms::fields.company_name'))
                                             ->required()
-                                            ->placeholder('Acme Inc.')
-                                            ->helperText('Used for accessibility')
+                                            ->placeholder(__('tallcms::ui.t_acme_inc'))
+                                            ->helperText(__('tallcms::ui.t_used_for_accessibility'))
                                             ->maxLength(100),
 
                                         TextInput::make('url')
-                                            ->label('Link (Optional)')
+                                            ->label(__('tallcms::fields.link_optional'))
                                             ->placeholder('https://example.com')
                                             ->maxLength(500),
                                     ])
@@ -142,13 +142,13 @@ class LogosBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Display Options')
+                                Section::make(__('tallcms::ui.t_display_options'))
                                     ->schema([
                                         Select::make('layout')
-                                            ->label('Layout')
+                                            ->label(__('tallcms::fields.layout'))
                                             ->options([
                                                 'grid' => 'Grid',
                                                 'inline' => 'Inline (Centered)',
@@ -156,7 +156,7 @@ class LogosBlock extends RichContentCustomBlock
                                             ->default('grid'),
 
                                         Select::make('columns')
-                                            ->label('Columns (Grid Layout)')
+                                            ->label(__('tallcms::fields.columns_grid_layout'))
                                             ->options([
                                                 '2' => '2 Columns',
                                                 '3' => '3 Columns',
@@ -167,7 +167,7 @@ class LogosBlock extends RichContentCustomBlock
                                             ->default('5'),
 
                                         Select::make('size')
-                                            ->label('Logo Size')
+                                            ->label(__('tallcms::fields.logo_size'))
                                             ->options([
                                                 'small' => 'Small',
                                                 'medium' => 'Medium',
@@ -177,37 +177,37 @@ class LogosBlock extends RichContentCustomBlock
                                     ])
                                     ->columns(3),
 
-                                Section::make('Styling')
+                                Section::make(__('tallcms::ui.t_styling'))
                                     ->schema([
                                         Toggle::make('grayscale')
-                                            ->label('Grayscale Logos')
-                                            ->helperText('Display logos in grayscale')
+                                            ->label(__('tallcms::fields.grayscale_logos'))
+                                            ->helperText(__('tallcms::ui.t_display_logos_in_grayscale'))
                                             ->default(true),
 
                                         Toggle::make('hover_color')
-                                            ->label('Color on Hover')
-                                            ->helperText('Show color when hovering (only if grayscale is enabled)')
+                                            ->label(__('tallcms::fields.color_on_hover'))
+                                            ->helperText(__('tallcms::ui.t_show_color_when_hovering_only_if_grayscale_is_enabled'))
                                             ->default(true),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(4),

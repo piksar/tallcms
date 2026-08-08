@@ -61,7 +61,7 @@ trait HasMultisiteWidgetContext
         $sessionValue = session('multisite_admin_site_id');
 
         if ($sessionValue === '__all_sites__') {
-            return 'All Sites';
+            return __('tallcms::widgets.all_sites');
         }
 
         if (! $siteId) {

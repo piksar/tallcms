@@ -18,9 +18,9 @@ class EditTallcmsMedia extends EditRecord
     {
         return [
             DeleteAction::make()
-                ->modalHeading('Delete Media File')
-                ->modalDescription('Are you sure you want to delete this media file? This action cannot be undone and the file will be permanently removed from storage.')
-                ->modalSubmitActionLabel('Delete File'),
+                ->modalHeading(__('tallcms::ui.t_delete_media_file'))
+                ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_delete_this_media_file_this_action_cannot_b'))
+                ->modalSubmitActionLabel(__('tallcms::ui.t_delete_file')),
         ];
     }
 

@@ -39,7 +39,7 @@ class HowToBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Step-by-step instructions with HowTo schema';
+        return __('tallcms::blocks.descriptions.how_to');
     }
 
     public static function getKeywords(): array
@@ -59,64 +59,64 @@ class HowToBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'How To';
+        return __('tallcms::blocks.labels.how_to');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Create step-by-step instructions with HowTo schema markup')
-            ->modalHeading('Configure How To Block')
+            ->modalDescription(__('tallcms::ui.t_create_step_by_step_instructions_with_howto_schema_markup'))
+            ->modalHeading(__('tallcms::ui.t_configure_how_to_block'))
             ->modalWidth('5xl')
             ->schema([
                 Tabs::make('How To Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('title')
-                                    ->label('Title')
-                                    ->placeholder('How to...')
+                                    ->label(__('tallcms::fields.title'))
+                                    ->placeholder(__('tallcms::ui.t_how_to'))
                                     ->maxLength(255),
 
                                 Textarea::make('description')
-                                    ->label('Description')
-                                    ->placeholder('A brief overview of what this guide covers')
+                                    ->label(__('tallcms::fields.description'))
+                                    ->placeholder(__('tallcms::ui.t_a_brief_overview_of_what_this_guide_covers'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 TextInput::make('total_time')
-                                    ->label('Total Time')
-                                    ->placeholder('e.g., PT30M or 30 minutes')
+                                    ->label(__('tallcms::fields.total_time'))
+                                    ->placeholder(__('tallcms::ui.t_e_g_pt30m_or_30_minutes'))
                                     ->maxLength(100),
 
                                 TextInput::make('estimated_cost')
-                                    ->label('Estimated Cost')
-                                    ->placeholder('e.g., 50')
+                                    ->label(__('tallcms::fields.estimated_cost'))
+                                    ->placeholder(__('tallcms::ui.t_e_g_50'))
                                     ->maxLength(50),
 
                                 TextInput::make('currency')
-                                    ->label('Currency')
+                                    ->label(__('tallcms::fields.currency'))
                                     ->default('USD')
                                     ->maxLength(10),
 
                                 Repeater::make('steps')
-                                    ->label('Steps')
+                                    ->label(__('tallcms::fields.steps'))
                                     ->schema([
                                         TextInput::make('step_name')
-                                            ->label('Step Name')
+                                            ->label(__('tallcms::fields.step_name'))
                                             ->required()
-                                            ->placeholder('Step title')
+                                            ->placeholder(__('tallcms::ui.t_step_title'))
                                             ->maxLength(500),
 
                                         Textarea::make('step_text')
-                                            ->label('Step Description')
+                                            ->label(__('tallcms::fields.step_description'))
                                             ->required()
-                                            ->placeholder('Detailed instructions for this step...')
+                                            ->placeholder(__('tallcms::ui.t_detailed_instructions_for_this_step'))
                                             ->rows(3),
 
                                         FileUpload::make('step_image')
-                                            ->label('Step Image')
+                                            ->label(__('tallcms::fields.step_image'))
                                             ->image()
                                             ->directory('cms/blocks/howto')
                                             ->disk(\cms_media_disk())
@@ -124,7 +124,7 @@ class HowToBlock extends RichContentCustomBlock
                                             ->nullable(),
 
                                         TextInput::make('step_url')
-                                            ->label('Step URL')
+                                            ->label(__('tallcms::fields.step_url'))
                                             ->url()
                                             ->nullable()
                                             ->placeholder('https://...')
@@ -138,53 +138,53 @@ class HowToBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Settings')
+                        Tab::make(__('tallcms::fields.settings'))
                             ->icon('heroicon-m-cog-6-tooth')
                             ->schema([
-                                Section::make('Display Options')
+                                Section::make(__('tallcms::ui.t_display_options'))
                                     ->schema([
                                         Select::make('text_alignment')
-                                            ->label('Header Alignment')
+                                            ->label(__('tallcms::fields.header_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for step number circles'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_step_number_circles')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('SEO')
+                                Section::make(__('tallcms::fields.seo'))
                                     ->schema([
                                         Toggle::make('show_schema')
-                                            ->label('Add HowTo Schema Markup')
-                                            ->helperText('Adds schema.org HowTo structured data for SEO')
+                                            ->label(__('tallcms::fields.add_howto_schema_markup'))
+                                            ->helperText(__('tallcms::ui.t_adds_schema_org_howto_structured_data_for_seo'))
                                             ->default(true),
                                     ]),
 
-                                Section::make('Spacing')
+                                Section::make(__('tallcms::ui.t_spacing'))
                                     ->schema([
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ]),
                             ]),

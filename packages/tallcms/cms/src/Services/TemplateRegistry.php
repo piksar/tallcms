@@ -66,19 +66,40 @@ class TemplateRegistry
      */
     public function getAvailableTemplates(): array
     {
-        if ($this->cachedTemplates !== null) {
-            return $this->cachedTemplates;
+        if ($this->cachedTemplates === null) {
+            $templates = $this->defaultTemplates;
+
+            // Merge theme templates if available
+            $themeTemplates = $this->getThemeTemplates();
+            foreach ($themeTemplates as $slug => $config) {
+                $templates[$slug] = array_merge($templates[$slug] ?? [], $config);
+            }
+
+            $this->cachedTemplates = $templates;
         }
 
-        $templates = $this->defaultTemplates;
+        return $this->localizeTemplates($this->cachedTemplates);
+    }
 
-        // Merge theme templates if available
-        $themeTemplates = $this->getThemeTemplates();
-        foreach ($themeTemplates as $slug => $config) {
-            $templates[$slug] = array_merge($templates[$slug] ?? [], $config);
+    /**
+     * @param  array<string, array<string, mixed>>  $templates
+     * @return array<string, array<string, mixed>>
+     */
+    protected function localizeTemplates(array $templates): array
+    {
+        foreach ($templates as $slug => &$config) {
+            $labelKey = "tallcms::blocks.templates.{$slug}.label";
+            $descriptionKey = "tallcms::blocks.templates.{$slug}.description";
+
+            if (\Illuminate\Support\Facades\Lang::has($labelKey)) {
+                $config['label'] = __($labelKey);
+            }
+
+            if (\Illuminate\Support\Facades\Lang::has($descriptionKey)) {
+                $config['description'] = __($descriptionKey);
+            }
         }
-
-        $this->cachedTemplates = $templates;
+        unset($config);
 
         return $templates;
     }

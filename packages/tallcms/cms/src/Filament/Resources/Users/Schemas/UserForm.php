@@ -33,43 +33,43 @@ class UserForm
 
         if (DbSchema::hasColumn($table, 'slug')) {
             $fields[] = TextInput::make('slug')
-                ->label('Author Slug')
+                ->label(__('tallcms::fields.author_slug'))
                 ->disabled()
                 ->dehydrated(false)
-                ->helperText('Auto-generated from name. Used in author archive URL.');
+                ->helperText(__('tallcms::ui.t_auto_generated_from_name_used_in_author_archive_url'));
         }
 
         if (DbSchema::hasColumn($table, 'bio')) {
             $fields[] = Textarea::make('bio')
-                ->label('Biography')
+                ->label(__('tallcms::fields.biography'))
                 ->rows(3)
                 ->maxLength(1000)
-                ->helperText('Short bio displayed on posts and author page');
+                ->helperText(__('tallcms::ui.t_short_bio_displayed_on_posts_and_author_page'));
         }
 
         if (DbSchema::hasColumn($table, 'twitter_handle')) {
             $fields[] = TextInput::make('twitter_handle')
-                ->label('X / Twitter Handle')
+                ->label(__('tallcms::fields.x_twitter_handle'))
                 ->prefix('@')
                 ->maxLength(50);
         }
 
         if (DbSchema::hasColumn($table, 'job_title')) {
             $fields[] = TextInput::make('job_title')
-                ->label('Job Title')
+                ->label(__('tallcms::fields.job_title'))
                 ->maxLength(255)
-                ->placeholder('e.g., Senior Editor');
+                ->placeholder(__('tallcms::ui.t_e_g_senior_editor'));
         }
 
         if (DbSchema::hasColumn($table, 'company')) {
             $fields[] = TextInput::make('company')
-                ->label('Company / Organization')
+                ->label(__('tallcms::fields.company_organization'))
                 ->maxLength(255);
         }
 
         if (DbSchema::hasColumn($table, 'linkedin_url')) {
             $fields[] = TextInput::make('linkedin_url')
-                ->label('LinkedIn URL')
+                ->label(__('tallcms::fields.linkedin_url'))
                 ->url()
                 ->maxLength(500)
                 ->placeholder('https://linkedin.com/in/...');
@@ -84,52 +84,52 @@ class UserForm
 
         return $schema
             ->components([
-                Section::make('User Information')
-                    ->description('Basic user profile information')
+                Section::make(__('tallcms::ui.t_user_information'))
+                    ->description(__('tallcms::ui.t_basic_user_profile_information'))
                     ->schema([
                         TextInput::make('name')
-                            ->label('Full Name')
+                            ->label(__('tallcms::fields.full_name'))
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Enter full name'),
+                            ->placeholder(__('tallcms::ui.t_enter_full_name')),
 
                         TextInput::make('email')
-                            ->label('Email Address')
+                            ->label(__('tallcms::fields.email_address'))
                             ->email()
                             ->required()
                             ->maxLength(255)
                             ->unique($model, 'email', ignoreRecord: true)
-                            ->placeholder('user@example.com'),
+                            ->placeholder(__('tallcms::ui.t_user_example_com')),
 
                         TextInput::make('password')
-                            ->label('Password')
+                            ->label(__('tallcms::fields.password'))
                             ->password()
                             ->required(fn (string $context): bool => $context === 'create')
                             ->rule(Password::default())
                             ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                             ->dehydrated(fn (?string $state): bool => filled($state))
-                            ->placeholder('Enter secure password')
-                            ->helperText('Leave blank to keep current password when editing'),
+                            ->placeholder(__('tallcms::ui.t_enter_secure_password'))
+                            ->helperText(__('tallcms::ui.t_leave_blank_to_keep_current_password_when_editing')),
                     ])
                     ->columns(2),
 
-                Section::make('Author Profile')
-                    ->description('Public author information displayed on posts and author archives')
+                Section::make(__('tallcms::ui.t_author_profile'))
+                    ->description(__('tallcms::ui.t_public_author_information_displayed_on_posts_and_author_archives'))
                     ->schema(static::getAuthorProfileFields($model))
                     ->columns(2)
                     ->collapsible()
                     ->visible(fn () => ! empty(static::getAuthorProfileFields($model))),
 
-                Section::make('Role Assignment')
-                    ->description('Assign roles to this user')
+                Section::make(__('tallcms::ui.t_role_assignment'))
+                    ->description(__('tallcms::ui.t_assign_roles_to_this_user'))
                     ->schema([
                         Select::make('roles')
-                            ->label('User Roles')
+                            ->label(__('tallcms::fields.user_roles'))
                             ->relationship('roles', 'name')
                             ->multiple()
                             ->preload()
                             ->searchable()
-                            ->helperText('Select one or more roles for this user')
+                            ->helperText(__('tallcms::ui.t_select_one_or_more_roles_for_this_user'))
                             ->columnSpanFull(),
                     ]),
             ]);

@@ -50,46 +50,46 @@ class SiteForm
 
     public static function generalTab(?Site $site = null): Tabs\Tab
     {
-        return Tabs\Tab::make('General')
+        return Tabs\Tab::make(__('tallcms::ui.tab_general'))
             ->icon('heroicon-o-cog-6-tooth')
             ->schema([
-                Section::make('Site Identity')
-                    ->description('Basic site information visible to visitors')
+                Section::make(__('tallcms::ui.t_site_identity'))
+                    ->description(__('tallcms::ui.t_basic_site_information_visible_to_visitors'))
                     ->schema([
                         TextInput::make('name')
-                            ->label('Site Name')
+                            ->label(__('tallcms::fields.site_name'))
                             ->required()
                             ->maxLength(255)
-                            ->helperText('The public brand name shown in browser tabs and throughout the site'),
+                            ->helperText(__('tallcms::ui.t_the_public_brand_name_shown_in_browser_tabs_and_throughout_the_site')),
 
                         TextInput::make('site_tagline')
-                            ->label('Tagline')
+                            ->label(__('tallcms::fields.tagline'))
                             ->maxLength(255)
-                            ->helperText('Short phrase that describes your site'),
+                            ->helperText(__('tallcms::ui.help_short_phrase_site')),
 
                         Textarea::make('site_description')
-                            ->label('Description')
+                            ->label(__('tallcms::fields.description'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Used as fallback meta description'),
+                            ->helperText(__('tallcms::ui.help_fallback_meta_description')),
 
                         Select::make('site_type')
-                            ->label('Site Type')
+                            ->label(__('tallcms::fields.site_type'))
                             ->options([
                                 'multi-page' => 'Multi-Page Website',
                                 'single-page' => 'Single-Page Application (SPA)',
                             ])
                             ->default('multi-page')
                             ->required()
-                            ->helperText('Multi-page: Traditional website. SPA: One-page with anchor navigation.'),
+                            ->helperText(__('tallcms::ui.help_site_type')),
                     ])
                     ->columns(2),
 
-                Section::make('Technical')
-                    ->description('Domain and theme configuration')
+                Section::make(__('tallcms::ui.t_technical'))
+                    ->description(__('tallcms::ui.t_domain_and_theme_configuration'))
                     ->schema([
                         TextInput::make('domain')
-                            ->label('Domain')
+                            ->label(__('tallcms::fields.domain'))
                             ->disabled(! tallcms_multisite_active())
                             ->dehydrated()
                             ->helperText(tallcms_multisite_active()
@@ -97,9 +97,9 @@ class SiteForm
                                 : 'Domain is derived from your APP_URL in standalone mode'),
 
                         Select::make('theme')
-                            ->label('Theme')
+                            ->label(__('tallcms::fields.theme'))
                             ->options(fn () => static::getThemeOptions())
-                            ->helperText('Visual theme for this site'),
+                            ->helperText(__('tallcms::ui.t_visual_theme_for_this_site')),
                     ])
                     ->columns(2),
             ]);
@@ -111,32 +111,32 @@ class SiteForm
      */
     public static function settingsGeneralTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('General')
+        return Tabs\Tab::make(__('tallcms::ui.tab_general'))
             ->icon('heroicon-o-cog-6-tooth')
             ->schema([
-                Section::make('Site Identity')
-                    ->description('Basic site information visible to visitors')
+                Section::make(__('tallcms::ui.t_site_identity'))
+                    ->description(__('tallcms::ui.t_basic_site_information_visible_to_visitors'))
                     ->schema([
                         TextInput::make('site_tagline')
-                            ->label('Tagline')
+                            ->label(__('tallcms::fields.tagline'))
                             ->maxLength(255)
-                            ->helperText('Short phrase that describes your site'),
+                            ->helperText(__('tallcms::ui.help_short_phrase_site')),
 
                         Textarea::make('site_description')
-                            ->label('Description')
+                            ->label(__('tallcms::fields.description'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Used as fallback meta description'),
+                            ->helperText(__('tallcms::ui.help_fallback_meta_description')),
 
                         Select::make('site_type')
-                            ->label('Site Type')
+                            ->label(__('tallcms::fields.site_type'))
                             ->options([
                                 'multi-page' => 'Multi-Page Website',
                                 'single-page' => 'Single-Page Application (SPA)',
                             ])
                             ->default('multi-page')
                             ->required()
-                            ->helperText('Multi-page: Traditional website. SPA: One-page with anchor navigation.'),
+                            ->helperText(__('tallcms::ui.help_site_type')),
                     ])
                     ->columns(2),
             ]);
@@ -144,35 +144,35 @@ class SiteForm
 
     public static function brandingTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Branding')
+        return Tabs\Tab::make(__('tallcms::ui.tab_branding'))
             ->icon('heroicon-o-paint-brush')
             ->schema([
-                Section::make('Visual Identity')
-                    ->description('Logo, favicon, and visual branding elements')
+                Section::make(__('tallcms::ui.t_visual_identity'))
+                    ->description(__('tallcms::ui.t_logo_favicon_and_visual_branding_elements'))
                     ->schema([
                         FileUpload::make('logo')
-                            ->label('Site Logo')
+                            ->label(__('tallcms::fields.site_logo'))
                             ->image()
                             ->directory('site-assets')
                             ->disk(\cms_media_disk())
                             ->visibility(\cms_media_visibility())
-                            ->helperText('Upload your site logo (PNG, JPG, or SVG)')
+                            ->helperText(__('tallcms::ui.help_upload_logo'))
                             ->deletable()
                             ->nullable(),
 
                         FileUpload::make('favicon')
-                            ->label('Favicon')
+                            ->label(__('tallcms::fields.favicon'))
                             ->image()
                             ->directory('site-assets')
                             ->disk(\cms_media_disk())
                             ->visibility(\cms_media_visibility())
                             ->acceptedFileTypes(['image/x-icon', 'image/png'])
-                            ->helperText('Upload favicon (.ico or .png, 16x16 or 32x32 pixels)')
+                            ->helperText(__('tallcms::ui.help_upload_favicon'))
                             ->nullable(),
 
                         Toggle::make('show_powered_by')
-                            ->label('Show "Powered by TallCMS" Badge')
-                            ->helperText('Displays a small badge in the site footer.')
+                            ->label(__('tallcms::fields.show_powered_by_tallcms_badge'))
+                            ->helperText(__('tallcms::ui.help_powered_by_badge'))
                             ->default(true)
                             ->columnSpanFull(),
                     ])
@@ -182,32 +182,32 @@ class SiteForm
 
     public static function contactTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Contact')
+        return Tabs\Tab::make(__('tallcms::ui.tab_contact'))
             ->icon('heroicon-o-envelope')
             ->schema([
-                Section::make('Contact Information')
-                    ->description('Contact details used in merge tags and forms')
+                Section::make(__('tallcms::ui.t_contact_information'))
+                    ->description(__('tallcms::ui.t_contact_details_used_in_merge_tags_and_forms'))
                     ->schema([
                         TextInput::make('contact_email')
-                            ->label('Contact Email')
+                            ->label(__('tallcms::fields.contact_email'))
                             ->email()
-                            ->helperText('Default email for contact forms'),
+                            ->helperText(__('tallcms::ui.help_default_contact_email')),
 
                         TextInput::make('contact_phone')
-                            ->label('Contact Phone')
+                            ->label(__('tallcms::fields.contact_phone'))
                             ->tel()
-                            ->helperText('Business phone number'),
+                            ->helperText(__('tallcms::ui.help_business_phone')),
 
                         TextInput::make('company_name')
-                            ->label('Company Name')
+                            ->label(__('tallcms::fields.company_name'))
                             ->maxLength(255)
-                            ->helperText('Legal company name'),
+                            ->helperText(__('tallcms::ui.help_legal_company_name')),
 
                         Textarea::make('company_address')
-                            ->label('Company Address')
+                            ->label(__('tallcms::fields.company_address'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Complete business address'),
+                            ->helperText(__('tallcms::ui.help_complete_business_address')),
                     ])
                     ->columns(2),
             ]);
@@ -215,19 +215,19 @@ class SiteForm
 
     public static function socialTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Social')
+        return Tabs\Tab::make(__('tallcms::ui.tab_social'))
             ->icon('heroicon-o-share')
             ->schema([
-                Section::make('Social Media')
-                    ->description('Social media links and newsletter signup')
+                Section::make(__('tallcms::ui.t_social_media'))
+                    ->description(__('tallcms::ui.t_social_media_links_and_newsletter_signup'))
                     ->schema([
-                        TextInput::make('social_facebook')->label('Facebook URL')->url(),
-                        TextInput::make('social_twitter')->label('Twitter / X URL')->url(),
-                        TextInput::make('social_linkedin')->label('LinkedIn URL')->url(),
-                        TextInput::make('social_instagram')->label('Instagram URL')->url(),
-                        TextInput::make('social_youtube')->label('YouTube URL')->url(),
-                        TextInput::make('social_tiktok')->label('TikTok URL')->url(),
-                        TextInput::make('newsletter_signup_url')->label('Newsletter Signup URL')->url(),
+                        TextInput::make('social_facebook')->label(__('tallcms::fields.facebook_url'))->url(),
+                        TextInput::make('social_twitter')->label(__('tallcms::fields.twitter_x_url'))->url(),
+                        TextInput::make('social_linkedin')->label(__('tallcms::fields.linkedin_url'))->url(),
+                        TextInput::make('social_instagram')->label(__('tallcms::fields.instagram_url'))->url(),
+                        TextInput::make('social_youtube')->label(__('tallcms::fields.youtube_url'))->url(),
+                        TextInput::make('social_tiktok')->label(__('tallcms::fields.tiktok_url'))->url(),
+                        TextInput::make('newsletter_signup_url')->label(__('tallcms::fields.newsletter_signup_url'))->url(),
                     ])
                     ->columns(2),
             ]);
@@ -247,40 +247,40 @@ class SiteForm
      */
     public static function embedCodeTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Embed Code')
+        return Tabs\Tab::make(__('tallcms::ui.t_embed_code'))
             ->icon('heroicon-o-code-bracket')
             ->schema([
-                Section::make('Warning')
+                Section::make(__('tallcms::ui.t_warning'))
                     ->icon('heroicon-o-exclamation-triangle')
                     ->iconColor('danger')
-                    ->description('Site owners can add scripts for this site only. Embed code runs on every page of this site for all visitors — only paste code from sources you trust.')
+                    ->description(__('tallcms::ui.t_site_owners_can_add_scripts_for_this_site_only_embed_code_runs_on_ev'))
                     ->schema([]),
 
-                Section::make('Head Code')
-                    ->description('Embedded inside <head> before </head> (analytics, meta tags, CSS)')
+                Section::make(__('tallcms::fields.head_code'))
+                    ->description(__('tallcms::ui.t_embedded_inside_head_before_head_analytics_meta_tags_css'))
                     ->schema([
                         Textarea::make('code_head')
-                            ->label('Head Code')
+                            ->label(__('tallcms::fields.head_code'))
                             ->rows(8)
                             ->extraInputAttributes(['class' => 'font-mono text-sm'])
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Body Start Code')
-                    ->description('Embedded right after the <body> open tag (GTM noscript, early scripts)')
+                Section::make(__('tallcms::fields.body_start_code'))
+                    ->description(__('tallcms::ui.t_embedded_right_after_the_body_open_tag_gtm_noscript_early_scripts'))
                     ->schema([
                         Textarea::make('code_body_start')
-                            ->label('Body Start Code')
+                            ->label(__('tallcms::fields.body_start_code'))
                             ->rows(8)
                             ->extraInputAttributes(['class' => 'font-mono text-sm'])
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Body End Code')
-                    ->description('Embedded before </body> (tracking pixels, chat widgets, deferred JS)')
+                Section::make(__('tallcms::fields.body_end_code'))
+                    ->description(__('tallcms::ui.t_embedded_before_body_tracking_pixels_chat_widgets_deferred_js'))
                     ->schema([
                         Textarea::make('code_body_end')
-                            ->label('Body End Code')
+                            ->label(__('tallcms::fields.body_end_code'))
                             ->rows(8)
                             ->extraInputAttributes(['class' => 'font-mono text-sm'])
                             ->columnSpanFull(),
@@ -290,15 +290,15 @@ class SiteForm
 
     public static function publishingTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Publishing')
+        return Tabs\Tab::make(__('tallcms::ui.tab_publishing'))
             ->icon('heroicon-o-document-check')
             ->schema([
-                Section::make('Publishing Workflow')
-                    ->description('Control how content gets published on this site')
+                Section::make(__('tallcms::ui.t_publishing_workflow'))
+                    ->description(__('tallcms::ui.t_control_how_content_gets_published_on_this_site'))
                     ->schema([
                         Toggle::make('review_workflow_enabled')
-                            ->label('Enable Review Workflow')
-                            ->helperText('When enabled, authors must submit content for review before it can be published. When disabled, all users with create permission can publish directly.')
+                            ->label(__('tallcms::fields.enable_review_workflow'))
+                            ->helperText(__('tallcms::ui.help_review_workflow'))
                             ->columnSpanFull(),
                     ]),
             ]);
@@ -306,23 +306,23 @@ class SiteForm
 
     public static function maintenanceTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Maintenance')
+        return Tabs\Tab::make(__('tallcms::ui.tab_maintenance'))
             ->icon('heroicon-o-wrench-screwdriver')
             ->schema([
-                Section::make('Maintenance Mode')
-                    ->description('Control site availability for visitors')
+                Section::make(__('tallcms::ui.t_maintenance_mode'))
+                    ->description(__('tallcms::ui.t_control_site_availability_for_visitors'))
                     ->schema([
                         Toggle::make('maintenance_mode')
-                            ->label('Enable Maintenance Mode')
-                            ->helperText('When enabled, visitors see a maintenance page. Admins can still access the panel.')
+                            ->label(__('tallcms::fields.enable_maintenance_mode'))
+                            ->helperText(__('tallcms::ui.help_maintenance_mode'))
                             ->live()
                             ->columnSpanFull(),
 
                         Textarea::make('maintenance_message')
-                            ->label('Maintenance Message')
+                            ->label(__('tallcms::fields.maintenance_message'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Message shown to visitors during maintenance mode')
+                            ->helperText(__('tallcms::ui.help_maintenance_message'))
                             ->visible(fn ($get) => $get('maintenance_mode'))
                             ->columnSpanFull(),
                     ]),
@@ -334,23 +334,23 @@ class SiteForm
         $schema = [];
 
         if ($includeSiteLocaleField) {
-            $schema[] = Section::make('Site Language')
-                ->description('Primary language for this site')
+            $schema[] = Section::make(__('tallcms::ui.t_site_language'))
+                ->description(__('tallcms::ui.t_primary_language_for_this_site'))
                 ->schema([
                     Select::make('locale')
-                        ->label('Locale')
+                        ->label(__('tallcms::fields.locale'))
                         ->options(fn () => static::getLocaleOptions())
                         ->searchable()
-                        ->helperText('Used for content and as the redirect target when / redirect is enabled.'),
+                        ->helperText(__('tallcms::ui.t_used_for_content_and_as_the_redirect_target_when_redirect_is_enabled')),
                 ])
                 ->columns(2);
         }
 
-        $schema[] = Section::make('URL Routing')
-            ->description('Locale URL behaviour for this site')
+        $schema[] = Section::make(__('tallcms::ui.t_url_routing'))
+            ->description(__('tallcms::ui.t_locale_url_behaviour_for_this_site'))
             ->schema(static::languagesRedirectSchema());
 
-        return Tabs\Tab::make('Languages')
+        return Tabs\Tab::make(__('tallcms::ui.tab_languages'))
             ->icon('heroicon-o-language')
             ->schema($schema);
     }
@@ -364,8 +364,8 @@ class SiteForm
     {
         return [
             Toggle::make('redirect_root_to_locale')
-                ->label('Redirect / to the default locale')
-                ->helperText('When enabled, visitors to / are redirected to this site\'s language prefix. Requires multilingual URLs with visible default locale (Global Defaults → Languages → Hide Default Language in URLs off).')
+                ->label(__('tallcms::fields.redirect_to_the_default_locale'))
+                ->helperText(__('tallcms::ui.t_when_enabled_visitors_to_are_redirected_to_this_site_s_language_pref'))
                 ->default(false)
                 ->disabled(fn () => ! static::isRedirectRootToLocaleApplicable())
                 ->dehydrated(fn () => static::isRedirectRootToLocaleApplicable())

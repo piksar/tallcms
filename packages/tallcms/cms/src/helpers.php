@@ -1249,3 +1249,46 @@ if (! function_exists('tallcms_multisite_active')) {
         return false;
     }
 }
+
+// Admin UI localization
+
+if (! function_exists('tallcms_label')) {
+    /**
+     * Resolve an admin resource label with optional config/plugin override.
+     *
+     * Literal overrides in config('tallcms.labels.*') win (white-label renames).
+     * When the override is null/empty, the package translation is used
+     * (__('tallcms::resources.{resource}.{facet}')), following APP_LOCALE.
+     *
+     * @param  string  $resource  Config key under tallcms.labels (e.g. pages, posts)
+     * @param  string  $facet  singular|plural|navigation
+     */
+    function tallcms_label(string $resource, string $facet): string
+    {
+        $override = config("tallcms.labels.{$resource}.{$facet}");
+
+        if (is_string($override) && $override !== '') {
+            return $override;
+        }
+
+        return (string) __("tallcms::resources.{$resource}.{$facet}");
+    }
+}
+
+if (! function_exists('tallcms_nav_group')) {
+    /**
+     * Resolve an admin navigation group label with optional config override.
+     *
+     * @param  string  $group  Key under tallcms.navigation.groups (e.g. content, system)
+     */
+    function tallcms_nav_group(string $group): string
+    {
+        $override = config("tallcms.navigation.groups.{$group}");
+
+        if (is_string($override) && $override !== '') {
+            return $override;
+        }
+
+        return (string) __("tallcms::navigation.groups.{$group}");
+    }
+}

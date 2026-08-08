@@ -178,8 +178,8 @@ class EditSite extends Page implements HasForms
         \TallCms\Cms\Models\SiteSetting::clearCache();
 
         Notification::make()
-            ->title('Site settings saved')
-            ->body("Settings for \"{$site->name}\" have been saved.")
+            ->title(__('tallcms::ui.t_site_settings_saved'))
+            ->body(__('tallcms::ui.n_settings_saved_for_site', ['name' => $site->name]))
             ->success()
             ->send();
     }

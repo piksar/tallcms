@@ -41,7 +41,7 @@ class CmsCommentsTable
                     ->sortable(),
 
                 TextColumn::make('author_display')
-                    ->label('Author')
+                    ->label(__('tallcms::fields.author'))
                     ->state(fn ($record) => $record->getAuthorName() ?? 'Anonymous')
                     ->description(fn ($record) => $record->getAuthorEmail())
                     ->searchable(query: function ($query, string $search) {
@@ -52,13 +52,13 @@ class CmsCommentsTable
                         });
                     }),
 
-                TextColumn::make('content')
+                TextColumn::make('content')->label(__('tallcms::fields.content'))
                     ->limit(80)
                     ->searchable()
                     ->wrap(),
 
                 TextColumn::make('post.title')
-                    ->label('Post')
+                    ->label(__('tallcms::fields.post'))
                     ->limit(40)
                     ->sortable()
                     ->url(fn ($record) => $record->post ? route(
@@ -67,7 +67,7 @@ class CmsCommentsTable
                     ) : null),
 
                 TextColumn::make('created_at')
-                    ->label('Submitted')
+                    ->label(__('tallcms::fields.submitted'))
                     ->since()
                     ->sortable(),
             ])
@@ -87,7 +87,7 @@ class CmsCommentsTable
                 ViewAction::make(),
 
                 Action::make('approve')
-                    ->label('Approve')
+                    ->label(__('tallcms::fields.approve'))
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->visible(fn ($record) => $record->isPending() && auth()->user()?->can('Approve:CmsComment'))
@@ -95,7 +95,7 @@ class CmsCommentsTable
                     ->action(fn ($record) => $record->approve(auth()->user())),
 
                 Action::make('reject')
-                    ->label('Reject')
+                    ->label(__('tallcms::fields.reject'))
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->visible(fn ($record) => ($record->isPending() || $record->isApproved()) && auth()->user()?->can('Reject:CmsComment'))
@@ -103,7 +103,7 @@ class CmsCommentsTable
                     ->action(fn ($record) => $record->reject()),
 
                 Action::make('unreject')
-                    ->label('Unreject')
+                    ->label(__('tallcms::fields.unreject'))
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->color('warning')
                     ->visible(fn ($record) => $record->isRejected() && auth()->user()?->can('Reject:CmsComment'))
@@ -111,7 +111,7 @@ class CmsCommentsTable
                     ->action(fn ($record) => $record->unreject()),
 
                 Action::make('mark_spam')
-                    ->label('Spam')
+                    ->label(__('tallcms::fields.spam'))
                     ->icon('heroicon-o-shield-exclamation')
                     ->color('gray')
                     ->visible(fn ($record) => ! $record->isSpam() && auth()->user()?->can('MarkAsSpam:CmsComment'))
@@ -119,7 +119,7 @@ class CmsCommentsTable
                     ->action(fn ($record) => $record->markAsSpam()),
 
                 Action::make('not_spam')
-                    ->label('Not Spam')
+                    ->label(__('tallcms::fields.not_spam'))
                     ->icon('heroicon-o-shield-check')
                     ->color('warning')
                     ->visible(fn ($record) => $record->isSpam() && auth()->user()?->can('MarkAsSpam:CmsComment'))
@@ -129,7 +129,7 @@ class CmsCommentsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('approve_selected')
-                        ->label('Approve Selected')
+                        ->label(__('tallcms::fields.approve_selected'))
                         ->icon('heroicon-o-check-circle')
                         ->visible(fn () => auth()->user()?->can('Approve:CmsComment'))
                         ->requiresConfirmation()
@@ -137,7 +137,7 @@ class CmsCommentsTable
                         ->deselectRecordsAfterCompletion(),
 
                     BulkAction::make('reject_selected')
-                        ->label('Reject Selected')
+                        ->label(__('tallcms::fields.reject_selected'))
                         ->icon('heroicon-o-x-circle')
                         ->visible(fn () => auth()->user()?->can('Reject:CmsComment'))
                         ->requiresConfirmation()
@@ -145,7 +145,7 @@ class CmsCommentsTable
                         ->deselectRecordsAfterCompletion(),
 
                     BulkAction::make('mark_spam_selected')
-                        ->label('Mark as Spam')
+                        ->label(__('tallcms::fields.mark_as_spam'))
                         ->icon('heroicon-o-shield-exclamation')
                         ->visible(fn () => auth()->user()?->can('MarkAsSpam:CmsComment'))
                         ->requiresConfirmation()
@@ -157,8 +157,8 @@ class CmsCommentsTable
                     RestoreBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No comments yet')
-            ->emptyStateDescription('When visitors submit comments on your posts, they will appear here for moderation.')
+            ->emptyStateHeading(__('tallcms::ui.empty_comments_heading'))
+            ->emptyStateDescription(__('tallcms::ui.empty_comments_description'))
             ->emptyStateIcon('heroicon-o-chat-bubble-left-right');
     }
 }

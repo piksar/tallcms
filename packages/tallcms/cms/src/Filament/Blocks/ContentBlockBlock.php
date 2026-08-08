@@ -36,7 +36,7 @@ class ContentBlockBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Rich text content section with title and body';
+        return __('tallcms::blocks.descriptions.content_block');
     }
 
     public static function getKeywords(): array
@@ -56,62 +56,62 @@ class ContentBlockBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Content';
+        return __('tallcms::blocks.labels.content_block');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Add a content section with title and rich text body')
+            ->modalDescription(__('tallcms::ui.t_add_a_content_section_with_title_and_rich_text_body'))
             ->schema([
                 Tabs::make('Content Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('title')
-                                    ->label('Title')
+                                    ->label(__('tallcms::fields.title'))
                                     ->maxLength(255)
-                                    ->placeholder('Enter section title'),
+                                    ->placeholder(__('tallcms::ui.t_enter_section_title')),
 
                                 TextInput::make('subtitle')
-                                    ->label('Subtitle')
+                                    ->label(__('tallcms::fields.subtitle'))
                                     ->maxLength(255)
-                                    ->placeholder('Optional subtitle or subheading'),
+                                    ->placeholder(__('tallcms::ui.t_optional_subtitle_or_subheading')),
 
                                 RichEditor::make('body')
-                                    ->label('Content')
-                                    ->placeholder('Write your content here...'),
+                                    ->label(__('tallcms::fields.content'))
+                                    ->placeholder(__('tallcms::ui.t_write_your_content_here')),
 
                                 static::getContentWidthField(),
 
                                 Select::make('heading_level')
-                                    ->label('Heading Level')
+                                    ->label(__('tallcms::fields.heading_level'))
                                     ->options([
                                         'h2' => 'H2 (recommended for sections)',
                                         'h3' => 'H3 (for subsections)',
                                         'h4' => 'H4 (for smaller headings)',
                                     ])
                                     ->default('h2')
-                                    ->helperText('Choose appropriate heading level for page structure'),
+                                    ->helperText(__('tallcms::ui.t_choose_appropriate_heading_level_for_page_structure')),
                             ]),
 
-                        Tab::make('Appearance')
+                        Tab::make(__('tallcms::ui.t_appearance'))
                             ->icon('heroicon-m-paint-brush')
                             ->schema([
                                 Select::make('background')
-                                    ->label('Background')
+                                    ->label(__('tallcms::fields.background'))
                                     ->options(static::getBackgroundOptions())
                                     ->default('bg-base-100'),
 
                                 Select::make('padding')
-                                    ->label('Section Padding')
+                                    ->label(__('tallcms::fields.section_padding'))
                                     ->options(static::getPaddingOptions())
                                     ->default('py-16'),
 
                                 Toggle::make('first_section')
-                                    ->label('First Section (Remove Top Padding)')
-                                    ->helperText('Overrides padding setting above')
+                                    ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                    ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                     ->default(false),
                             ]),
 

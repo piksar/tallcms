@@ -180,17 +180,19 @@ return [
     | Navigation Groups
     |--------------------------------------------------------------------------
     |
-    | Admin sidebar group names. Change these to rename groups globally.
-    | The multisite plugin adds 'platform' when active.
+    | Optional literal overrides for admin sidebar group names. Leave null to
+    | use package translations (tallcms::navigation.groups.* / APP_LOCALE).
+    | Set a string to rename a group (white-label). The multisite plugin may
+    | use the 'platform' group when active.
     |
     */
     'navigation' => [
         'groups' => [
-            'platform' => 'Sites',
-            'content' => 'Content',
-            'appearance' => 'Appearance',
-            'configuration' => 'Configuration',
-            'system' => 'System',
+            'platform' => null,
+            'content' => null,
+            'appearance' => null,
+            'configuration' => null,
+            'system' => null,
         ],
     ],
 
@@ -199,7 +201,8 @@ return [
     | Resource Labels
     |--------------------------------------------------------------------------
     |
-    | Admin panel singular, plural, and navigation labels for each resource.
+    | Optional literal overrides for admin resource labels. Leave null to use
+    | package translations (tallcms::resources.* / APP_LOCALE).
     | Override any key to rename a resource without touching package files.
     | In plugin mode, prefer the TallCmsPlugin fluent API:
     |   TallCmsPlugin::make()->categoryLabel('Tags', 'Tag')
@@ -208,54 +211,54 @@ return [
     */
     'labels' => [
         'categories' => [
-            'singular'   => 'Category',
-            'plural'     => 'Categories',
-            'navigation' => 'Categories',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'pages' => [
-            'singular'   => 'Page',
-            'plural'     => 'Pages',
-            'navigation' => 'Pages',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'posts' => [
-            'singular'   => 'Post',
-            'plural'     => 'Posts',
-            'navigation' => 'Posts',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'menus' => [
-            'singular'   => 'Menu',
-            'plural'     => 'Menus',
-            'navigation' => 'Menus',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'media' => [
-            'singular'   => 'Media File',
-            'plural'     => 'Media Files',
-            'navigation' => 'Media Library',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'media_collections' => [
-            'singular'   => 'Collection',
-            'plural'     => 'Collections',
-            'navigation' => 'Collections',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'comments' => [
-            'singular'   => 'Comment',
-            'plural'     => 'Comments',
-            'navigation' => 'Comments',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'contact_submissions' => [
-            'singular'   => 'Contact Submission',
-            'plural'     => 'Contact Submissions',
-            'navigation' => 'Contact Submissions',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'users' => [
-            'singular'   => 'User',
-            'plural'     => 'Users',
-            'navigation' => 'Users',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
         'site_settings' => [
-            'singular'   => 'Site',
-            'plural'     => 'Sites',
-            'navigation' => 'Site Settings',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ],
     ],
 

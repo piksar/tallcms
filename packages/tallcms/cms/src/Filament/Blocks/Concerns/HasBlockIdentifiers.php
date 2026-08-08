@@ -24,12 +24,12 @@ trait HasBlockIdentifiers
      */
     public static function getIdentifiersSection(): Section
     {
-        return Section::make('Advanced Settings')
+        return Section::make(__('tallcms::ui.t_advanced_settings'))
             ->schema([
                 TextInput::make('anchor_id')
-                    ->label('Anchor ID')
-                    ->placeholder('e.g., my-section')
-                    ->helperText('Used for anchor links (e.g., #my-section). Auto-generated from title if empty.')
+                    ->label(__('tallcms::fields.anchor_id'))
+                    ->placeholder(__('tallcms::ui.t_e_g_my_section'))
+                    ->helperText(__('tallcms::ui.t_used_for_anchor_links_e_g_my_section_auto_generated_from_title_if_em'))
                     ->maxLength(100)
                     ->regex('/^[a-z0-9-]*$/')
                     ->validationMessages([
@@ -37,9 +37,9 @@ trait HasBlockIdentifiers
                     ]),
 
                 TextInput::make('css_classes')
-                    ->label('CSS Classes')
-                    ->placeholder('e.g., my-custom-class another-class')
-                    ->helperText('Additional CSS classes to add to the block wrapper.')
+                    ->label(__('tallcms::fields.css_classes'))
+                    ->placeholder(__('tallcms::ui.t_e_g_my_custom_class_another_class'))
+                    ->helperText(__('tallcms::ui.t_additional_css_classes_to_add_to_the_block_wrapper'))
                     ->maxLength(255),
             ])
             ->columns(2)

@@ -30,9 +30,12 @@ class PluginManager extends Page implements HasForms
 {
     use HasPageShield, InteractsWithForms;
 
-    protected static ?string $title = 'Plugin Manager';
-
     protected string $view = 'tallcms::filament.pages.plugin-manager';
+
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.plugin_manager.title');
+    }
 
     public static function getNavigationIcon(): string|BackedEnum|null
     {
@@ -41,12 +44,12 @@ class PluginManager extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return 'Plugins';
+        return __('tallcms::pages.plugin_manager.navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.system', 'System');
+        return tallcms_nav_group('system');
     }
 
     public static function getNavigationSort(): ?int
@@ -91,7 +94,7 @@ class PluginManager extends Page implements HasForms
                 ->where('id', $sessionValue)
                 ->first();
 
-            return $site ? "Viewing licenses for: {$site->name} ({$site->domain})" : null;
+            return $site ? __('tallcms::ui.viewing_licenses_for', ['name' => $site->name, 'domain' => $site->domain]) : null;
         } catch (\Illuminate\Database\QueryException) {
             return null;
         }
@@ -428,8 +431,8 @@ class PluginManager extends Page implements HasForms
         $this->getPluginManager()->refreshCache();
 
         Notification::make()
-            ->title('Plugins refreshed')
-            ->body('Plugin list has been refreshed.')
+            ->title(__('tallcms::ui.t_plugins_refreshed'))
+            ->body(__('tallcms::ui.t_plugin_list_has_been_refreshed'))
             ->success()
             ->send();
 
@@ -445,7 +448,7 @@ class PluginManager extends Page implements HasForms
 
         if (! $plugin) {
             Notification::make()
-                ->title('Plugin not found')
+                ->title(__('tallcms::ui.t_plugin_not_found'))
                 ->danger()
                 ->send();
 
@@ -457,13 +460,13 @@ class PluginManager extends Page implements HasForms
         if ($result->success) {
             $count = count($result->migrations);
             Notification::make()
-                ->title('Migrations completed')
-                ->body("Ran {$count} migration(s) for {$plugin->name}.")
+                ->title(__('tallcms::ui.t_migrations_completed'))
+                ->body(__('tallcms::ui.n_ran_count_migration_s_for_name', ['count' => $count, 'name' => $plugin->name]))
                 ->success()
                 ->send();
         } else {
             Notification::make()
-                ->title('Migration failed')
+                ->title(__('tallcms::ui.t_migration_failed'))
                 ->body(implode("\n", $result->errors))
                 ->danger()
                 ->send();
@@ -480,8 +483,8 @@ class PluginManager extends Page implements HasForms
         // Guard: respect uploads config for one-click updates too
         if (! $this->getPluginManager()->uploadsAllowed()) {
             Notification::make()
-                ->title('Updates disabled')
-                ->body('Plugin updates are not enabled in configuration.')
+                ->title(__('tallcms::ui.t_updates_disabled'))
+                ->body(__('tallcms::ui.t_plugin_updates_are_not_enabled_in_configuration'))
                 ->danger()
                 ->send();
 
@@ -492,8 +495,8 @@ class PluginManager extends Page implements HasForms
         $plugin = $this->getPluginManager()->find($vendor, $slug);
         if (! $plugin) {
             Notification::make()
-                ->title('Plugin not found')
-                ->body("Could not find plugin {$vendor}/{$slug}.")
+                ->title(__('tallcms::ui.t_plugin_not_found'))
+                ->body(__('tallcms::ui.n_could_not_find_plugin_vendor_slug', ['vendor' => $vendor, 'slug' => $slug]))
                 ->danger()
                 ->send();
 
@@ -518,19 +521,19 @@ class PluginManager extends Page implements HasForms
 
             if ($isLicenseIssue) {
                 Notification::make()
-                    ->title('License Required')
+                    ->title(__('tallcms::ui.t_license_required'))
                     ->body($updateCheck['message'] ?? 'A valid license is required to download updates.')
                     ->danger()
                     ->actions([
                         \Filament\Actions\Action::make('manage_license')
-                            ->label('Manage License')
+                            ->label(__('tallcms::fields.manage_license'))
                             ->url(static::getUrl(['plugin' => $pluginSlug])),
                     ])
                     ->send();
             } else {
                 // Network/server error (has license but check failed without purchase_url signal)
                 Notification::make()
-                    ->title('Update check failed')
+                    ->title(__('tallcms::ui.t_update_check_failed'))
                     ->body($updateCheck['message'] ?? 'Could not check for updates. Please try again.')
                     ->danger()
                     ->send();
@@ -541,15 +544,15 @@ class PluginManager extends Page implements HasForms
 
         // 4. Verify update is available and download URL exists
         if (! $updateCheck['update_available']) {
-            Notification::make()->title('Already up to date')->success()->send();
+            Notification::make()->title(__('tallcms::ui.t_already_up_to_date'))->success()->send();
 
             return;
         }
 
         if (empty($updateCheck['download_url'])) {
             Notification::make()
-                ->title('Download unavailable')
-                ->body('Could not get download URL. Please try again or download manually.')
+                ->title(__('tallcms::ui.t_download_unavailable'))
+                ->body(__('tallcms::ui.t_could_not_get_download_url_please_try_again_or_download_manually'))
                 ->warning()
                 ->send();
 
@@ -578,7 +581,7 @@ class PluginManager extends Page implements HasForms
                     'status' => $response->status(),
                 ]);
                 Notification::make()
-                    ->title('Download failed')
+                    ->title(__('tallcms::ui.t_download_failed'))
                     ->body('HTTP status: '.$response->status())
                     ->danger()
                     ->send();
@@ -598,8 +601,8 @@ class PluginManager extends Page implements HasForms
                     'body_preview' => substr($body, 0, 200),
                 ]);
                 Notification::make()
-                    ->title('Download failed')
-                    ->body('Server returned invalid response (not a ZIP file). Check logs for details.')
+                    ->title(__('tallcms::ui.t_download_failed'))
+                    ->body(__('tallcms::ui.t_server_returned_invalid_response_not_a_zip_file_check_logs_for_detai'))
                     ->danger()
                     ->send();
 
@@ -619,13 +622,13 @@ class PluginManager extends Page implements HasForms
                 unset($this->filteredPlugins);
 
                 Notification::make()
-                    ->title('Plugin updated!')
+                    ->title(__('tallcms::ui.t_plugin_updated'))
                     ->body($result->message)
                     ->success()
                     ->send();
             } else {
                 Notification::make()
-                    ->title('Update failed')
+                    ->title(__('tallcms::ui.t_update_failed'))
                     ->body(implode("\n", $result->errors))
                     ->danger()
                     ->send();
@@ -633,7 +636,7 @@ class PluginManager extends Page implements HasForms
         } catch (\Throwable $e) {
             Log::error('One-click update failed', ['plugin' => "{$vendor}/{$slug}", 'error' => $e->getMessage()]);
             Notification::make()
-                ->title('Update failed')
+                ->title(__('tallcms::ui.t_update_failed'))
                 ->body('An error occurred: '.$e->getMessage())
                 ->danger()
                 ->send();
@@ -659,8 +662,8 @@ class PluginManager extends Page implements HasForms
         $this->refreshLicenseState();
 
         Notification::make()
-            ->title('Status Refreshed')
-            ->body('License status has been refreshed from the server.')
+            ->title(__('tallcms::ui.t_status_refreshed'))
+            ->body(__('tallcms::ui.t_license_status_has_been_refreshed_from_the_server'))
             ->success()
             ->send();
     }
@@ -676,19 +679,19 @@ class PluginManager extends Page implements HasForms
         if (! $result['success']) {
             if ($result['purchase_url'] ?? null) {
                 Notification::make()
-                    ->title('License Required')
+                    ->title(__('tallcms::ui.t_license_required'))
                     ->body($result['message'])
                     ->warning()
                     ->actions([
                         \Filament\Actions\Action::make('purchase')
-                            ->label('Purchase License')
+                            ->label(__('tallcms::fields.purchase_license'))
                             ->url($result['purchase_url'])
                             ->openUrlInNewTab(),
                     ])
                     ->send();
             } else {
                 Notification::make()
-                    ->title('Update Check Failed')
+                    ->title(__('tallcms::ui.t_update_check_failed_2'))
                     ->body($result['message'])
                     ->danger()
                     ->send();
@@ -711,8 +714,8 @@ class PluginManager extends Page implements HasForms
             ];
 
             Notification::make()
-                ->title('Update Available!')
-                ->body("Version {$result['latest_version']} is available. You have {$result['current_version']}.")
+                ->title(__('tallcms::ui.t_update_available'))
+                ->body(__('tallcms::ui.n_version_latest_version_is_available_you_have_current_ve', ['latest_version' => $result['latest_version'], 'current_version' => $result['current_version']]))
                 ->success()
                 ->send();
         } else {
@@ -720,8 +723,8 @@ class PluginManager extends Page implements HasForms
             unset($updates[$pluginSlug]);
 
             Notification::make()
-                ->title('Up to Date')
-                ->body("You have the latest version ({$result['current_version']}).")
+                ->title(__('tallcms::ui.t_up_to_date'))
+                ->body(__('tallcms::ui.n_you_have_the_latest_version_current_version', ['current_version' => $result['current_version']]))
                 ->success()
                 ->send();
         }
@@ -740,14 +743,14 @@ class PluginManager extends Page implements HasForms
     public function activateLicenseAction(): Action
     {
         return Action::make('activateLicense')
-            ->label('Activate License')
+            ->label(__('tallcms::fields.activate_license'))
             ->icon('heroicon-o-key')
             ->color('primary')
             ->modalHeading(fn (array $arguments) => "Activate License — {$arguments['name']}")
-            ->modalDescription('Enter your license key from your purchase email.')
+            ->modalDescription(__('tallcms::ui.t_enter_your_license_key_from_your_purchase_email'))
             ->form([
                 TextInput::make('license_key')
-                    ->label('License Key')
+                    ->label(__('tallcms::fields.license_key'))
                     ->placeholder('XXXX-XXXX-XXXX-XXXX')
                     ->required(),
             ])
@@ -759,20 +762,20 @@ class PluginManager extends Page implements HasForms
 
                 if ($result['valid']) {
                     Notification::make()
-                        ->title('License Activated')
-                        ->body('The license has been successfully activated!')
+                        ->title(__('tallcms::ui.t_license_activated'))
+                        ->body(__('tallcms::ui.t_the_license_has_been_successfully_activated'))
                         ->success()
                         ->send();
                 } else {
                     if ($result['status'] === 'not_supported') {
                         Notification::make()
-                            ->title('Plugin Not Supported')
-                            ->body('This plugin does not support license activation.')
+                            ->title(__('tallcms::ui.t_plugin_not_supported'))
+                            ->body(__('tallcms::ui.t_this_plugin_does_not_support_license_activation'))
                             ->warning()
                             ->send();
                     } else {
                         Notification::make()
-                            ->title('Activation Failed')
+                            ->title(__('tallcms::ui.t_activation_failed_2'))
                             ->body($result['message'])
                             ->danger()
                             ->send();
@@ -789,25 +792,25 @@ class PluginManager extends Page implements HasForms
     public function deactivateLicenseAction(): Action
     {
         return Action::make('deactivateLicense')
-            ->label('Deactivate')
+            ->label(__('tallcms::fields.deactivate'))
             ->icon('heroicon-o-x-circle')
             ->color('danger')
             ->requiresConfirmation()
             ->modalHeading(fn (array $arguments) => "Deactivate License — {$arguments['name']}")
-            ->modalDescription('Are you sure you want to deactivate this license? The plugin may lose access to updates and premium features.')
-            ->modalSubmitActionLabel('Yes, Deactivate')
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_deactivate_this_license_the_plugin_may_lose'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_deactivate'))
             ->action(function (array $arguments) {
                 $result = app(PluginLicenseService::class)->deactivate($arguments['pluginSlug']);
 
                 if ($result['success']) {
                     Notification::make()
-                        ->title('License Deactivated')
-                        ->body('The license has been deactivated from this site.')
+                        ->title(__('tallcms::ui.t_license_deactivated'))
+                        ->body(__('tallcms::ui.t_the_license_has_been_deactivated_from_this_site'))
                         ->success()
                         ->send();
                 } else {
                     Notification::make()
-                        ->title('Deactivation Notice')
+                        ->title(__('tallcms::ui.t_deactivation_notice'))
                         ->body($result['message'])
                         ->warning()
                         ->send();
@@ -823,11 +826,11 @@ class PluginManager extends Page implements HasForms
     public function applyUpdateAction(): Action
     {
         return Action::make('applyUpdate')
-            ->label('Update')
+            ->label(__('tallcms::fields.update'))
             ->icon('heroicon-o-arrow-path')
             ->color('warning')
             ->requiresConfirmation()
-            ->modalHeading('Update Plugin')
+            ->modalHeading(__('tallcms::ui.t_update_plugin'))
             ->modalDescription(fn (array $arguments) => "Update '{$arguments['name']}' to v{$arguments['latest_version']}? A backup will be created.")
             ->action(fn (array $arguments) => $this->oneClickUpdate($arguments['vendor'], $arguments['slug']));
     }
@@ -838,11 +841,11 @@ class PluginManager extends Page implements HasForms
     public function uninstallAction(): Action
     {
         return Action::make('uninstall')
-            ->label('Uninstall')
+            ->label(__('tallcms::fields.uninstall'))
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->requiresConfirmation()
-            ->modalHeading('Uninstall Plugin')
+            ->modalHeading(__('tallcms::ui.t_uninstall_plugin'))
             ->modalDescription(function (array $arguments) {
                 $message = "Are you sure you want to uninstall '{$arguments['name']}'? This will rollback all migrations and remove the plugin files. This action cannot be undone.";
 
@@ -856,7 +859,7 @@ class PluginManager extends Page implements HasForms
 
                 return $message;
             })
-            ->modalSubmitActionLabel('Yes, Uninstall')
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_uninstall'))
             ->action(function (array $arguments) {
                 $vendor = $arguments['vendor'];
                 $slug = $arguments['slug'];
@@ -873,15 +876,15 @@ class PluginManager extends Page implements HasForms
 
                 if ($result->success) {
                     Notification::make()
-                        ->title('Plugin uninstalled')
-                        ->body("'{$arguments['name']}' has been removed.")
+                        ->title(__('tallcms::ui.t_plugin_uninstalled'))
+                        ->body(__('tallcms::ui.n_name_has_been_removed', ['name' => $arguments['name']]))
                         ->success()
                         ->send();
 
                     if ($hadActiveLicense) {
                         Notification::make()
-                            ->title('License still active')
-                            ->body("The license for '{$arguments['name']}' is still allocated to this domain. You can deactivate it from your license provider to free the activation slot.")
+                            ->title(__('tallcms::ui.t_license_still_active'))
+                            ->body(__('tallcms::ui.n_the_license_for_name_is_still_allocated_to_this_domain_', ['name' => $arguments['name']]))
                             ->warning()
                             ->persistent()
                             ->send();
@@ -891,7 +894,7 @@ class PluginManager extends Page implements HasForms
                     unset($this->plugins);
                 } else {
                     Notification::make()
-                        ->title('Uninstall failed')
+                        ->title(__('tallcms::ui.t_uninstall_failed'))
                         ->body(implode("\n", $result->errors))
                         ->danger()
                         ->send();
@@ -905,13 +908,13 @@ class PluginManager extends Page implements HasForms
     public function rollbackAction(): Action
     {
         return Action::make('rollback')
-            ->label('Rollback')
+            ->label(__('tallcms::fields.rollback'))
             ->icon('heroicon-o-arrow-uturn-left')
             ->color('warning')
             ->requiresConfirmation()
-            ->modalHeading('Rollback Plugin')
+            ->modalHeading(__('tallcms::ui.t_rollback_plugin'))
             ->modalDescription(fn (array $arguments) => "Are you sure you want to rollback '{$arguments['name']}' to version {$arguments['version']}?")
-            ->modalSubmitActionLabel('Yes, Rollback')
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_rollback'))
             ->action(function (array $arguments) {
                 $vendor = $arguments['vendor'];
                 $slug = $arguments['slug'];
@@ -921,7 +924,7 @@ class PluginManager extends Page implements HasForms
 
                 if ($result->success) {
                     Notification::make()
-                        ->title('Rollback successful')
+                        ->title(__('tallcms::ui.t_rollback_successful'))
                         ->body($result->message)
                         ->success()
                         ->send();
@@ -930,7 +933,7 @@ class PluginManager extends Page implements HasForms
                     unset($this->plugins);
                 } else {
                     Notification::make()
-                        ->title('Rollback failed')
+                        ->title(__('tallcms::ui.t_rollback_failed'))
                         ->body(implode("\n", $result->errors))
                         ->danger()
                         ->send();
@@ -945,7 +948,7 @@ class PluginManager extends Page implements HasForms
     {
         return [
             Action::make('refreshAllLicenses')
-                ->label('Refresh Licenses')
+                ->label(__('tallcms::fields.refresh_licenses'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
                 ->action(function () {
@@ -961,14 +964,14 @@ class PluginManager extends Page implements HasForms
                     $this->refreshLicenseState();
 
                     Notification::make()
-                        ->title('All Statuses Refreshed')
+                        ->title(__('tallcms::ui.t_all_statuses_refreshed'))
                         ->success()
                         ->send();
                 })
                 ->visible(fn () => collect($this->licenseStatuses)->contains('has_license', true)),
 
             Action::make('checkUpdates')
-                ->label('Check for Updates')
+                ->label(__('tallcms::fields.check_for_updates'))
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->action(function () {
@@ -1022,7 +1025,7 @@ class PluginManager extends Page implements HasForms
                     $updateCount = count($updates);
                     if (! empty($failedChecks)) {
                         Notification::make()
-                            ->title('Update check completed with errors')
+                            ->title(__('tallcms::ui.t_update_check_completed_with_errors'))
                             ->body($updateCount > 0
                                 ? "{$updateCount} update(s) found. Could not check: ".implode(', ', $failedChecks)
                                 : 'Could not check: '.implode(', ', $failedChecks))
@@ -1037,33 +1040,33 @@ class PluginManager extends Page implements HasForms
                 }),
 
             Action::make('refresh')
-                ->label('Refresh')
+                ->label(__('tallcms::fields.refresh'))
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->action(fn () => $this->refreshPlugins()),
 
             // Combined Install/Update Plugin action
             Action::make('install')
-                ->label('Install / Update Plugin')
+                ->label(__('tallcms::fields.install_update_plugin'))
                 ->icon('heroicon-o-arrow-up-tray')
                 ->color('primary')
                 ->visible(fn () => $this->getPluginManager()->uploadsAllowed())
                 ->form([
                     FileUpload::make('plugin_zip')
-                        ->label('Plugin Package (ZIP)')
+                        ->label(__('tallcms::fields.plugin_package_zip'))
                         ->acceptedFileTypes(['application/zip', 'application/x-zip-compressed'])
                         ->maxSize(50 * 1024) // 50MB
                         ->required()
                         ->disk('local')
                         ->directory('plugin-uploads')
-                        ->helperText('Upload a plugin package. Auto-detects new install vs update.'),
+                        ->helperText(__('tallcms::ui.t_upload_a_plugin_package_auto_detects_new_install_vs_update')),
                 ])
                 ->action(function (array $data) {
                     // Server-side guard
                     if (! $this->getPluginManager()->uploadsAllowed()) {
                         Notification::make()
-                            ->title('Uploads disabled')
-                            ->body('Plugin uploads are not enabled in configuration.')
+                            ->title(__('tallcms::ui.t_uploads_disabled'))
+                            ->body(__('tallcms::ui.t_plugin_uploads_are_not_enabled_in_configuration'))
                             ->danger()
                             ->send();
 
@@ -1079,7 +1082,7 @@ class PluginManager extends Page implements HasForms
 
                         if (! $validationResult->isValid) {
                             Notification::make()
-                                ->title('Invalid plugin package')
+                                ->title(__('tallcms::ui.t_invalid_plugin_package'))
                                 ->body(implode("\n", $validationResult->errors))
                                 ->danger()
                                 ->send();
@@ -1102,7 +1105,7 @@ class PluginManager extends Page implements HasForms
                             // Show warnings if any
                             foreach ($result->warnings as $warning) {
                                 Notification::make()
-                                    ->title('Warning')
+                                    ->title(__('tallcms::ui.t_warning'))
                                     ->body($warning)
                                     ->warning()
                                     ->send();
@@ -1112,8 +1115,8 @@ class PluginManager extends Page implements HasForms
                             $migrationMsg = $migrationCount > 0 ? " ({$migrationCount} migration(s) ran)" : '';
 
                             Notification::make()
-                                ->title("Plugin {$actionVerb}")
-                                ->body("'{$result->plugin->name}' v{$result->plugin->version} has been {$actionVerb}.{$migrationMsg}")
+                                ->title(__('tallcms::ui.n_plugin_actionverb', ['actionverb' => $actionVerb]))
+                                ->body(__('tallcms::ui.n_name_v_version_has_been_actionverb_migrationmsg', ['name' => $result->plugin->name, 'version' => $result->plugin->version, 'actionverb' => $actionVerb, 'migrationmsg' => $migrationMsg]))
                                 ->success()
                                 ->send();
 
@@ -1139,7 +1142,7 @@ class PluginManager extends Page implements HasForms
                         ]);
 
                         Notification::make()
-                            ->title('Upload failed')
+                            ->title(__('tallcms::ui.t_upload_failed'))
                             ->body('An unexpected error occurred: '.$e->getMessage())
                             ->danger()
                             ->send();

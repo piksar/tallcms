@@ -12,9 +12,12 @@ class PluginLicenses extends Page
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-key';
 
-    protected static ?string $title = 'Plugin Licenses';
-
     protected string $view = 'tallcms::filament.pages.plugin-licenses';
+
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.plugin_licenses.title');
+    }
 
     public function mount(): void
     {

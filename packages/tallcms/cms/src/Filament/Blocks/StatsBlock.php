@@ -42,7 +42,7 @@ class StatsBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Key metrics and statistics display';
+        return __('tallcms::blocks.descriptions.stats');
     }
 
     public static function getKeywords(): array
@@ -62,7 +62,7 @@ class StatsBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Stats';
+        return __('tallcms::blocks.labels.stats');
     }
 
     protected static function getStatsStyleOptions(): array
@@ -77,48 +77,48 @@ class StatsBlock extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Display key metrics and statistics with optional count-up animation')
-            ->modalHeading('Configure Stats Block')
+            ->modalDescription(__('tallcms::ui.t_display_key_metrics_and_statistics_with_optional_count_up_animation'))
+            ->modalHeading(__('tallcms::ui.t_configure_stats_block'))
             ->modalWidth('5xl')
             ->schema([
                 Tabs::make('Stats Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-chart-bar')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Our Impact')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_our_impact'))
                                     ->maxLength(255),
 
                                 Repeater::make('stats')
-                                    ->label('Statistics')
+                                    ->label(__('tallcms::fields.statistics'))
                                     ->schema([
                                         TextInput::make('value')
-                                            ->label('Value')
+                                            ->label(__('tallcms::fields.value'))
                                             ->required()
-                                            ->placeholder('10000')
-                                            ->helperText('The numeric value (numbers only for animation)')
+                                            ->placeholder(__('tallcms::ui.t_10000'))
+                                            ->helperText(__('tallcms::ui.t_the_numeric_value_numbers_only_for_animation'))
                                             ->maxLength(50),
 
                                         TextInput::make('label')
-                                            ->label('Label')
+                                            ->label(__('tallcms::fields.label'))
                                             ->required()
-                                            ->placeholder('Happy Customers')
+                                            ->placeholder(__('tallcms::ui.t_happy_customers'))
                                             ->maxLength(100),
 
                                         TextInput::make('prefix')
-                                            ->label('Prefix')
+                                            ->label(__('tallcms::fields.prefix'))
                                             ->placeholder('$')
                                             ->maxLength(10),
 
                                         TextInput::make('suffix')
-                                            ->label('Suffix')
+                                            ->label(__('tallcms::fields.suffix'))
                                             ->placeholder('+')
                                             ->maxLength(10),
 
                                         Select::make('icon')
-                                            ->label('Icon (Optional)')
+                                            ->label(__('tallcms::fields.icon_optional'))
                                             ->searchable()
                                             ->options([
                                                 '' => 'No Icon',
@@ -148,13 +148,13 @@ class StatsBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Grid Layout')
+                                Section::make(__('tallcms::ui.t_grid_layout'))
                                     ->schema([
                                         Select::make('columns')
-                                            ->label('Columns')
+                                            ->label(__('tallcms::fields.columns'))
                                             ->options([
                                                 '2' => '2 Columns',
                                                 '3' => '3 Columns',
@@ -163,49 +163,49 @@ class StatsBlock extends RichContentCustomBlock
                                             ->default('4'),
 
                                         Select::make('stat_style')
-                                            ->label('Stat Style')
+                                            ->label(__('tallcms::fields.stat_style'))
                                             ->options(static::getStatsStyleOptions())
                                             ->default('stat'),
 
                                         Select::make('text_alignment')
-                                            ->label('Text Alignment')
+                                            ->label(__('tallcms::fields.text_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for stat icons and values'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_stat_icons_and_values')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('Spacing')
+                                Section::make(__('tallcms::ui.t_spacing'))
                                     ->schema([
                                         Toggle::make('animate')
-                                            ->label('Count-Up Animation')
-                                            ->helperText('Animate numbers when scrolling into view. Respects prefers-reduced-motion.')
+                                            ->label(__('tallcms::fields.count_up_animation'))
+                                            ->helperText(__('tallcms::ui.t_animate_numbers_when_scrolling_into_view_respects_prefers_reduced_mo'))
                                             ->default(false),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(2),

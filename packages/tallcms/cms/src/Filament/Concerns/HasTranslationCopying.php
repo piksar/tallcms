@@ -97,7 +97,7 @@ trait HasTranslationCopying
             Notification::make()
                 ->info()
                 ->title('Content copied from '.$defaultLabel)
-                ->body('Review and translate the content for this locale.')
+                ->body(__('tallcms::ui.t_review_and_translate_the_content_for_this_locale'))
                 ->persistent()
                 ->send();
         }
@@ -172,7 +172,7 @@ trait HasTranslationCopying
         $defaultLabel = $this->getLocaleLabelForCopy($defaultLocale);
 
         return Action::make('copyFromDefault')
-            ->label('Copy from '.$defaultLabel)
+            ->label(__('tallcms::fields.copy_from', ['locale' => $defaultLabel]))
             ->icon('heroicon-o-document-duplicate')
             ->color('gray')
             ->visible(fn () => tallcms_i18n_enabled()
@@ -181,7 +181,7 @@ trait HasTranslationCopying
             ->requiresConfirmation()
             ->modalHeading('Copy content from '.$defaultLabel)
             ->modalDescription('This will overwrite the current content with the '.$defaultLabel.' version. This action cannot be undone.')
-            ->modalSubmitActionLabel('Copy & Overwrite')
+            ->modalSubmitActionLabel(__('tallcms::ui.t_copy_overwrite'))
             ->action(function () use ($defaultLocale, $defaultLabel) {
                 $translatableAttributes = static::getResource()::getTranslatableAttributes();
 

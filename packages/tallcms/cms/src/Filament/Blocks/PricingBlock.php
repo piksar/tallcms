@@ -44,7 +44,7 @@ class PricingBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Pricing table with plans and features';
+        return __('tallcms::blocks.descriptions.pricing');
     }
 
     public static function getKeywords(): array
@@ -64,7 +64,7 @@ class PricingBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Pricing Block';
+        return __('tallcms::blocks.labels.pricing');
     }
 
     protected static function getPricingCardStyleOptions(): array
@@ -90,78 +90,78 @@ class PricingBlock extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Create a comprehensive pricing table with plans, features, and call-to-action buttons')
-            ->modalHeading('Configure Pricing Block')
+            ->modalDescription(__('tallcms::ui.t_create_a_comprehensive_pricing_table_with_plans_features_and_call_to'))
+            ->modalHeading(__('tallcms::ui.t_configure_pricing_block'))
             ->modalWidth('7xl')
             ->schema([
                 Tabs::make('Pricing Configuration')
                     ->tabs([
-                        Tab::make('Header')
+                        Tab::make(__('tallcms::ui.t_header'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('section_title')
-                                    ->label('Section Title')
-                                    ->placeholder('Choose Your Plan')
+                                    ->label(__('tallcms::fields.section_title'))
+                                    ->placeholder(__('tallcms::ui.t_choose_your_plan'))
                                     ->maxLength(255),
 
                                 Textarea::make('section_subtitle')
-                                    ->label('Section Subtitle')
-                                    ->placeholder('Select the perfect plan for your needs')
+                                    ->label(__('tallcms::fields.section_subtitle'))
+                                    ->placeholder(__('tallcms::ui.t_select_the_perfect_plan_for_your_needs'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Select::make('text_alignment')
-                                    ->label('Text Alignment')
+                                    ->label(__('tallcms::fields.text_alignment'))
                                     ->options(static::getTextAlignmentOptions())
                                     ->default('text-center'),
                             ]),
 
-                        Tab::make('Plans')
+                        Tab::make(__('tallcms::ui.t_plans'))
                             ->icon('heroicon-m-currency-dollar')
                             ->schema([
                                 Repeater::make('plans')
-                                    ->label('Pricing Plans')
+                                    ->label(__('tallcms::fields.pricing_plans'))
                                     ->schema([
-                                        Section::make('Plan Details')
+                                        Section::make(__('tallcms::ui.t_plan_details'))
                                             ->schema([
                                                 TextInput::make('name')
-                                                    ->label('Plan Name')
+                                                    ->label(__('tallcms::fields.plan_name'))
                                                     ->required()
-                                                    ->placeholder('Professional')
+                                                    ->placeholder(__('tallcms::ui.t_professional'))
                                                     ->maxLength(100),
 
                                                 TextInput::make('description')
-                                                    ->label('Plan Description')
-                                                    ->placeholder('Perfect for growing teams')
+                                                    ->label(__('tallcms::fields.plan_description'))
+                                                    ->placeholder(__('tallcms::ui.t_perfect_for_growing_teams'))
                                                     ->maxLength(200),
 
                                                 Toggle::make('is_popular')
-                                                    ->label('Mark as Popular/Recommended')
+                                                    ->label(__('tallcms::fields.mark_as_popular_recommended'))
                                                     ->default(false)
                                                     ->live(),
 
                                                 TextInput::make('popular_badge_text')
-                                                    ->label('Popular Badge Text')
-                                                    ->placeholder('Most Popular')
+                                                    ->label(__('tallcms::fields.popular_badge_text'))
+                                                    ->placeholder(__('tallcms::ui.t_most_popular'))
                                                     ->maxLength(50)
                                                     ->visible(fn (Get $get): bool => $get('is_popular')),
                                             ])->columns(2),
 
-                                        Section::make('Pricing')
+                                        Section::make(__('tallcms::ui.t_pricing'))
                                             ->schema([
                                                 TextInput::make('currency_symbol')
-                                                    ->label('Currency Symbol')
+                                                    ->label(__('tallcms::fields.currency_symbol'))
                                                     ->default('$')
                                                     ->maxLength(5),
 
                                                 TextInput::make('price')
-                                                    ->label('Price')
+                                                    ->label(__('tallcms::fields.price'))
                                                     ->required()
-                                                    ->placeholder('29')
+                                                    ->placeholder(__('tallcms::ui.t_29'))
                                                     ->numeric(),
 
                                                 Select::make('billing_period')
-                                                    ->label('Billing Period')
+                                                    ->label(__('tallcms::fields.billing_period'))
                                                     ->options([
                                                         'month' => 'per month',
                                                         'year' => 'per year',
@@ -173,29 +173,29 @@ class PricingBlock extends RichContentCustomBlock
                                                     ->default('month'),
 
                                                 TextInput::make('discount_text')
-                                                    ->label('Discount Text (Optional)')
-                                                    ->placeholder('Save 20%')
+                                                    ->label(__('tallcms::fields.discount_text_optional'))
+                                                    ->placeholder(__('tallcms::ui.t_save_20'))
                                                     ->maxLength(50),
                                             ])->columns(4),
 
-                                        Section::make('Features')
+                                        Section::make(__('tallcms::fields.features'))
                                             ->schema([
                                                 Repeater::make('features')
-                                                    ->label('Plan Features')
+                                                    ->label(__('tallcms::fields.plan_features'))
                                                     ->schema([
                                                         TextInput::make('text')
-                                                            ->label('Feature Text')
+                                                            ->label(__('tallcms::fields.feature_text'))
                                                             ->required()
-                                                            ->placeholder('Unlimited projects')
+                                                            ->placeholder(__('tallcms::ui.t_unlimited_projects'))
                                                             ->maxLength(200),
 
                                                         Toggle::make('included')
-                                                            ->label('Included')
+                                                            ->label(__('tallcms::fields.included'))
                                                             ->default(true),
 
                                                         TextInput::make('tooltip')
-                                                            ->label('Tooltip (Optional)')
-                                                            ->placeholder('Additional information about this feature')
+                                                            ->label(__('tallcms::fields.tooltip_optional'))
+                                                            ->placeholder(__('tallcms::ui.t_additional_information_about_this_feature'))
                                                             ->maxLength(300),
                                                     ])
                                                     ->defaultItems(3)
@@ -203,27 +203,27 @@ class PricingBlock extends RichContentCustomBlock
                                                     ->itemLabel(fn (array $state): ?string => $state['text'] ?? null),
                                             ]),
 
-                                        Section::make('Call to Action')
+                                        Section::make(__('tallcms::ui.t_call_to_action'))
                                             ->schema([
                                                 TextInput::make('button_text')
-                                                    ->label('Button Text')
+                                                    ->label(__('tallcms::fields.button_text'))
                                                     ->required()
-                                                    ->placeholder('Get Started')
+                                                    ->placeholder(__('tallcms::ui.t_get_started'))
                                                     ->maxLength(50),
 
                                                 TextInput::make('button_url')
-                                                    ->label('Button URL')
+                                                    ->label(__('tallcms::fields.button_url'))
                                                     ->placeholder('/signup?plan=professional')
                                                     ->maxLength(500),
 
                                                 Select::make('button_style')
-                                                    ->label('Button Style')
+                                                    ->label(__('tallcms::fields.button_style'))
                                                     ->options(static::getPlanButtonStyleOptions())
                                                     ->default('btn-primary'),
 
                                                 TextInput::make('trial_text')
-                                                    ->label('Trial Text (Optional)')
-                                                    ->placeholder('14-day free trial')
+                                                    ->label(__('tallcms::fields.trial_text_optional'))
+                                                    ->placeholder(__('tallcms::ui.t_14_day_free_trial'))
                                                     ->maxLength(100),
                                             ])->columns(2),
                                     ])
@@ -235,13 +235,13 @@ class PricingBlock extends RichContentCustomBlock
                                     ->maxItems(6),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Grid Layout')
+                                Section::make(__('tallcms::ui.t_grid_layout'))
                                     ->schema([
                                         Select::make('columns')
-                                            ->label('Number of Columns')
+                                            ->label(__('tallcms::fields.number_of_columns'))
                                             ->options([
                                                 '1' => '1 Column',
                                                 '2' => '2 Columns',
@@ -251,12 +251,12 @@ class PricingBlock extends RichContentCustomBlock
                                             ->default('3'),
 
                                         Select::make('card_style')
-                                            ->label('Card Style')
+                                            ->label(__('tallcms::fields.card_style'))
                                             ->options(static::getPricingCardStyleOptions())
                                             ->default('shadow'),
 
                                         Select::make('spacing')
-                                            ->label('Card Spacing')
+                                            ->label(__('tallcms::fields.card_spacing'))
                                             ->options([
                                                 'tight' => 'Tight (gap-4)',
                                                 'normal' => 'Normal (gap-6)',
@@ -266,29 +266,29 @@ class PricingBlock extends RichContentCustomBlock
                                     ])
                                     ->columns(3),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for popular plan highlight'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_popular_plan_highlight')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(4),

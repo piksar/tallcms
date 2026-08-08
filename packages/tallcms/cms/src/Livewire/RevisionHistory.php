@@ -262,9 +262,9 @@ class RevisionHistory extends Component implements HasActions, HasForms
             ->icon('heroicon-o-arrow-uturn-left')
             ->color('warning')
             ->requiresConfirmation()
-            ->modalHeading('Restore Revision')
+            ->modalHeading(__('tallcms::ui.t_restore_revision'))
             ->modalDescription(fn (array $arguments) => 'Are you sure you want to restore '.$this->getLabelForRevision($arguments['revisionId'] ?? 0).'? This will create a new revision with the restored content.')
-            ->modalSubmitActionLabel('Restore')
+            ->modalSubmitActionLabel(__('tallcms::ui.t_restore'))
             ->action(function (array $arguments) {
                 $revisionId = $arguments['revisionId'] ?? null;
                 if (! $revisionId) {
@@ -283,8 +283,8 @@ class RevisionHistory extends Component implements HasActions, HasForms
             if (! $revision) {
                 Notification::make()
                     ->danger()
-                    ->title('Error')
-                    ->body('Revision not found or does not belong to this record.')
+                    ->title(__('tallcms::ui.t_error'))
+                    ->body(__('tallcms::ui.t_revision_not_found_or_does_not_belong_to_this_record'))
                     ->send();
 
                 return;
@@ -297,8 +297,8 @@ class RevisionHistory extends Component implements HasActions, HasForms
             if (! auth()->user()?->can($permissionName)) {
                 Notification::make()
                     ->danger()
-                    ->title('Permission Denied')
-                    ->body('You do not have permission to restore revisions.')
+                    ->title(__('tallcms::ui.t_permission_denied'))
+                    ->body(__('tallcms::ui.t_you_do_not_have_permission_to_restore_revisions'))
                     ->send();
 
                 return;
@@ -311,8 +311,8 @@ class RevisionHistory extends Component implements HasActions, HasForms
 
             Notification::make()
                 ->success()
-                ->title('Revision Restored')
-                ->body("Content restored to revision #{$revision->revision_number}")
+                ->title(__('tallcms::ui.t_revision_restored'))
+                ->body(__('tallcms::ui.n_content_restored_revision', ['number' => $revision->revision_number]))
                 ->send();
 
             $this->clearSelection();
@@ -329,7 +329,7 @@ class RevisionHistory extends Component implements HasActions, HasForms
         } catch (\Exception $e) {
             Notification::make()
                 ->danger()
-                ->title('Error')
+                ->title(__('tallcms::ui.t_error'))
                 ->body('Failed to restore revision: '.$e->getMessage())
                 ->send();
         }

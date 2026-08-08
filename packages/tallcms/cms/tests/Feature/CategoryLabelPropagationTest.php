@@ -7,7 +7,7 @@ use TallCms\Cms\Tests\TestCase;
 
 /**
  * PR #60 regression guard — category labels inside CmsPostForm, CmsPostsTable,
- * and CmsCategoryForm must read from `tallcms.labels.categories.*` so a rename
+ * and CmsCategoryForm must read via `tallcms_label('categories', …)` so a rename
  * (e.g. "Categories" → "Tags") propagates into form section headings, helper
  * text, table columns, and filter labels — not only into the resource-level
  * labels covered by ResourceLabelOverrideTest.
@@ -22,17 +22,17 @@ use TallCms\Cms\Tests\TestCase;
 class CategoryLabelPropagationTest extends TestCase
 {
     #[DataProvider('configReadCallsites')]
-    public function test_source_file_reads_category_label_from_config(
+    public function test_source_file_reads_category_label_from_helper(
         string $relativePath,
-        string $expectedConfigCall,
+        string $expectedHelperCall,
         string $context,
     ): void {
         $source = file_get_contents(self::packagePath($relativePath));
 
         $this->assertStringContainsString(
-            $expectedConfigCall,
+            $expectedHelperCall,
             $source,
-            "{$context} must read the category label from config so the label "
+            "{$context} must read the category label via tallcms_label() so the label "
             .'override API (PR #57) covers renames deep in forms and tables, '
             .'not only at the resource level.',
         );
@@ -43,17 +43,17 @@ class CategoryLabelPropagationTest extends TestCase
         return [
             'CmsPostForm categories section heading' => [
                 'src/Filament/Resources/CmsPosts/Schemas/CmsPostForm.php',
-                "config('tallcms.labels.categories.plural'",
+                "tallcms_label('categories', 'plural')",
                 'The Categories section heading in CmsPostForm',
             ],
             'CmsPostsTable categories column' => [
                 'src/Filament/Resources/CmsPosts/Tables/CmsPostsTable.php',
-                "config('tallcms.labels.categories.plural'",
+                "tallcms_label('categories', 'plural')",
                 'The categories column label in CmsPostsTable',
             ],
             'CmsCategoryForm parent field' => [
                 'src/Filament/Resources/CmsCategories/Schemas/CmsCategoryForm.php',
-                "config('tallcms.labels.categories.singular'",
+                "tallcms_label('categories', 'singular')",
                 'The Parent field label in CmsCategoryForm',
             ],
         ];
@@ -63,7 +63,7 @@ class CategoryLabelPropagationTest extends TestCase
     {
         // Belt-and-braces: assert the specific hardcoded strings we replaced
         // are NOT present, so a partial revert that restores the literal would
-        // fail this test even if the config call is kept elsewhere.
+        // fail this test even if the helper call is kept elsewhere.
         $source = file_get_contents(self::packagePath(
             'src/Filament/Resources/CmsPosts/Schemas/CmsPostForm.php'
         ));
@@ -72,7 +72,7 @@ class CategoryLabelPropagationTest extends TestCase
             "Section::make('Categories')",
             $source,
             'CmsPostForm must not hardcode the Categories section heading — '
-            .'use config(\'tallcms.labels.categories.plural\', ...) instead.',
+            .'use tallcms_label(\'categories\', \'plural\') instead.',
         );
     }
 
@@ -87,7 +87,7 @@ class CategoryLabelPropagationTest extends TestCase
         // get the correct label without a form override.
         foreach (['CmsPostForm', 'CmsPageForm'] as $form) {
             $source = file_get_contents(self::packagePath(
-                "src/Filament/Resources/".($form === 'CmsPostForm' ? 'CmsPosts' : 'CmsPages')
+                'src/Filament/Resources/'.($form === 'CmsPostForm' ? 'CmsPosts' : 'CmsPages')
                 ."/Schemas/{$form}.php"
             ));
 

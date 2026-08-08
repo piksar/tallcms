@@ -56,22 +56,22 @@ class CmsCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.categories.singular', 'Category');
+        return tallcms_label('categories', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.categories.plural', 'Categories');
+        return tallcms_label('categories', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.categories.navigation', 'Categories');
+        return tallcms_label('categories', 'navigation');
     }
 
     public static function getNavigationSort(): ?int

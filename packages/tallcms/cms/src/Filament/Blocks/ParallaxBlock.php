@@ -34,7 +34,7 @@ class ParallaxBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Full-width parallax scrolling section';
+        return __('tallcms::blocks.descriptions.parallax');
     }
 
     public static function getKeywords(): array
@@ -54,23 +54,23 @@ class ParallaxBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Parallax Section';
+        return __('tallcms::blocks.labels.parallax');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Create a full-width parallax image section with overlay content')
-            ->modalHeading('Configure Parallax Section')
+            ->modalDescription(__('tallcms::ui.t_create_a_full_width_parallax_image_section_with_overlay_content'))
+            ->modalHeading(__('tallcms::ui.t_configure_parallax_section'))
             ->modalWidth('5xl')
             ->schema([
                 Tabs::make('Parallax Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-photo')
                             ->schema([
                                 FileUpload::make('image')
-                                    ->label('Background Image')
+                                    ->label(__('tallcms::fields.background_image'))
                                     ->required()
                                     ->image()
                                     ->disk(\cms_media_disk())
@@ -81,34 +81,34 @@ class ParallaxBlock extends RichContentCustomBlock
                                     ->imageResizeTargetHeight('1080'),
 
                                 TextInput::make('heading')
-                                    ->label('Heading')
-                                    ->placeholder('Your Inspiring Message')
+                                    ->label(__('tallcms::fields.heading'))
+                                    ->placeholder(__('tallcms::ui.t_your_inspiring_message'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Subheading')
-                                    ->placeholder('A brief description or call to action')
+                                    ->label(__('tallcms::fields.subheading'))
+                                    ->placeholder(__('tallcms::ui.t_a_brief_description_or_call_to_action'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 TextInput::make('cta_text')
-                                    ->label('Button Text (Optional)')
-                                    ->placeholder('Get Started')
+                                    ->label(__('tallcms::fields.button_text_optional'))
+                                    ->placeholder(__('tallcms::ui.t_get_started'))
                                     ->maxLength(50),
 
                                 TextInput::make('cta_url')
-                                    ->label('Button URL')
+                                    ->label(__('tallcms::fields.button_url'))
                                     ->placeholder('https://example.com or /page')
                                     ->maxLength(500),
                             ]),
 
-                        Tab::make('Appearance')
+                        Tab::make(__('tallcms::ui.t_appearance'))
                             ->icon('heroicon-m-paint-brush')
                             ->schema([
-                                Section::make('Layout')
+                                Section::make(__('tallcms::fields.layout'))
                                     ->schema([
                                         Select::make('height')
-                                            ->label('Section Height')
+                                            ->label(__('tallcms::fields.section_height'))
                                             ->options([
                                                 'small' => 'Small (300px)',
                                                 'medium' => 'Medium (500px)',
@@ -118,20 +118,20 @@ class ParallaxBlock extends RichContentCustomBlock
                                             ->default('medium'),
 
                                         Select::make('text_alignment')
-                                            ->label('Text Alignment')
+                                            ->label(__('tallcms::fields.text_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Overlay')
+                                Section::make(__('tallcms::ui.t_overlay'))
                                     ->schema([
                                         ColorPicker::make('overlay_color')
-                                            ->label('Overlay Color')
+                                            ->label(__('tallcms::fields.overlay_color'))
                                             ->default('#000000'),
 
                                         Select::make('overlay_opacity')
-                                            ->label('Overlay Opacity')
+                                            ->label(__('tallcms::fields.overlay_opacity'))
                                             ->options([
                                                 '0' => '0% (No Overlay)',
                                                 '10' => '10%',

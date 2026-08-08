@@ -26,22 +26,22 @@ class TallcmsMediaResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.media.navigation', 'Media Library');
+        return tallcms_label('media', 'navigation');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.media.singular', 'Media File');
+        return tallcms_label('media', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.media.plural', 'Media Files');
+        return tallcms_label('media', 'plural');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getNavigationSort(): ?int

@@ -38,7 +38,7 @@ class FaqBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Frequently asked questions accordion';
+        return __('tallcms::blocks.descriptions.faq');
     }
 
     public static function getKeywords(): array
@@ -58,45 +58,45 @@ class FaqBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'FAQ';
+        return __('tallcms::blocks.labels.faq');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Create a frequently asked questions section with accordion functionality')
-            ->modalHeading('Configure FAQ Block')
+            ->modalDescription(__('tallcms::ui.t_create_a_frequently_asked_questions_section_with_accordion_functiona'))
+            ->modalHeading(__('tallcms::ui.t_configure_faq_block'))
             ->modalWidth('5xl')
             ->schema([
                 Tabs::make('FAQ Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Frequently Asked Questions')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_frequently_asked_questions'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Section Subheading')
-                                    ->placeholder('Find answers to common questions')
+                                    ->label(__('tallcms::fields.section_subheading'))
+                                    ->placeholder(__('tallcms::ui.t_find_answers_to_common_questions'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Repeater::make('items')
-                                    ->label('Questions & Answers')
+                                    ->label(__('tallcms::fields.questions_answers'))
                                     ->schema([
                                         TextInput::make('question')
-                                            ->label('Question')
+                                            ->label(__('tallcms::fields.question'))
                                             ->required()
-                                            ->placeholder('What is your return policy?')
+                                            ->placeholder(__('tallcms::ui.t_what_is_your_return_policy'))
                                             ->maxLength(500),
 
                                         Textarea::make('answer')
-                                            ->label('Answer')
+                                            ->label(__('tallcms::fields.answer'))
                                             ->required()
-                                            ->placeholder('Our return policy allows returns within 30 days...')
+                                            ->placeholder(__('tallcms::ui.t_our_return_policy_allows_returns_within_30_days'))
                                             ->rows(4),
                                     ])
                                     ->defaultItems(3)
@@ -107,13 +107,13 @@ class FaqBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Settings')
+                        Tab::make(__('tallcms::fields.settings'))
                             ->icon('heroicon-m-cog-6-tooth')
                             ->schema([
-                                Section::make('Display Options')
+                                Section::make(__('tallcms::ui.t_display_options'))
                                     ->schema([
                                         Select::make('style')
-                                            ->label('Display Style')
+                                            ->label(__('tallcms::fields.display_style'))
                                             ->options([
                                                 'accordion' => 'Accordion (Collapsible)',
                                                 'list' => 'List (Always Visible)',
@@ -121,51 +121,51 @@ class FaqBlock extends RichContentCustomBlock
                                             ->default('accordion'),
 
                                         Toggle::make('first_open')
-                                            ->label('First Item Open by Default')
-                                            ->helperText('Only applies to accordion style')
+                                            ->label(__('tallcms::fields.first_item_open_by_default'))
+                                            ->helperText(__('tallcms::ui.t_only_applies_to_accordion_style'))
                                             ->default(false),
 
                                         Toggle::make('allow_multiple')
-                                            ->label('Allow Multiple Items Open')
-                                            ->helperText('Only applies to accordion style')
+                                            ->label(__('tallcms::fields.allow_multiple_items_open'))
+                                            ->helperText(__('tallcms::ui.t_only_applies_to_accordion_style'))
                                             ->default(false),
 
                                         Select::make('text_alignment')
-                                            ->label('Header Alignment')
+                                            ->label(__('tallcms::fields.header_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('SEO')
+                                Section::make(__('tallcms::fields.seo'))
                                     ->schema([
                                         Toggle::make('show_schema')
-                                            ->label('Add FAQ Schema Markup')
-                                            ->helperText('Adds schema.org FAQPage structured data for SEO')
+                                            ->label(__('tallcms::fields.add_faq_schema_markup'))
+                                            ->helperText(__('tallcms::ui.t_adds_schema_org_faqpage_structured_data_for_seo'))
                                             ->default(true),
                                     ]),
 
-                                Section::make('Spacing')
+                                Section::make(__('tallcms::ui.t_spacing'))
                                     ->schema([
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ]),
                             ]),

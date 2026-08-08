@@ -84,22 +84,22 @@ class CmsPageResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.pages.singular', 'Page');
+        return tallcms_label('pages', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.pages.plural', 'Pages');
+        return tallcms_label('pages', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.pages.navigation', 'Pages');
+        return tallcms_label('pages', 'navigation');
     }
 
     public static function getNavigationSort(): ?int
@@ -137,7 +137,7 @@ class CmsPageResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            __('Type') => static::getModelLabel(),
+            __('tallcms::fields.type') => static::getModelLabel(),
             __('Status') => __(ucfirst($record->status ?? 'draft')),
         ];
     }

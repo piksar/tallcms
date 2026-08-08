@@ -4,7 +4,7 @@
 
         <div class="mt-8">
             <x-filament::button type="submit" color="primary">
-                Save Global Defaults
+                {{ __('tallcms::ui.save_global_defaults') }}
             </x-filament::button>
         </div>
     </form>

@@ -148,7 +148,7 @@ class HasMultisiteWidgetContextTest extends TestCase
     {
         session(['multisite_admin_site_id' => '__all_sites__']);
 
-        $this->assertSame('All Sites', (new WidgetContextProbe)->getMultisiteName(null));
+        $this->assertSame(__('tallcms::widgets.all_sites'), (new WidgetContextProbe)->getMultisiteName(null));
     }
 
     public function test_multisite_name_returns_site_row_name(): void

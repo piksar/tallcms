@@ -284,6 +284,11 @@ class TallCmsServiceProvider extends PackageServiceProvider
     {
         parent::packageRegistered();
 
+        // Load UI translations during register() so nested providers / Filament
+        // plugins that boot before TallCmsServiceProvider::boot() can resolve
+        // __('tallcms::…') without poisoning the translator cache with [].
+        $this->registerPackageTranslations();
+
         // Register class aliases for backwards compatibility
         $this->registerClassAliases();
 
@@ -321,6 +326,22 @@ class TallCmsServiceProvider extends PackageServiceProvider
         // Register custom CMS permissions with Filament Shield so they
         // appear in the role editor UI and aren't wiped on role save
         $this->mergeShieldCustomPermissions();
+    }
+
+    /**
+     * Register package lang files early (register phase).
+     *
+     * Spatie Package Tools also loads these in boot() via hasTranslations();
+     * calling loadTranslationsFrom again is safe (namespace hint is replaced).
+     * Early registration avoids empty translator cache entries when other
+     * providers resolve tallcms:: keys before TallCmsServiceProvider::boot().
+     */
+    protected function registerPackageTranslations(): void
+    {
+        $this->loadTranslationsFrom(
+            $this->package->basePath('/../resources/lang'),
+            $this->package->shortName(),
+        );
     }
 
     /**

@@ -21,17 +21,17 @@ class UserResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.users.singular', 'User');
+        return tallcms_label('users', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.users.plural', 'Users');
+        return tallcms_label('users', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.users.navigation', 'Users');
+        return tallcms_label('users', 'navigation');
     }
 
     public static function getModel(): string
@@ -65,7 +65,7 @@ class UserResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.system', 'System');
+        return tallcms_nav_group('system');
     }
 
     public static function getNavigationSort(): ?int

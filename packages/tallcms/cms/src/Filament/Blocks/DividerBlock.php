@@ -32,7 +32,7 @@ class DividerBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Decorative spacing or line separator';
+        return __('tallcms::blocks.descriptions.divider');
     }
 
     public static function getKeywords(): array
@@ -52,20 +52,20 @@ class DividerBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Divider';
+        return __('tallcms::blocks.labels.divider');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Add spacing or a decorative line between sections')
-            ->modalHeading('Configure Divider')
+            ->modalDescription(__('tallcms::ui.t_add_spacing_or_a_decorative_line_between_sections'))
+            ->modalHeading(__('tallcms::ui.t_configure_divider'))
             ->modalWidth('lg')
             ->schema([
-                Section::make('Style')
+                Section::make(__('tallcms::ui.t_style'))
                     ->schema([
                         Select::make('style')
-                            ->label('Divider Style')
+                            ->label(__('tallcms::fields.divider_style'))
                             ->options([
                                 'space' => 'Space Only',
                                 'line' => 'Horizontal Line',
@@ -76,7 +76,7 @@ class DividerBlock extends RichContentCustomBlock
                             ->live(),
 
                         Select::make('height')
-                            ->label('Spacing Height')
+                            ->label(__('tallcms::fields.spacing_height'))
                             ->options([
                                 'small' => 'Small',
                                 'medium' => 'Medium',
@@ -89,10 +89,10 @@ class DividerBlock extends RichContentCustomBlock
                     ])
                     ->columns(3),
 
-                Section::make('Line Options')
+                Section::make(__('tallcms::ui.t_line_options'))
                     ->schema([
                         Select::make('color')
-                            ->label('Color')
+                            ->label(__('tallcms::fields.color'))
                             ->options([
                                 'default' => 'Default',
                                 'primary' => 'Primary',
@@ -107,7 +107,7 @@ class DividerBlock extends RichContentCustomBlock
                             ->default('default'),
 
                         Select::make('position')
-                            ->label('Content Position')
+                            ->label(__('tallcms::fields.content_position'))
                             ->options([
                                 'center' => 'Center',
                                 'start' => 'Start',
@@ -117,13 +117,13 @@ class DividerBlock extends RichContentCustomBlock
                             ->visible(fn (Get $get): bool => in_array($get('style'), ['line-text', 'line-icon'])),
 
                         TextInput::make('text')
-                            ->label('Divider Text')
-                            ->placeholder('OR')
+                            ->label(__('tallcms::fields.divider_text'))
+                            ->placeholder(__('tallcms::ui.t_or'))
                             ->maxLength(50)
                             ->visible(fn (Get $get): bool => $get('style') === 'line-text'),
 
                         Select::make('icon')
-                            ->label('Icon')
+                            ->label(__('tallcms::fields.icon'))
                             ->searchable()
                             ->visible(fn (Get $get): bool => $get('style') === 'line-icon')
                             ->options([

@@ -110,7 +110,7 @@ class TallCmsPlugin implements Plugin
             $shieldPlugin = FilamentShieldPlugin::make();
 
             // Place Shield under System group
-            $group = $this->shieldNavigationGroup ?? config('tallcms.navigation.groups.system', 'System');
+            $group = $this->shieldNavigationGroup ?? tallcms_nav_group('system');
             $shieldPlugin->navigationGroup($group);
 
             $panel->plugin($shieldPlugin);
@@ -206,10 +206,10 @@ class TallCmsPlugin implements Plugin
         // MultisitePlugin sets groups with Platform first during register().
         if (empty($panel->getNavigationGroups())) {
             $panel->navigationGroups([
-                \Filament\Navigation\NavigationGroup::make(config('tallcms.navigation.groups.content', 'Content')),
-                \Filament\Navigation\NavigationGroup::make(config('tallcms.navigation.groups.appearance', 'Appearance')),
-                \Filament\Navigation\NavigationGroup::make(config('tallcms.navigation.groups.configuration', 'Configuration')),
-                \Filament\Navigation\NavigationGroup::make(config('tallcms.navigation.groups.system', 'System')),
+                \Filament\Navigation\NavigationGroup::make(fn (): string => tallcms_nav_group('content')),
+                \Filament\Navigation\NavigationGroup::make(fn (): string => tallcms_nav_group('appearance')),
+                \Filament\Navigation\NavigationGroup::make(fn (): string => tallcms_nav_group('configuration')),
+                \Filament\Navigation\NavigationGroup::make(fn (): string => tallcms_nav_group('system')),
             ]);
         }
     }
@@ -648,11 +648,12 @@ class TallCmsPlugin implements Plugin
      * Store label overrides for a resource key.
      *
      * Only provided (non-null) values are written; omitted ones preserve
-     * the existing config default. This matters because the default
-     * navigation label is intentionally different from plural for some
-     * resources (e.g. media -> "Media Library", site_settings ->
-     * "Site Settings"), and the singular form is usually not the same
-     * word as the plural ("Article" vs "Articles").
+     * the existing config value (including null). When a facet stays null,
+     * tallcms_label() falls back to the package translation for APP_LOCALE.
+     * This matters because the default navigation label is intentionally
+     * different from plural for some resources (e.g. media -> "Media Library",
+     * site_settings -> "Site Settings"), and the singular form is usually
+     * not the same word as the plural ("Article" vs "Articles").
      */
     protected function setResourceLabels(string $key, string $plural, ?string $singular, ?string $navigation): static
     {

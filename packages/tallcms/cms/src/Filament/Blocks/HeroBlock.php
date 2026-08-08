@@ -44,7 +44,7 @@ class HeroBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Full-width hero section with background image';
+        return __('tallcms::blocks.descriptions.hero');
     }
 
     public static function getKeywords(): array
@@ -64,7 +64,7 @@ class HeroBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Hero';
+        return __('tallcms::blocks.labels.hero');
     }
 
     /**
@@ -139,16 +139,16 @@ class HeroBlock extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Configure the hero section with heading, subheading, and background image')
+            ->modalDescription(__('tallcms::ui.t_configure_the_hero_section_with_heading_subheading_and_background_im'))
             ->schema([
                 Tabs::make('Hero Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
-                                RichEditor::make('heading')
+                                RichEditor::make('heading')->label(__('tallcms::fields.heading'))
                                     ->maxLength(255)
-                                    ->placeholder('Enter hero heading')
+                                    ->placeholder(__('tallcms::ui.t_enter_hero_heading'))
                                     ->toolbarButtons([
                                         'bold',
                                         'italic',
@@ -164,9 +164,9 @@ class HeroBlock extends RichContentCustomBlock
                                         'text-error' => 'Error',
                                         'text-white' => 'White',
                                     ]),
-                                RichEditor::make('subheading')
+                                RichEditor::make('subheading')->label(__('tallcms::fields.subheading'))
                                     ->maxLength(500)
-                                    ->placeholder('Enter hero subheading or description')
+                                    ->placeholder(__('tallcms::ui.t_enter_hero_subheading_or_description'))
                                     ->toolbarButtons([
                                         'bold',
                                         'italic',
@@ -183,16 +183,16 @@ class HeroBlock extends RichContentCustomBlock
                                         'text-white' => 'White',
                                     ]),
 
-                                Section::make('Primary Button')
+                                Section::make(__('tallcms::fields.primary_button'))
                                     ->schema([
-                                        TextInput::make('button_text')
+                                        TextInput::make('button_text')->label(__('tallcms::fields.button_text'))
                                             ->maxLength(100)
-                                            ->placeholder('Call to action button text')
+                                            ->placeholder(__('tallcms::ui.t_call_to_action_button_text'))
                                             ->live()
                                             ->columnSpan(1),
 
                                         Select::make('button_link_type')
-                                            ->label('Link Type')
+                                            ->label(__('tallcms::fields.link_type'))
                                             ->options([
                                                 'page' => 'Page',
                                                 'external' => 'External URL',
@@ -203,40 +203,40 @@ class HeroBlock extends RichContentCustomBlock
                                             ->columnSpan(1),
 
                                         Select::make('button_page_id')
-                                            ->label('Select Page')
+                                            ->label(__('tallcms::fields.select_page'))
                                             ->options(fn ($livewire) => \TallCms\Cms\Filament\Forms\OwnerSitePicker::publishedPages($livewire))
                                             ->searchable()
                                             ->visible(fn (Get $get): bool => $get('button_link_type') === 'page')
                                             ->columnSpanFull(),
 
                                         TextInput::make('button_url')
-                                            ->label('URL')
+                                            ->label(__('tallcms::fields.url'))
                                             ->placeholder('https://example.com or /contact')
                                             ->visible(fn (Get $get): bool => in_array($get('button_link_type'), ['external', 'custom']))
                                             ->columnSpanFull(),
 
                                         TextInput::make('button_microcopy')
-                                            ->label('Microcopy')
+                                            ->label(__('tallcms::fields.microcopy'))
                                             ->maxLength(50)
-                                            ->placeholder('e.g., No terminal required')
-                                            ->helperText('Small supporting text below button to reduce hesitation')
+                                            ->placeholder(__('tallcms::ui.t_e_g_no_terminal_required'))
+                                            ->helperText(__('tallcms::ui.t_small_supporting_text_below_button_to_reduce_hesitation'))
                                             ->visible(fn (Get $get): bool => filled($get('button_text')))
                                             ->columnSpanFull(),
                                     ])
                                     ->columns(2)
                                     ->compact(),
 
-                                Section::make('Secondary Button (Optional)')
+                                Section::make(__('tallcms::ui.t_secondary_button_optional'))
                                     ->schema([
                                         TextInput::make('secondary_button_text')
-                                            ->label('Button Text')
+                                            ->label(__('tallcms::fields.button_text'))
                                             ->maxLength(100)
-                                            ->placeholder('Learn More')
+                                            ->placeholder(__('tallcms::ui.t_learn_more'))
                                             ->live()
                                             ->columnSpan(1),
 
                                         Select::make('secondary_button_link_type')
-                                            ->label('Link Type')
+                                            ->label(__('tallcms::fields.link_type'))
                                             ->options([
                                                 'page' => 'Page',
                                                 'external' => 'External URL',
@@ -248,23 +248,23 @@ class HeroBlock extends RichContentCustomBlock
                                             ->columnSpan(1),
 
                                         Select::make('secondary_button_page_id')
-                                            ->label('Select Page')
+                                            ->label(__('tallcms::fields.select_page'))
                                             ->options(fn ($livewire) => \TallCms\Cms\Filament\Forms\OwnerSitePicker::publishedPages($livewire))
                                             ->searchable()
                                             ->visible(fn (Get $get): bool => $get('secondary_button_link_type') === 'page' && filled($get('secondary_button_text')))
                                             ->columnSpanFull(),
 
                                         TextInput::make('secondary_button_url')
-                                            ->label('URL')
+                                            ->label(__('tallcms::fields.url'))
                                             ->placeholder('https://example.com')
                                             ->visible(fn (Get $get): bool => in_array($get('secondary_button_link_type'), ['external', 'custom']) && filled($get('secondary_button_text')))
                                             ->columnSpanFull(),
 
                                         TextInput::make('secondary_button_microcopy')
-                                            ->label('Microcopy')
+                                            ->label(__('tallcms::fields.microcopy'))
                                             ->maxLength(50)
-                                            ->placeholder('e.g., Open source on GitHub')
-                                            ->helperText('Small supporting text below button')
+                                            ->placeholder(__('tallcms::ui.t_e_g_open_source_on_github'))
+                                            ->helperText(__('tallcms::ui.t_small_supporting_text_below_button'))
                                             ->visible(fn (Get $get): bool => filled($get('secondary_button_text')))
                                             ->columnSpanFull(),
                                     ])
@@ -273,18 +273,18 @@ class HeroBlock extends RichContentCustomBlock
                                     ->collapsible(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
                                 Select::make('layout')
-                                    ->label('Layout Variant')
+                                    ->label(__('tallcms::fields.layout_variant'))
                                     ->options(static::getLayoutOptions())
                                     ->default('centered')
                                     ->live()
-                                    ->helperText('Choose how the hero content is arranged'),
+                                    ->helperText(__('tallcms::ui.t_choose_how_the_hero_content_is_arranged')),
 
                                 Select::make('height')
-                                    ->label('Section Height')
+                                    ->label(__('tallcms::fields.section_height'))
                                     ->options([
                                         'min-h-[50vh]' => 'Small (50vh)',
                                         'min-h-[70vh]' => 'Medium (70vh)',
@@ -294,14 +294,14 @@ class HeroBlock extends RichContentCustomBlock
                                     ->default('min-h-[70vh]'),
 
                                 Select::make('text_alignment')
-                                    ->label('Text Alignment')
+                                    ->label(__('tallcms::fields.text_alignment'))
                                     ->options(static::getTextAlignmentOptions())
                                     ->default('text-center'),
 
-                                Section::make('Figure Image')
-                                    ->description('Image displayed alongside content')
+                                Section::make(__('tallcms::fields.figure_image'))
+                                    ->description(__('tallcms::ui.t_image_displayed_alongside_content'))
                                     ->schema([
-                                        FileUpload::make('figure_image')
+                                        FileUpload::make('figure_image')->label(__('tallcms::fields.figure_image'))
                                             ->image()
                                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                             ->maxSize(5120)
@@ -309,38 +309,38 @@ class HeroBlock extends RichContentCustomBlock
                                             ->disk(\cms_media_disk())
                                             ->visibility(\cms_media_visibility())
                                             ->nullable()
-                                            ->helperText('Recommended: 800×600px. Max 5MB.'),
+                                            ->helperText(__('tallcms::ui.t_recommended_800_600px_max_5mb')),
 
                                         TextInput::make('figure_alt')
-                                            ->label('Alt Text')
+                                            ->label(__('tallcms::fields.alt_text'))
                                             ->maxLength(255)
-                                            ->placeholder('Describe the image for accessibility')
+                                            ->placeholder(__('tallcms::ui.t_describe_the_image_for_accessibility'))
                                             ->required(fn (Get $get) => filled($get('figure_image'))),
 
                                         Toggle::make('figure_rounded')
-                                            ->label('Rounded Corners')
+                                            ->label(__('tallcms::fields.rounded_corners'))
                                             ->default(true),
 
                                         Toggle::make('figure_shadow')
-                                            ->label('Drop Shadow')
+                                            ->label(__('tallcms::fields.drop_shadow'))
                                             ->default(true),
                                     ])
                                     ->columns(2)
                                     ->visible(fn (Get $get): bool => in_array($get('layout'), ['figure-left', 'figure-right'])),
 
-                                Section::make('Form Settings')
-                                    ->description('Configure the lead capture form')
+                                Section::make(__('tallcms::ui.t_form_settings'))
+                                    ->description(__('tallcms::ui.t_configure_the_lead_capture_form'))
                                     ->schema([
                                         TextInput::make('form_title')
-                                            ->label('Form Card Title')
+                                            ->label(__('tallcms::fields.form_card_title'))
                                             ->maxLength(100)
-                                            ->placeholder('e.g., Get Started Today'),
+                                            ->placeholder(__('tallcms::ui.t_e_g_get_started_today')),
 
                                         Repeater::make('form_fields')
-                                            ->label('Form Fields')
+                                            ->label(__('tallcms::fields.form_fields'))
                                             ->schema([
                                                 Select::make('type')
-                                                    ->label('Field Type')
+                                                    ->label(__('tallcms::fields.field_type'))
                                                     ->options([
                                                         'text' => 'Text',
                                                         'email' => 'Email',
@@ -352,27 +352,27 @@ class HeroBlock extends RichContentCustomBlock
                                                     ->live(),
 
                                                 TextInput::make('name')
-                                                    ->label('Field Name')
+                                                    ->label(__('tallcms::fields.field_name'))
                                                     ->required()
                                                     ->alphaDash()
                                                     ->maxLength(50)
                                                     ->distinct()
-                                                    ->helperText('Unique identifier — letters, numbers, underscores, or dashes.'),
+                                                    ->helperText(__('tallcms::ui.t_unique_identifier_letters_numbers_underscores_or_dashes')),
 
                                                 TextInput::make('label')
-                                                    ->label('Display Label')
+                                                    ->label(__('tallcms::fields.display_label'))
                                                     ->required()
                                                     ->maxLength(255),
 
                                                 Toggle::make('required')
-                                                    ->label('Required')
+                                                    ->label(__('tallcms::fields.required'))
                                                     ->default(false)
                                                     ->inline(false),
 
                                                 TagsInput::make('options')
-                                                    ->label('Dropdown Options')
+                                                    ->label(__('tallcms::fields.dropdown_options'))
                                                     ->visible(fn (Get $get): bool => $get('type') === 'select')
-                                                    ->helperText('Press Enter after each option')
+                                                    ->helperText(__('tallcms::ui.t_press_enter_after_each_option'))
                                                     ->columnSpanFull(),
                                             ])
                                             ->columns(2)
@@ -387,39 +387,39 @@ class HeroBlock extends RichContentCustomBlock
                                             ->addActionLabel('Add Field'),
 
                                         TextInput::make('form_submit_text')
-                                            ->label('Submit Button Text')
+                                            ->label(__('tallcms::fields.submit_button_text'))
                                             ->default('Get Started')
                                             ->maxLength(50),
 
                                         Textarea::make('form_success_message')
-                                            ->label('Success Message')
+                                            ->label(__('tallcms::fields.success_message'))
                                             ->default("Thanks! We'll be in touch.")
                                             ->maxLength(500),
 
                                         Select::make('form_redirect_page_id')
-                                            ->label('Redirect After Submission')
+                                            ->label(__('tallcms::fields.redirect_after_submission'))
                                             ->options(fn ($livewire) => \TallCms\Cms\Filament\Forms\OwnerSitePicker::publishedPages($livewire))
                                             ->searchable()
-                                            ->placeholder('Stay on page (show success message)')
-                                            ->helperText('Optionally redirect to a page after successful submission'),
+                                            ->placeholder(__('tallcms::ui.t_stay_on_page_show_success_message'))
+                                            ->helperText(__('tallcms::ui.t_optionally_redirect_to_a_page_after_successful_submission')),
 
                                         Select::make('form_button_style')
-                                            ->label('Submit Button Style')
+                                            ->label(__('tallcms::fields.submit_button_style'))
                                             ->options(static::getButtonVariantOptions())
                                             ->default('btn-primary'),
 
                                         Select::make('form_card_style')
-                                            ->label('Card Style')
+                                            ->label(__('tallcms::fields.card_style'))
                                             ->options(static::getFormCardStyleOptions())
                                             ->default('bg-base-100 shadow-2xl'),
                                     ])
                                     ->visible(fn (Get $get): bool => $get('layout') === 'with-form'),
                             ]),
 
-                        Tab::make('Background')
+                        Tab::make(__('tallcms::fields.background'))
                             ->icon('heroicon-m-photo')
                             ->schema([
-                                FileUpload::make('background_image')
+                                FileUpload::make('background_image')->label(__('tallcms::fields.background_image'))
                                     ->image()
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->maxSize(5120)
@@ -427,49 +427,49 @@ class HeroBlock extends RichContentCustomBlock
                                     ->disk(\cms_media_disk())
                                     ->visibility(\cms_media_visibility())
                                     ->nullable()
-                                    ->helperText('Recommended: 2560×1440px (16:9). Keep focal point centered. Max 5MB.')
+                                    ->helperText(__('tallcms::ui.t_recommended_2560_1440px_16_9_keep_focal_point_centered_max_5mb'))
                                     ->live(),
 
                                 Select::make('background_color')
-                                    ->label('Background Color')
+                                    ->label(__('tallcms::fields.background_color'))
                                     ->options(static::getHeroBackgroundOptions())
                                     ->default('bg-gradient-to-br from-primary to-secondary')
                                     ->visible(fn (Get $get): bool => empty($get('background_image'))),
 
                                 Toggle::make('parallax_effect')
-                                    ->label('Enable Parallax Effect')
+                                    ->label(__('tallcms::fields.enable_parallax_effect'))
                                     ->default(true)
-                                    ->helperText('Background moves slower than content when scrolling'),
+                                    ->helperText(__('tallcms::ui.t_background_moves_slower_than_content_when_scrolling')),
 
                                 Slider::make('overlay_opacity')
-                                    ->label('Overlay Darkness')
+                                    ->label(__('tallcms::fields.overlay_darkness'))
                                     ->range(minValue: 0, maxValue: 100)
                                     ->step(5)
                                     ->tooltips(true)
                                     ->pips(PipsMode::Positions)
                                     ->pipsValues([0, 25, 50, 75, 100])
                                     ->fillTrack()
-                                    ->helperText('Controls dark overlay on background (0% = none, 100% = full dark)'),
+                                    ->helperText(__('tallcms::ui.t_controls_dark_overlay_on_background_0_none_100_full_dark')),
                             ]),
 
-                        Tab::make('Styling')
+                        Tab::make(__('tallcms::ui.t_styling'))
                             ->icon('heroicon-m-paint-brush')
                             ->schema([
-                                Section::make('Button Styles')
-                                    ->description('Choose button styles for the hero section')
+                                Section::make(__('tallcms::ui.t_button_styles'))
+                                    ->description(__('tallcms::ui.t_choose_button_styles_for_the_hero_section'))
                                     ->schema([
                                         Select::make('button_variant')
-                                            ->label('Primary Button')
+                                            ->label(__('tallcms::fields.primary_button'))
                                             ->options(static::getHeroButtonVariantOptions())
                                             ->default('btn-primary'),
 
                                         Select::make('secondary_button_variant')
-                                            ->label('Secondary Button')
+                                            ->label(__('tallcms::fields.secondary_button'))
                                             ->options(static::getHeroSecondaryButtonVariantOptions())
                                             ->default('btn-ghost text-white hover:bg-white/20'),
 
                                         Select::make('button_size')
-                                            ->label('Button Size')
+                                            ->label(__('tallcms::fields.button_size'))
                                             ->options(static::getButtonSizeOptions())
                                             ->default('btn-lg'),
                                     ])

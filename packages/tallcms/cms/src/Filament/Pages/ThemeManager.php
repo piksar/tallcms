@@ -30,9 +30,12 @@ class ThemeManager extends Page implements HasForms
 {
     use HasPageShield, InteractsWithForms;
 
-    protected static ?string $title = 'Theme Manager';
-
     protected string $view = 'tallcms::filament.pages.theme-manager';
+
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.theme_manager.title');
+    }
 
     public static function getNavigationIcon(): string|BackedEnum|null
     {
@@ -41,12 +44,12 @@ class ThemeManager extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return 'Themes';
+        return __('tallcms::pages.theme_manager.navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.appearance', 'Appearance');
+        return tallcms_nav_group('appearance');
     }
 
     public static function getNavigationSort(): ?int
@@ -245,7 +248,7 @@ class ThemeManager extends Page implements HasForms
 
         if (! $siteQuery->exists()) {
             Notification::make()
-                ->title('Cannot switch to that site')
+                ->title(__('tallcms::ui.t_cannot_switch_to_that_site'))
                 ->danger()
                 ->send();
 
@@ -264,7 +267,7 @@ class ThemeManager extends Page implements HasForms
             return null;
         }
 
-        return "Managing theme for: {$context->name} ({$context->domain})";
+        return __('tallcms::ui.managing_theme_for_full', ['name' => $context->name, 'domain' => $context->domain]);
     }
 
     /**
@@ -527,8 +530,8 @@ class ThemeManager extends Page implements HasForms
 
         if (! $theme) {
             Notification::make()
-                ->title('Theme not found')
-                ->body("The theme '{$slug}' could not be found.")
+                ->title(__('tallcms::ui.t_theme_not_found'))
+                ->body(__('tallcms::ui.n_the_theme_slug_could_not_be_found', ['slug' => $slug]))
                 ->danger()
                 ->send();
 
@@ -540,7 +543,7 @@ class ThemeManager extends Page implements HasForms
 
         if (! $validation->isValid) {
             Notification::make()
-                ->title('Theme activation failed')
+                ->title(__('tallcms::ui.t_theme_activation_failed'))
                 ->body(implode("\n", $validation->errors))
                 ->danger()
                 ->send();
@@ -552,7 +555,7 @@ class ThemeManager extends Page implements HasForms
         if ($validation->hasWarnings()) {
             foreach ($validation->warnings as $warning) {
                 Notification::make()
-                    ->title('Warning')
+                    ->title(__('tallcms::ui.t_warning'))
                     ->body($warning)
                     ->warning()
                     ->send();
@@ -583,8 +586,8 @@ class ThemeManager extends Page implements HasForms
             SiteSetting::set('theme_default_preset', '', 'text', 'theme');
 
             Notification::make()
-                ->title('Site theme updated')
-                ->body("'{$theme->name}' is now active for {$context->name}.")
+                ->title(__('tallcms::ui.t_site_theme_updated'))
+                ->body(__('tallcms::ui.n_theme_name_is_now_active_for_context_name', ['theme_name' => $theme->name, 'context_name' => $context->name]))
                 ->success()
                 ->send();
 
@@ -594,16 +597,16 @@ class ThemeManager extends Page implements HasForms
             SiteSetting::set('theme_default_preset', '', 'text', 'theme');
 
             Notification::make()
-                ->title('Theme activated')
-                ->body("'{$theme->name}' is now the default theme.")
+                ->title(__('tallcms::ui.t_theme_activated'))
+                ->body(__('tallcms::ui.n_theme_name_is_now_the_default_theme', ['theme_name' => $theme->name]))
                 ->success()
                 ->send();
 
             $this->clearThemeCache();
         } else {
             Notification::make()
-                ->title('Activation failed')
-                ->body('Failed to activate theme. Please check the logs.')
+                ->title(__('tallcms::ui.t_activation_failed'))
+                ->body(__('tallcms::ui.t_failed_to_activate_theme_please_check_the_logs'))
                 ->danger()
                 ->send();
         }
@@ -618,8 +621,8 @@ class ThemeManager extends Page implements HasForms
 
         if (! $rollbackSlug) {
             Notification::make()
-                ->title('No rollback available')
-                ->body('There is no previous theme to rollback to.')
+                ->title(__('tallcms::ui.t_no_rollback_available'))
+                ->body(__('tallcms::ui.t_there_is_no_previous_theme_to_rollback_to'))
                 ->warning()
                 ->send();
 
@@ -628,8 +631,8 @@ class ThemeManager extends Page implements HasForms
 
         if ($this->getThemeManager()->rollbackToPrevious()) {
             Notification::make()
-                ->title('Rollback successful')
-                ->body("Reverted to previous theme: {$rollbackSlug}")
+                ->title(__('tallcms::ui.t_rollback_successful'))
+                ->body(__('tallcms::ui.n_reverted_to_previous_theme_rollbackslug', ['rollbackslug' => $rollbackSlug]))
                 ->success()
                 ->send();
 
@@ -637,8 +640,8 @@ class ThemeManager extends Page implements HasForms
             $this->clearThemeCache();
         } else {
             Notification::make()
-                ->title('Rollback failed')
-                ->body('Failed to rollback to previous theme.')
+                ->title(__('tallcms::ui.t_rollback_failed'))
+                ->body(__('tallcms::ui.t_failed_to_rollback_to_previous_theme'))
                 ->danger()
                 ->send();
         }
@@ -653,7 +656,7 @@ class ThemeManager extends Page implements HasForms
 
         if (! $theme) {
             Notification::make()
-                ->title('Theme not found')
+                ->title(__('tallcms::ui.t_theme_not_found'))
                 ->danger()
                 ->send();
 
@@ -663,8 +666,8 @@ class ThemeManager extends Page implements HasForms
         // Validate theme can be previewed (same checks as middleware)
         if ($theme->isPrebuilt() && ! $theme->isBuilt()) {
             Notification::make()
-                ->title('Theme not built')
-                ->body("Theme '{$theme->name}' has not been built. Run 'npm run build' in the theme directory first.")
+                ->title(__('tallcms::ui.t_theme_not_built'))
+                ->body(__('tallcms::ui.n_theme_theme_name_has_not_been_built_run_npm_run_build_i', ['theme_name' => $theme->name]))
                 ->danger()
                 ->send();
 
@@ -674,7 +677,7 @@ class ThemeManager extends Page implements HasForms
         if (! $theme->meetsRequirements()) {
             $unmet = $theme->getUnmetRequirements();
             Notification::make()
-                ->title('Theme requirements not met')
+                ->title(__('tallcms::ui.t_theme_requirements_not_met'))
                 ->body(implode("\n", $unmet))
                 ->danger()
                 ->send();
@@ -689,8 +692,8 @@ class ThemeManager extends Page implements HasForms
         $this->dispatch('open-preview', url: $previewUrl);
 
         Notification::make()
-            ->title('Preview opened')
-            ->body("Preview of '{$theme->name}' opened in new tab.")
+            ->title(__('tallcms::ui.t_preview_opened'))
+            ->body(__('tallcms::ui.n_preview_of_theme_name_opened_in_new_tab', ['theme_name' => $theme->name]))
             ->info()
             ->send();
     }
@@ -710,8 +713,8 @@ class ThemeManager extends Page implements HasForms
         $availablePresets = $activeTheme->getDaisyUIPresets();
         if (! in_array($preset, $availablePresets)) {
             Notification::make()
-                ->title('Invalid preset')
-                ->body("The preset '{$preset}' is not available for this theme.")
+                ->title(__('tallcms::ui.t_invalid_preset'))
+                ->body(__('tallcms::ui.n_the_preset_preset_is_not_available_for_this_theme', ['preset' => $preset]))
                 ->danger()
                 ->send();
 
@@ -721,7 +724,7 @@ class ThemeManager extends Page implements HasForms
         SiteSetting::set('theme_default_preset', $preset, 'text', 'theme', 'Default daisyUI preset for the active theme');
 
         Notification::make()
-            ->title('Default preset updated')
+            ->title(__('tallcms::ui.t_default_preset_updated'))
             ->body("Default preset changed to '".ucfirst($preset)."'.")
             ->success()
             ->send();
@@ -813,8 +816,8 @@ class ThemeManager extends Page implements HasForms
         $this->getThemeManager()->refreshCache();
 
         Notification::make()
-            ->title('Themes refreshed')
-            ->body('Theme list has been refreshed.')
+            ->title(__('tallcms::ui.t_themes_refreshed'))
+            ->body(__('tallcms::ui.t_theme_list_has_been_refreshed'))
             ->success()
             ->send();
 
@@ -828,21 +831,21 @@ class ThemeManager extends Page implements HasForms
     public function deleteAction(): Action
     {
         return Action::make('delete')
-            ->label('Delete')
+            ->label(__('tallcms::fields.delete'))
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->visible(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->authorize(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->requiresConfirmation()
-            ->modalHeading('Delete Theme')
+            ->modalHeading(__('tallcms::ui.t_delete_theme'))
             ->modalDescription(fn (array $arguments) => "Are you sure you want to delete the theme '{$arguments['name']}'? This action cannot be undone.")
-            ->modalSubmitActionLabel('Yes, Delete Theme')
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_delete_theme'))
             ->action(function (array $arguments) {
                 // Server-side guard: themes are installation-wide, super_admin only.
                 if (! auth()->user()?->hasRole('super_admin')) {
                     Notification::make()
-                        ->title('Not authorized')
-                        ->body('Only super admins can delete themes.')
+                        ->title(__('tallcms::ui.t_not_authorized'))
+                        ->body(__('tallcms::ui.t_only_super_admins_can_delete_themes'))
                         ->danger()
                         ->send();
 
@@ -854,8 +857,8 @@ class ThemeManager extends Page implements HasForms
 
                 if (! $theme) {
                     Notification::make()
-                        ->title('Theme not found')
-                        ->body("The theme '{$slug}' could not be found.")
+                        ->title(__('tallcms::ui.t_theme_not_found'))
+                        ->body(__('tallcms::ui.n_the_theme_slug_could_not_be_found', ['slug' => $slug]))
                         ->danger()
                         ->send();
 
@@ -867,7 +870,7 @@ class ThemeManager extends Page implements HasForms
 
                 if (! $result['success']) {
                     Notification::make()
-                        ->title('Delete failed')
+                        ->title(__('tallcms::ui.t_delete_failed'))
                         ->body($result['error'])
                         ->danger()
                         ->send();
@@ -876,8 +879,8 @@ class ThemeManager extends Page implements HasForms
                 }
 
                 Notification::make()
-                    ->title('Theme deleted')
-                    ->body("'{$theme->name}' has been removed.")
+                    ->title(__('tallcms::ui.t_theme_deleted'))
+                    ->body(__('tallcms::ui.n_theme_name_has_been_removed', ['theme_name' => $theme->name]))
                     ->success()
                     ->send();
 
@@ -931,8 +934,8 @@ class ThemeManager extends Page implements HasForms
         $this->refreshLicenseState();
 
         Notification::make()
-            ->title('Status Refreshed')
-            ->body('License status has been refreshed from the server.')
+            ->title(__('tallcms::ui.t_status_refreshed'))
+            ->body(__('tallcms::ui.t_license_status_has_been_refreshed_from_the_server'))
             ->success()
             ->send();
     }
@@ -957,16 +960,16 @@ class ThemeManager extends Page implements HasForms
     public function activateLicenseAction(): Action
     {
         return Action::make('activateLicense')
-            ->label('Activate License')
+            ->label(__('tallcms::fields.activate_license'))
             ->icon('heroicon-o-key')
             ->color('primary')
             ->visible(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->authorize(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->modalHeading(fn (array $arguments) => "Activate License — {$arguments['name']}")
-            ->modalDescription('Enter your license key from your purchase email.')
+            ->modalDescription(__('tallcms::ui.t_enter_your_license_key_from_your_purchase_email'))
             ->form([
                 TextInput::make('license_key')
-                    ->label('License Key')
+                    ->label(__('tallcms::fields.license_key'))
                     ->placeholder('XXXX-XXXX-XXXX-XXXX')
                     ->required(),
             ])
@@ -974,8 +977,8 @@ class ThemeManager extends Page implements HasForms
                 // Server-side guard: theme licenses are installation-wide, super_admin only.
                 if (! auth()->user()?->hasRole('super_admin')) {
                     Notification::make()
-                        ->title('Not authorized')
-                        ->body('Only super admins can activate theme licenses.')
+                        ->title(__('tallcms::ui.t_not_authorized'))
+                        ->body(__('tallcms::ui.t_only_super_admins_can_activate_theme_licenses'))
                         ->danger()
                         ->send();
 
@@ -989,20 +992,20 @@ class ThemeManager extends Page implements HasForms
 
                 if ($result['valid']) {
                     Notification::make()
-                        ->title('License Activated')
-                        ->body('The license has been successfully activated!')
+                        ->title(__('tallcms::ui.t_license_activated'))
+                        ->body(__('tallcms::ui.t_the_license_has_been_successfully_activated'))
                         ->success()
                         ->send();
                 } else {
                     if ($result['status'] === 'not_supported') {
                         Notification::make()
-                            ->title('Theme Not Supported')
-                            ->body('This theme does not support license activation.')
+                            ->title(__('tallcms::ui.t_theme_not_supported'))
+                            ->body(__('tallcms::ui.t_this_theme_does_not_support_license_activation'))
                             ->warning()
                             ->send();
                     } else {
                         Notification::make()
-                            ->title('Activation Failed')
+                            ->title(__('tallcms::ui.t_activation_failed_2'))
                             ->body($result['message'])
                             ->danger()
                             ->send();
@@ -1019,21 +1022,21 @@ class ThemeManager extends Page implements HasForms
     public function deactivateLicenseAction(): Action
     {
         return Action::make('deactivateLicense')
-            ->label('Deactivate')
+            ->label(__('tallcms::fields.deactivate'))
             ->icon('heroicon-o-x-circle')
             ->color('danger')
             ->visible(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->authorize(fn () => auth()->user()?->hasRole('super_admin') ?? false)
             ->requiresConfirmation()
             ->modalHeading(fn (array $arguments) => "Deactivate License — {$arguments['name']}")
-            ->modalDescription('Are you sure you want to deactivate this license? The theme may lose access to updates and premium features.')
-            ->modalSubmitActionLabel('Yes, Deactivate')
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_deactivate_this_license_the_theme_may_lose_'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_deactivate'))
             ->action(function (array $arguments) {
                 // Server-side guard: theme licenses are installation-wide, super_admin only.
                 if (! auth()->user()?->hasRole('super_admin')) {
                     Notification::make()
-                        ->title('Not authorized')
-                        ->body('Only super admins can deactivate theme licenses.')
+                        ->title(__('tallcms::ui.t_not_authorized'))
+                        ->body(__('tallcms::ui.t_only_super_admins_can_deactivate_theme_licenses'))
                         ->danger()
                         ->send();
 
@@ -1044,13 +1047,13 @@ class ThemeManager extends Page implements HasForms
 
                 if ($result['success']) {
                     Notification::make()
-                        ->title('License Deactivated')
-                        ->body('The license has been deactivated from this site.')
+                        ->title(__('tallcms::ui.t_license_deactivated'))
+                        ->body(__('tallcms::ui.t_the_license_has_been_deactivated_from_this_site'))
                         ->success()
                         ->send();
                 } else {
                     Notification::make()
-                        ->title('Deactivation Notice')
+                        ->title(__('tallcms::ui.t_deactivation_notice'))
                         ->body($result['message'])
                         ->warning()
                         ->send();
@@ -1067,18 +1070,18 @@ class ThemeManager extends Page implements HasForms
     {
         return [
             Action::make('rollback')
-                ->label('Rollback to Previous')
+                ->label(__('tallcms::fields.rollback_to_previous'))
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->color('warning')
                 ->visible(fn () => $this->canRollback())
                 ->requiresConfirmation()
-                ->modalHeading('Rollback Theme')
+                ->modalHeading(__('tallcms::ui.t_rollback_theme'))
                 ->modalDescription(fn () => "Are you sure you want to rollback to the previous theme ({$this->getRollbackSlug()})?")
-                ->modalSubmitActionLabel('Yes, Rollback')
+                ->modalSubmitActionLabel(__('tallcms::ui.t_yes_rollback'))
                 ->action(fn () => $this->rollbackTheme()),
 
             Action::make('refreshAllLicenses')
-                ->label('Refresh Licenses')
+                ->label(__('tallcms::fields.refresh_licenses'))
                 ->icon('heroicon-o-key')
                 ->color('gray')
                 ->visible(fn () => auth()->user()?->hasRole('super_admin') ?? false)
@@ -1087,8 +1090,8 @@ class ThemeManager extends Page implements HasForms
                     // Server-side guard: cache-busting installation-wide license state, super_admin only.
                     if (! auth()->user()?->hasRole('super_admin')) {
                         Notification::make()
-                            ->title('Not authorized')
-                            ->body('Only super admins can refresh theme license status.')
+                            ->title(__('tallcms::ui.t_not_authorized'))
+                            ->body(__('tallcms::ui.t_only_super_admins_can_refresh_theme_license_status'))
                             ->danger()
                             ->send();
 
@@ -1107,14 +1110,14 @@ class ThemeManager extends Page implements HasForms
                     $this->refreshLicenseState();
 
                     Notification::make()
-                        ->title('All Statuses Refreshed')
+                        ->title(__('tallcms::ui.t_all_statuses_refreshed'))
                         ->success()
                         ->send();
                 })
                 ->visible(fn () => collect($this->licenseStatuses)->contains('has_license', true)),
 
             Action::make('refresh')
-                ->label('Refresh')
+                ->label(__('tallcms::fields.refresh'))
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->action(fn () => $this->refreshThemes()),
@@ -1122,20 +1125,20 @@ class ThemeManager extends Page implements HasForms
             // Theme Upload action — gated to super_admin (installation-wide concern)
             // AND the theme.allow_uploads config flag.
             Action::make('upload')
-                ->label('Upload Theme')
+                ->label(__('tallcms::fields.upload_theme'))
                 ->icon('heroicon-o-arrow-up-tray')
                 ->color('primary')
                 ->visible(fn () => config('theme.allow_uploads', false) && (auth()->user()?->hasRole('super_admin') ?? false))
                 ->authorize(fn () => auth()->user()?->hasRole('super_admin') ?? false)
                 ->form([
                     FileUpload::make('theme_zip')
-                        ->label('Theme Package (ZIP)')
+                        ->label(__('tallcms::fields.theme_package_zip'))
                         ->acceptedFileTypes(['application/zip', 'application/x-zip-compressed'])
                         ->maxSize(50 * 1024) // 50MB
                         ->required()
                         ->disk('local')
                         ->directory('theme-uploads')
-                        ->helperText('Upload a theme package (.zip file). Maximum size: 50MB.'),
+                        ->helperText(__('tallcms::ui.t_upload_a_theme_package_zip_file_maximum_size_50mb')),
                 ])
                 ->action(function (array $data) {
                     // Server-side guards: super_admin only AND uploads enabled.
@@ -1143,8 +1146,8 @@ class ThemeManager extends Page implements HasForms
                     // invoked via direct AJAX bypassing visible().
                     if (! auth()->user()?->hasRole('super_admin')) {
                         Notification::make()
-                            ->title('Not authorized')
-                            ->body('Only super admins can upload themes.')
+                            ->title(__('tallcms::ui.t_not_authorized'))
+                            ->body(__('tallcms::ui.t_only_super_admins_can_upload_themes'))
                             ->danger()
                             ->send();
 
@@ -1153,8 +1156,8 @@ class ThemeManager extends Page implements HasForms
 
                     if (! config('theme.allow_uploads', false)) {
                         Notification::make()
-                            ->title('Uploads disabled')
-                            ->body('Theme uploads are not enabled in configuration.')
+                            ->title(__('tallcms::ui.t_uploads_disabled'))
+                            ->body(__('tallcms::ui.t_theme_uploads_are_not_enabled_in_configuration'))
                             ->danger()
                             ->send();
 
@@ -1171,7 +1174,7 @@ class ThemeManager extends Page implements HasForms
 
                         if (! $validation->isValid) {
                             Notification::make()
-                                ->title('Invalid theme package')
+                                ->title(__('tallcms::ui.t_invalid_theme_package'))
                                 ->body(implode("\n", $validation->errors))
                                 ->danger()
                                 ->send();
@@ -1182,7 +1185,7 @@ class ThemeManager extends Page implements HasForms
                         // Show warnings if any
                         foreach ($validation->warnings as $warning) {
                             Notification::make()
-                                ->title('Warning')
+                                ->title(__('tallcms::ui.t_warning'))
                                 ->body($warning)
                                 ->warning()
                                 ->send();
@@ -1193,8 +1196,8 @@ class ThemeManager extends Page implements HasForms
                         // Step 2: Check if theme already exists
                         if (File::exists(base_path("themes/{$slug}"))) {
                             Notification::make()
-                                ->title('Theme already exists')
-                                ->body("A theme with slug '{$slug}' already exists. Please remove it first or upload a theme with a different slug.")
+                                ->title(__('tallcms::ui.t_theme_already_exists'))
+                                ->body(__('tallcms::ui.n_a_theme_with_slug_slug_already_exists_please_remove_it_', ['slug' => $slug]))
                                 ->danger()
                                 ->send();
 
@@ -1206,7 +1209,7 @@ class ThemeManager extends Page implements HasForms
 
                         if (! $extractResult['success']) {
                             Notification::make()
-                                ->title('Extraction failed')
+                                ->title(__('tallcms::ui.t_extraction_failed'))
                                 ->body($extractResult['error'])
                                 ->danger()
                                 ->send();
@@ -1226,7 +1229,7 @@ class ThemeManager extends Page implements HasForms
                             $extractedSlug = null;
 
                             Notification::make()
-                                ->title('Theme validation failed')
+                                ->title(__('tallcms::ui.t_theme_validation_failed'))
                                 ->body(implode("\n", $dirValidation->errors))
                                 ->danger()
                                 ->send();
@@ -1251,8 +1254,8 @@ class ThemeManager extends Page implements HasForms
                             $extractedSlug = null;
 
                             Notification::make()
-                                ->title('Installation failed')
-                                ->body('Failed to publish theme assets. Check logs for details.')
+                                ->title(__('tallcms::ui.t_installation_failed'))
+                                ->body(__('tallcms::ui.t_failed_to_publish_theme_assets_check_logs_for_details'))
                                 ->danger()
                                 ->send();
 
@@ -1266,8 +1269,8 @@ class ThemeManager extends Page implements HasForms
                         $this->refreshThemes();
 
                         Notification::make()
-                            ->title('Theme uploaded successfully')
-                            ->body("Theme '{$validation->themeData['name']}' has been installed. You can now activate it.")
+                            ->title(__('tallcms::ui.t_theme_uploaded_successfully'))
+                            ->body(__('tallcms::ui.n_theme_validation_themedata_name_has_been_installed_you_', ['validation_themedata_name' => $validation->themeData['name']]))
                             ->success()
                             ->send();
 
@@ -1295,7 +1298,7 @@ class ThemeManager extends Page implements HasForms
                         ]);
 
                         Notification::make()
-                            ->title('Upload failed')
+                            ->title(__('tallcms::ui.t_upload_failed'))
                             ->body('An unexpected error occurred: '.$e->getMessage())
                             ->danger()
                             ->send();

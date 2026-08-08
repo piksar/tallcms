@@ -32,9 +32,10 @@ class GlobalDefaults extends Page implements HasForms
 
     protected string $view = 'tallcms::filament.pages.global-defaults';
 
-    protected static ?string $navigationLabel = 'Global Defaults';
-
-    protected static ?string $title = 'Global Defaults';
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.global_defaults.title');
+    }
 
     public ?array $data = [];
 
@@ -62,9 +63,14 @@ class GlobalDefaults extends Page implements HasForms
         return 'heroicon-o-globe-alt';
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return __('tallcms::pages.global_defaults.navigation');
+    }
+
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.configuration', 'Configuration');
+        return tallcms_nav_group('configuration');
     }
 
     public static function getNavigationSort(): ?int
@@ -210,8 +216,8 @@ class GlobalDefaults extends Page implements HasForms
         }
 
         Notification::make()
-            ->title('Global defaults saved')
-            ->body('All sites without overrides will inherit these values.')
+            ->title(__('tallcms::ui.notify_global_defaults_saved'))
+            ->body(__('tallcms::ui.notify_global_defaults_saved_body'))
             ->success()
             ->send();
     }
@@ -224,8 +230,8 @@ class GlobalDefaults extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            Section::make('Inherited Defaults')
-                ->description('These are the default values inherited by all sites. Per-site overrides on the Site Settings page take precedence.')
+            Section::make(__('tallcms::ui.inherited_defaults'))
+                ->description(__('tallcms::ui.inherited_defaults_description'))
                 ->schema([]),
 
             Tabs::make('Global Defaults')
@@ -245,32 +251,32 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function generalTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('General')
+        return Tabs\Tab::make(__('tallcms::ui.tab_general'))
             ->icon('heroicon-o-cog-6-tooth')
             ->schema([
-                Section::make('Site Identity Defaults')
-                    ->description('Default identity values inherited by new sites')
+                Section::make(__('tallcms::ui.site_identity_defaults'))
+                    ->description(__('tallcms::ui.site_identity_defaults_description'))
                     ->schema([
                         TextInput::make('site_tagline')
-                            ->label('Tagline')
+                            ->label(__('tallcms::fields.tagline'))
                             ->maxLength(255)
-                            ->helperText('Short phrase that describes your site'),
+                            ->helperText(__('tallcms::ui.help_short_phrase_site')),
 
                         Textarea::make('site_description')
-                            ->label('Description')
+                            ->label(__('tallcms::fields.description'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Used as fallback meta description'),
+                            ->helperText(__('tallcms::ui.help_fallback_meta_description')),
 
                         Select::make('site_type')
-                            ->label('Site Type')
+                            ->label(__('tallcms::fields.site_type'))
                             ->options([
-                                'multi-page' => 'Multi-Page Website',
-                                'single-page' => 'Single-Page Application (SPA)',
+                                'multi-page' => __('tallcms::ui.option_multi_page_website'),
+                                'single-page' => __('tallcms::ui.option_spa'),
                             ])
                             ->default('multi-page')
                             ->required()
-                            ->helperText('Multi-page: Traditional website. SPA: One-page with anchor navigation.'),
+                            ->helperText(__('tallcms::ui.help_site_type')),
                     ])
                     ->columns(2),
             ]);
@@ -278,53 +284,53 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function brandingTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Branding')
+        return Tabs\Tab::make(__('tallcms::ui.tab_branding'))
             ->icon('heroicon-o-paint-brush')
             ->schema([
-                Section::make('Visual Identity Defaults')
-                    ->description('Default branding inherited by new sites')
+                Section::make(__('tallcms::ui.visual_identity_defaults'))
+                    ->description(__('tallcms::ui.visual_identity_defaults_description'))
                     ->schema([
                         FileUpload::make('logo')
-                            ->label('Site Logo')
+                            ->label(__('tallcms::fields.site_logo'))
                             ->image()
                             ->directory('site-assets')
                             ->disk(\cms_media_disk())
                             ->visibility(\cms_media_visibility())
-                            ->helperText('Upload your site logo (PNG, JPG, or SVG)')
+                            ->helperText(__('tallcms::ui.help_upload_logo'))
                             ->deletable()
                             ->nullable(),
 
                         FileUpload::make('favicon')
-                            ->label('Favicon')
+                            ->label(__('tallcms::fields.favicon'))
                             ->image()
                             ->directory('site-assets')
                             ->disk(\cms_media_disk())
                             ->visibility(\cms_media_visibility())
                             ->acceptedFileTypes(['image/x-icon', 'image/png'])
-                            ->helperText('Upload favicon (.ico or .png, 16x16 or 32x32 pixels)')
+                            ->helperText(__('tallcms::ui.help_upload_favicon'))
                             ->nullable(),
 
                         Toggle::make('show_powered_by')
-                            ->label('Show "Powered by TallCMS" Badge')
-                            ->helperText('Displays a small badge in the site footer.')
+                            ->label(__('tallcms::fields.show_powered_by_tallcms_badge'))
+                            ->helperText(__('tallcms::ui.help_powered_by_badge'))
                             ->default(true)
                             ->columnSpanFull(),
 
                         Toggle::make('show_theme_switcher')
-                            ->label('Show theme switcher in header')
-                            ->helperText('Default for sites whose theme supports runtime theme switching. Per-site overrides win.')
+                            ->label(__('tallcms::fields.show_theme_switcher_in_header'))
+                            ->helperText(__('tallcms::ui.help_theme_switcher_default'))
                             ->default(true)
                             ->columnSpanFull(),
 
                         Toggle::make('show_search')
-                            ->label('Show search box in header')
-                            ->helperText('Default for sites whose theme renders a search control. Per-site overrides win.')
+                            ->label(__('tallcms::fields.show_search_box_in_header'))
+                            ->helperText(__('tallcms::ui.help_search_control_default'))
                             ->default(true)
                             ->columnSpanFull(),
 
                         Toggle::make('show_language_dropdown')
-                            ->label('Show language dropdown in header')
-                            ->helperText('Default for sites whose theme renders a locale switcher. Only effective when i18n is enabled.')
+                            ->label(__('tallcms::fields.show_language_dropdown_in_header'))
+                            ->helperText(__('tallcms::ui.help_locale_switcher_default'))
                             ->default(true)
                             ->columnSpanFull(),
                     ])
@@ -334,32 +340,32 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function contactTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Contact')
+        return Tabs\Tab::make(__('tallcms::ui.tab_contact'))
             ->icon('heroicon-o-envelope')
             ->schema([
-                Section::make('Contact Information Defaults')
-                    ->description('Default contact details inherited by new sites')
+                Section::make(__('tallcms::ui.contact_information_defaults'))
+                    ->description(__('tallcms::ui.contact_information_defaults_description'))
                     ->schema([
                         TextInput::make('contact_email')
-                            ->label('Contact Email')
+                            ->label(__('tallcms::fields.contact_email'))
                             ->email()
-                            ->helperText('Default email for contact forms'),
+                            ->helperText(__('tallcms::ui.help_default_contact_email')),
 
                         TextInput::make('contact_phone')
-                            ->label('Contact Phone')
+                            ->label(__('tallcms::fields.contact_phone'))
                             ->tel()
-                            ->helperText('Business phone number'),
+                            ->helperText(__('tallcms::ui.help_business_phone')),
 
                         TextInput::make('company_name')
-                            ->label('Company Name')
+                            ->label(__('tallcms::fields.company_name'))
                             ->maxLength(255)
-                            ->helperText('Legal company name'),
+                            ->helperText(__('tallcms::ui.help_legal_company_name')),
 
                         Textarea::make('company_address')
-                            ->label('Company Address')
+                            ->label(__('tallcms::fields.company_address'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Complete business address'),
+                            ->helperText(__('tallcms::ui.help_complete_business_address')),
                     ])
                     ->columns(2),
             ]);
@@ -367,19 +373,19 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function socialTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Social')
+        return Tabs\Tab::make(__('tallcms::ui.tab_social'))
             ->icon('heroicon-o-share')
             ->schema([
-                Section::make('Social Media Defaults')
-                    ->description('Default social links inherited by new sites')
+                Section::make(__('tallcms::ui.social_media_defaults'))
+                    ->description(__('tallcms::ui.social_media_defaults_description'))
                     ->schema([
-                        TextInput::make('social_facebook')->label('Facebook URL')->url(),
-                        TextInput::make('social_twitter')->label('Twitter / X URL')->url(),
-                        TextInput::make('social_linkedin')->label('LinkedIn URL')->url(),
-                        TextInput::make('social_instagram')->label('Instagram URL')->url(),
-                        TextInput::make('social_youtube')->label('YouTube URL')->url(),
-                        TextInput::make('social_tiktok')->label('TikTok URL')->url(),
-                        TextInput::make('newsletter_signup_url')->label('Newsletter Signup URL')->url(),
+                        TextInput::make('social_facebook')->label(__('tallcms::fields.facebook_url'))->url(),
+                        TextInput::make('social_twitter')->label(__('tallcms::fields.twitter_x_url'))->url(),
+                        TextInput::make('social_linkedin')->label(__('tallcms::fields.linkedin_url'))->url(),
+                        TextInput::make('social_instagram')->label(__('tallcms::fields.instagram_url'))->url(),
+                        TextInput::make('social_youtube')->label(__('tallcms::fields.youtube_url'))->url(),
+                        TextInput::make('social_tiktok')->label(__('tallcms::fields.tiktok_url'))->url(),
+                        TextInput::make('newsletter_signup_url')->label(__('tallcms::fields.newsletter_signup_url'))->url(),
                     ])
                     ->columns(2),
             ]);
@@ -387,15 +393,15 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function publishingTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Publishing')
+        return Tabs\Tab::make(__('tallcms::ui.tab_publishing'))
             ->icon('heroicon-o-document-check')
             ->schema([
-                Section::make('Publishing Workflow Default')
-                    ->description('Default publishing behavior inherited by new sites')
+                Section::make(__('tallcms::ui.publishing_workflow_default'))
+                    ->description(__('tallcms::ui.publishing_workflow_default_description'))
                     ->schema([
                         Toggle::make('review_workflow_enabled')
-                            ->label('Enable Review Workflow')
-                            ->helperText('When enabled, authors must submit content for review before it can be published. When disabled, all users with create permission can publish directly.')
+                            ->label(__('tallcms::fields.enable_review_workflow'))
+                            ->helperText(__('tallcms::ui.help_review_workflow'))
                             ->columnSpanFull(),
                     ]),
             ]);
@@ -403,23 +409,23 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function maintenanceTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Maintenance')
+        return Tabs\Tab::make(__('tallcms::ui.tab_maintenance'))
             ->icon('heroicon-o-wrench-screwdriver')
             ->schema([
-                Section::make('Maintenance Mode Default')
-                    ->description('Default maintenance settings inherited by new sites')
+                Section::make(__('tallcms::ui.maintenance_mode_default'))
+                    ->description(__('tallcms::ui.maintenance_mode_default_description'))
                     ->schema([
                         Toggle::make('maintenance_mode')
-                            ->label('Enable Maintenance Mode')
-                            ->helperText('When enabled, visitors see a maintenance page. Admins can still access the panel.')
+                            ->label(__('tallcms::fields.enable_maintenance_mode'))
+                            ->helperText(__('tallcms::ui.help_maintenance_mode'))
                             ->live()
                             ->columnSpanFull(),
 
                         Textarea::make('maintenance_message')
-                            ->label('Maintenance Message')
+                            ->label(__('tallcms::fields.maintenance_message'))
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Message shown to visitors during maintenance mode')
+                            ->helperText(__('tallcms::ui.help_maintenance_message'))
                             ->visible(fn ($get) => $get('maintenance_mode'))
                             ->columnSpanFull(),
                     ]),
@@ -428,15 +434,15 @@ class GlobalDefaults extends Page implements HasForms
 
     protected function i18nTab(): Tabs\Tab
     {
-        return Tabs\Tab::make('Languages')
+        return Tabs\Tab::make(__('tallcms::ui.tab_languages'))
             ->icon('heroicon-o-language')
             ->schema([
-                Section::make('Multilingual Support')
-                    ->description('Configure multilingual support for your content. These settings are installation-wide and apply to all sites.')
+                Section::make(__('tallcms::ui.multilingual_support'))
+                    ->description(__('tallcms::ui.multilingual_support_description'))
                     ->schema([
                         Toggle::make('i18n_enabled')
-                            ->label('Enable Multilingual Support')
-                            ->helperText('When enabled, content can be translated into multiple languages.')
+                            ->label(__('tallcms::fields.enable_multilingual_support'))
+                            ->helperText(__('tallcms::ui.help_i18n_enabled'))
                             ->live()
                             ->columnSpanFull()
                             ->afterStateUpdated(function ($state, callable $set): void {
@@ -446,16 +452,16 @@ class GlobalDefaults extends Page implements HasForms
                             }),
 
                         Select::make('default_locale')
-                            ->label('Default Language')
+                            ->label(__('tallcms::fields.default_language'))
                             ->options(fn () => $this->getLocaleOptions())
                             ->searchable()
                             ->required()
-                            ->helperText('The primary language for your site.')
+                            ->helperText(__('tallcms::ui.help_default_language'))
                             ->visible(fn ($get) => $get('i18n_enabled')),
 
                         Toggle::make('hide_default_locale')
-                            ->label('Hide Default Language in URLs')
-                            ->helperText('Default language accessed at / instead of /en/.')
+                            ->label(__('tallcms::fields.hide_default_language_in_urls'))
+                            ->helperText(__('tallcms::ui.help_hide_default_locale'))
                             ->default(true)
                             ->live()
                             ->afterStateUpdated(function ($state, callable $set): void {
@@ -466,8 +472,8 @@ class GlobalDefaults extends Page implements HasForms
                             ->visible(fn ($get) => $get('i18n_enabled')),
 
                         Toggle::make('redirect_root_to_locale')
-                            ->label('Redirect / to the default locale')
-                            ->helperText('When enabled, visitors to / are redirected to the default language prefix (e.g. /en/). Only applies when Hide Default Language in URLs is off.')
+                            ->label(__('tallcms::fields.redirect_to_the_default_locale'))
+                            ->helperText(__('tallcms::ui.help_redirect_root_locale'))
                             ->default(false)
                             ->disabled(fn ($get) => ! $get('i18n_enabled') || $get('hide_default_locale'))
                             ->dehydrated(fn ($get) => $get('i18n_enabled') && ! $get('hide_default_locale'))

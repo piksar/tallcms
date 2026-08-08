@@ -215,6 +215,10 @@
                                     class="fi-fo-rich-editor-custom-blocks-list flex flex-col h-full"
                                     x-data="{
                                         searchQuery: '',
+                                        labels: {
+                                            recentlyUsed: @js(__('tallcms::editor.recently_used')),
+                                            other: @js(__('tallcms::editor.other')),
+                                        },
                                         blocks: @js($groupedBlocks),
                                         categories: @js($blockCategories),
                                         componentKey: @js($key),
@@ -393,7 +397,7 @@
                                         },
 
                                         get effectiveCategories() {
-                                            return { recent: { label: 'Recently used' }, ...this.categories };
+                                            return { recent: { label: this.labels.recentlyUsed }, ...this.categories };
                                         },
 
                                         get totalFilteredCount() {
@@ -445,7 +449,7 @@
                                             :class="activeTab === 'blocks' ? 'fi-cms-block-tab-active' : ''"
                                             class="fi-cms-block-tab flex-1 px-3 py-2 text-sm font-medium transition-colors"
                                         >
-                                            Blocks
+                                            {{ __('tallcms::editor.blocks') }}
                                         </button>
                                         <button
                                             type="button"
@@ -455,7 +459,7 @@
                                             :class="activeTab === 'outline' ? 'fi-cms-block-tab-active' : ''"
                                             class="fi-cms-block-tab flex-1 px-3 py-2 text-sm font-medium transition-colors"
                                         >
-                                            Outline
+                                            {{ __('tallcms::editor.outline') }}
                                             <span x-show="outlineItems.length > 0" x-text="`(${outlineItems.length})`" class="opacity-60 ms-1"></span>
                                         </button>
                                     </div>
@@ -468,7 +472,7 @@
                                         <input
                                             type="text"
                                             x-model="searchQuery"
-                                            placeholder="Search blocks..."
+                                            placeholder="{{ __('tallcms::editor.search_blocks') }}"
                                             class="fi-input block w-full border-none bg-transparent py-1 text-sm text-gray-950 outline-none placeholder:text-gray-400 focus:ring-0 dark:text-white dark:placeholder:text-gray-500"
                                         />
                                     </div>
@@ -484,7 +488,7 @@
                                                         x-on:click="toggleCategory(category)"
                                                         class="fi-cms-block-category-heading sticky top-0 z-10 flex w-full items-center justify-between gap-2 px-3 py-2 text-start text-xs font-semibold uppercase tracking-wider transition-colors"
                                                     >
-                                                        <span x-text="effectiveCategories[category]?.label ?? 'Other'"></span>
+                                                        <span x-text="effectiveCategories[category]?.label ?? labels.other"></span>
                                                         <span class="transition-transform duration-200" :class="{ 'rotate-180': isExpanded(category) }">
                                                             {!! \Filament\Support\generate_icon_html('heroicon-m-chevron-down', 'h-4 w-4')->toHtml() !!}
                                                         </span>
@@ -579,7 +583,7 @@
                                             x-show="outlineItems.length === 0"
                                             class="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400"
                                         >
-                                            <p>No blocks yet. Add blocks from the Blocks tab to see them here.</p>
+                                            <p>{{ __('tallcms::editor.no_blocks_outline') }}</p>
                                         </div>
                                     </div>
                                 </div>
