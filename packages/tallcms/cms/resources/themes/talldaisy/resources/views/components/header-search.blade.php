@@ -7,7 +7,7 @@
                 <input
                     type="search"
                     name="q"
-                    placeholder="{{ __('Search...') }}"
+                    placeholder="{{ __('tallcms::frontend.search_placeholder') }}"
                     class="input input-sm input-bordered w-40 focus:w-56 transition-all duration-200 join-item"
                     minlength="{{ config('tallcms.search.min_query_length', 2) }}"
                 />
@@ -24,7 +24,7 @@
     <button
         @click="open = true"
         class="btn btn-ghost btn-circle lg:hidden"
-        aria-label="{{ __('Search') }}"
+        aria-label="{{ __('tallcms::frontend.search') }}"
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -61,14 +61,14 @@
                         <input
                             type="search"
                             name="q"
-                            placeholder="{{ __('Search pages and posts...') }}"
+                            placeholder="{{ __('tallcms::frontend.search_pages_and_posts') }}"
                             class="input input-bordered flex-1 join-item"
                             minlength="{{ config('tallcms.search.min_query_length', 2) }}"
                             x-ref="mobileSearch"
                             x-init="$watch('open', value => { if (value) setTimeout(() => $refs.mobileSearch.focus(), 100) })"
                         />
                         <button type="submit" class="btn btn-primary join-item">
-                            {{ __('Search') }}
+                            {{ __('tallcms::frontend.search') }}
                         </button>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
             <button
                 @click="open = false"
                 class="btn btn-sm btn-ghost btn-circle absolute top-2 right-2"
-                aria-label="{{ __('Close') }}"
+                aria-label="{{ __('tallcms::frontend.close') }}"
             >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

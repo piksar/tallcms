@@ -116,7 +116,7 @@
             <x-menu location="footer" style="footer" />
         </nav>
         <aside>
-            <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
             <x-tallcms::powered-by />
         </aside>
     </footer>

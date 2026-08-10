@@ -206,7 +206,7 @@
         {{-- Bottom bar --}}
         <div class="border-t border-neutral-content/10">
             <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-content/40">
-                <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
                 <x-tallcms::powered-by />
             </div>
         </div>

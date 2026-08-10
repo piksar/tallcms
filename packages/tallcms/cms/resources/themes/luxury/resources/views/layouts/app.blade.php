@@ -117,7 +117,7 @@
             <x-menu location="footer" style="footer" />
         </nav>
         <aside>
-            <p>&copy; {{ date('Y') }} {{ $footerSiteName }}. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ $footerSiteName }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
             <x-tallcms::powered-by />
         </aside>
     </footer>

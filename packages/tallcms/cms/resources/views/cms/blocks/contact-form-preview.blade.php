@@ -1,6 +1,6 @@
 @php
     $fields = $config['fields'] ?? [];
-    $submitButtonText = $config['submit_button_text'] ?? 'Send Message';
+    $submitButtonText = $config['submit_button_text'] ?? __('tallcms::frontend.send_message');
     $buttonStyle = $config['button_style'] ?? 'btn-primary';
     $formId = 'contact-form-preview-' . uniqid();
     $sectionPadding = ($config['first_section'] ?? false) ? 'pb-16' : ($config['padding'] ?? 'py-16');

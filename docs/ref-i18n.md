@@ -407,8 +407,24 @@ Publish or place files at `lang/vendor/tallcms/{locale}/*.php` (Laravel’s pack
 ### Not in scope (yet)
 
 - Per-user admin language preference / panel language switcher
-- Translating public frontend theme chrome
 - Plugin package UI strings (follow the same `vendor::key` pattern later)
+
+---
+
+## Frontend chrome locale
+
+Public theme/chrome strings (search placeholder, “Read more”, footer rights, reading time, comments UI, etc.) use Laravel translations under the `tallcms` namespace:
+
+```php
+__('tallcms::frontend.read_more')
+__('tallcms::frontend.min_read', ['minutes' => $post->reading_time])
+```
+
+Keys live in `packages/tallcms/cms/resources/lang/{locale}/frontend.php` (`en` + `de`).
+
+**Locale source:** the active **frontend / content locale** (URL prefix / `SetLocaleMiddleware`), not the Filament admin `APP_LOCALE`. Admin Filament chrome (when present) follows `APP_LOCALE` separately.
+
+Host apps and installed themes that override package views must call `__('tallcms::frontend…')` themselves — installing lang files alone does not change hardcoded Blade copies under `themes/{slug}/` or app `resources/views/`.
 
 ---
 

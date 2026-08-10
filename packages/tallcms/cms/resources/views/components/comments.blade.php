@@ -26,7 +26,7 @@
 
 <section class="mt-12 border-t border-base-300 pt-8" id="comments">
     <h2 class="text-2xl font-bold text-base-content mb-6">
-        {{ $commentCount === 0 ? 'Comments' : $commentCount . ' ' . \Illuminate\Support\Str::plural('Comment', $commentCount) }}
+        {{ trans_choice('tallcms::frontend.comments_count', $commentCount, ['count' => $commentCount]) }}
     </h2>
 
     {{-- Comment List --}}

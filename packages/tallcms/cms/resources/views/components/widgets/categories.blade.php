@@ -20,7 +20,7 @@
 
 @if($categories->isNotEmpty())
 <div class="bg-base-100 rounded-lg p-4 shadow-sm">
-    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ __('tallcms::frontend.categories') }}</h3>
     <ul class="space-y-2">
         @foreach($categories as $category)
             @php

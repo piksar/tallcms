@@ -106,7 +106,7 @@
                                 <input
                                     type="search"
                                     name="q"
-                                    placeholder="{{ __('Search...') }}"
+                                    placeholder="{{ __('tallcms::frontend.search_placeholder') }}"
                                     class="w-40 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 focus:w-56"
                                     minlength="{{ config('tallcms.search.min_query_length', 2) }}"
                                 />
@@ -150,7 +150,7 @@
                             <input
                                 type="search"
                                 name="q"
-                                placeholder="{{ __('Search...') }}"
+                                placeholder="{{ __('tallcms::frontend.search_placeholder') }}"
                                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 minlength="{{ config('tallcms.search.min_query_length', 2) }}"
                             />
@@ -288,7 +288,7 @@
 
                 <!-- Copyright -->
                 <div class="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-                    <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. All rights reserved.</p>
+                    <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
                 </div>
             </div>
         </footer>

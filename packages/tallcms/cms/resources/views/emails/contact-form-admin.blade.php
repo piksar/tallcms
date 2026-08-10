@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Contact Form Submission</title>
+    <title>{{ __('tallcms::frontend.email_admin_title') }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -60,7 +60,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>New Contact Form Submission</h2>
+        <h2>{{ __('tallcms::frontend.email_admin_heading') }}</h2>
 
         @foreach($submission->form_data as $field)
             <div class="field">
@@ -70,9 +70,9 @@
         @endforeach
 
         <div class="meta">
-            <p><strong>Submitted from:</strong> {{ $submission->page_url }}</p>
-            <p><strong>Date:</strong> {{ $submission->created_at->format('M j, Y \a\t g:i A') }}</p>
-            <p><strong>IP Address:</strong> {{ request()->ip() }}</p>
+            <p><strong>{{ __('tallcms::frontend.email_submitted_from') }}</strong> {{ $submission->page_url }}</p>
+            <p><strong>{{ __('tallcms::frontend.email_date') }}</strong> {{ $submission->created_at->format('M j, Y \a\t g:i A') }}</p>
+            <p><strong>{{ __('tallcms::frontend.email_ip_address') }}</strong> {{ request()->ip() }}</p>
         </div>
     </div>
 </body>

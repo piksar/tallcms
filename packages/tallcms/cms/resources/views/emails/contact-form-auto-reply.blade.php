@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank you for contacting us</title>
+    <title>{{ __('tallcms::frontend.email_auto_reply_title') }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -73,22 +73,22 @@
 </head>
 <body>
     <div class="container">
-        <h2>Thank you for reaching out!</h2>
+        <h2>{{ __('tallcms::frontend.email_auto_reply_heading') }}</h2>
 
         <div class="message">
-            <p>We've received your message and will get back to you as soon as possible.</p>
+            <p>{{ __('tallcms::frontend.email_auto_reply_received') }}</p>
         </div>
 
-        <p>Hello{{ $submission->name ? ' ' . e($submission->name) : '' }},</p>
+        <p>{{ __('tallcms::frontend.email_auto_reply_hello') }}{{ $submission->name ? ' ' . e($submission->name) : '' }},</p>
 
         @if(!empty($customMessage))
             <p>{!! nl2br(e($customMessage)) !!}</p>
         @else
-            <p>Thank you for contacting {{ $siteName ?? config('app.name') }}. This email confirms that we have received your submission. Our team will review your message and respond within 1-2 business days.</p>
+            <p>{{ __('tallcms::frontend.email_auto_reply_body', ['site' => $siteName ?? config('app.name')]) }}</p>
         @endif
 
         <div class="summary">
-            <h3>Your Submission Summary</h3>
+            <h3>{{ __('tallcms::frontend.email_submission_summary') }}</h3>
 
             @foreach($submission->form_data as $field)
                 <div class="field">
@@ -99,7 +99,7 @@
         </div>
 
         <div class="footer">
-            <p>This is an automated response. Please do not reply to this email.</p>
+            <p>{{ __('tallcms::frontend.email_automated_response') }}</p>
             <p>&copy; {{ date('Y') }} {{ $siteName ?? config('app.name') }}</p>
         </div>
     </div>

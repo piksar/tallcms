@@ -108,7 +108,7 @@
 
 @if(!empty($groupedPosts))
     {{-- Posts by category mode --}}
-    <nav class="bg-base-100 rounded-lg p-4 shadow-sm sticky top-24" aria-label="Table of contents">
+    <nav class="bg-base-100 rounded-lg p-4 shadow-sm sticky top-24" aria-label="{{ __('tallcms::frontend.table_of_contents') }}">
         <h3 class="text-lg font-semibold mb-4">
             <a href="{{ tallcms_localized_url($parentSlug) }}" class="hover:text-primary transition-colors">{{ $page->title }}</a>
         </h3>
@@ -148,7 +148,7 @@
     </nav>
 @elseif(count($headings) > 0)
     {{-- Heading anchor mode (pages without Posts blocks) --}}
-    <nav class="bg-base-100 rounded-lg p-4 shadow-sm sticky top-24" aria-label="Table of contents">
+    <nav class="bg-base-100 rounded-lg p-4 shadow-sm sticky top-24" aria-label="{{ __('tallcms::frontend.table_of_contents') }}">
         <h3 class="text-lg font-semibold mb-4">On This Page</h3>
         <ul class="space-y-0.5">
             @foreach($headings as $heading)

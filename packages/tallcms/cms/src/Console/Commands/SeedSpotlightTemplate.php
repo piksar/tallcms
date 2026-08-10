@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use TallCms\Cms\Console\Commands\Concerns\TranslatesDemoTemplateStrings;
 
 /**
  * Seed the "Spotlight" template — a premium variant of Launchpad for
@@ -29,6 +30,8 @@ use Illuminate\Support\Str;
  */
 class SeedSpotlightTemplate extends Command
 {
+    use TranslatesDemoTemplateStrings;
+
     protected $signature = 'tallcms:seed-spotlight-template
                             {--owner= : User ID to own the template site (defaults to first super_admin)}
                             {--force : Delete any existing Spotlight template and recreate}';
@@ -38,14 +41,14 @@ class SeedSpotlightTemplate extends Command
     public function handle(): int
     {
         if (! Schema::hasTable('tallcms_sites') || ! Schema::hasColumn('tallcms_sites', 'is_template_source')) {
-            $this->error('Multisite plugin with is_template_source column required.');
+            $this->error(__('tallcms::console.seed_template.multisite_required'));
 
             return self::FAILURE;
         }
 
         $ownerId = $this->resolveOwnerId();
         if (! $ownerId) {
-            $this->error('No owner user found. Pass --owner=<id> or create a super_admin first.');
+            $this->error(__('tallcms::console.seed_template.no_owner'));
 
             return self::FAILURE;
         }
@@ -53,25 +56,25 @@ class SeedSpotlightTemplate extends Command
         $existing = DB::table('tallcms_sites')->where('domain', 'spotlight.template')->first();
         if ($existing) {
             if (! $this->option('force')) {
-                $this->components->warn('Spotlight template already exists (site id '.$existing->id.'). Use --force to recreate.');
+                $this->components->warn(__('tallcms::console.seed_template.already_exists', ['template' => 'Spotlight', 'id' => $existing->id]));
 
                 return self::SUCCESS;
             }
             $this->deleteSite((int) $existing->id);
-            $this->components->info('Removed existing Spotlight template.');
+            $this->components->info(__('tallcms::console.seed_template.removed', ['template' => 'Spotlight']));
         }
 
         $siteId = $this->createSite($ownerId);
-        $this->components->info("Created site: Spotlight (id {$siteId})");
+        $this->components->info(__('tallcms::console.seed_template.created_site', ['template' => 'Spotlight', 'id' => $siteId]));
 
         $pageIds = $this->createPages($siteId, $ownerId);
-        $this->components->info('Created '.count($pageIds).' pages.');
+        $this->components->info(__('tallcms::console.seed_template.created_pages', ['count' => count($pageIds)]));
 
         $this->createMenu($siteId, $pageIds);
-        $this->components->info('Created primary menu.');
+        $this->components->info(__('tallcms::console.seed_template.created_menu'));
 
         $this->newLine();
-        $this->components->info('✨ Spotlight template ready. It now appears in the Template Gallery.');
+        $this->components->info(__('tallcms::console.seed_template.ready', ['emoji' => '✨', 'template' => 'Spotlight', 'message' => __('tallcms::console.seed_template.ready_gallery')]));
 
         return self::SUCCESS;
     }
@@ -105,7 +108,7 @@ class SeedSpotlightTemplate extends Command
     protected function createSite(int $ownerId): int
     {
         return (int) DB::table('tallcms_sites')->insertGetId([
-            'name' => 'Spotlight',
+            'name' => $this->demo('spotlight.spotlight_14ab8041d7'),
             'domain' => 'spotlight.template',
             'uuid' => (string) Str::uuid(),
             'user_id' => $ownerId,
@@ -121,16 +124,16 @@ class SeedSpotlightTemplate extends Command
     {
         $pages = [
             'home' => [
-                'title' => 'Home',
+                'title' => $this->demoJson('menu.home'),
                 'is_homepage' => true,
                 'content' => $this->homeContent(),
             ],
             'thank-you' => [
-                'title' => 'Thank You',
+                'title_key' => 'launchpad.thank_you_30c59ce5f2',
                 'content' => $this->thankYouContent(),
             ],
             'disclaimer' => [
-                'title' => 'Disclaimer',
+                'title_key' => 'launchpad.disclaimer_4c4a2e80cc',
                 'content' => $this->disclaimerContent(),
             ],
         ];
@@ -140,7 +143,7 @@ class SeedSpotlightTemplate extends Command
             $ids[$slug] = (int) DB::table('tallcms_pages')->insertGetId([
                 'site_id' => $siteId,
                 'author_id' => $ownerId,
-                'title' => json_encode(['en' => $page['title']]),
+                'title' => $page['title'] ?? $this->demoJson($page['title_key']),
                 'slug' => json_encode(['en' => $slug]),
                 'content' => json_encode(['en' => $page['content']]),
                 'status' => 'published',
@@ -159,7 +162,7 @@ class SeedSpotlightTemplate extends Command
     {
         $menuId = (int) DB::table('tallcms_menus')->insertGetId([
             'site_id' => $siteId,
-            'name' => 'Primary',
+            'name' => $this->demo('shared.menu_primary'),
             'location' => 'header',
             'is_active' => true,
             'created_at' => now(),
@@ -168,8 +171,8 @@ class SeedSpotlightTemplate extends Command
 
         $lft = 1;
         foreach ([
-            ['label' => 'The Residence', 'type' => 'page', 'page_id' => $pageIds['home']],
-            ['label' => 'Disclaimer', 'type' => 'page', 'page_id' => $pageIds['disclaimer']],
+            ['label' => $this->demo('spotlight.the_residence_7190677061'), 'type' => 'page', 'page_id' => $pageIds['home']],
+            ['label' => $this->demo('launchpad.disclaimer_4c4a2e80cc'), 'type' => 'page', 'page_id' => $pageIds['disclaimer']],
         ] as $item) {
             DB::table('tallcms_menu_items')->insert([
                 'menu_id' => $menuId,
@@ -188,22 +191,14 @@ class SeedSpotlightTemplate extends Command
 
     // --- Block helpers ------------------------------------------------------
 
-    protected function block(string $id, array $config): string
-    {
-        $json = json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $encoded = htmlspecialchars($json, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
-        return "<div data-type=\"customBlock\" data-config=\"{$encoded}\" data-id=\"{$id}\"></div>";
-    }
-
     // --- Page contents ------------------------------------------------------
 
     protected function homeContent(): string
     {
         return implode("\n", [
-            $this->block('hero', [
-                'heading' => '<p>[Project Name]</p>',
-                'subheading' => "<p>A limited collection of [Unit Count] residences in [District #] — [Tenure] from [Year]. Register your interest to receive the brochure, price guide, and priority access to the showflat.</p>",
+            $this->demoBlock('hero', [
+                'heading' => $this->demo('launchpad.p_project_name_p_a7e1d5f0dd'),
+                'subheading' => $this->demo('spotlight.p_a_limited_collection_of_unit_count_re_77e52ae64f'),
                 // Hero's with-form layout renders a form card alongside the
                 // hero copy instead of duplicating contact form lower down.
                 'layout' => 'with-form',
@@ -213,73 +208,73 @@ class SeedSpotlightTemplate extends Command
                 'overlay_opacity' => 40,
                 'form_title' => 'Priority preview access',
                 'form_fields' => [
-                    ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'required' => true, 'options' => []],
-                    ['name' => 'email', 'type' => 'email', 'label' => 'Email', 'required' => true, 'options' => []],
-                    ['name' => 'phone', 'type' => 'tel', 'label' => 'Phone', 'required' => true, 'options' => []],
-                    ['name' => 'unit_type', 'type' => 'select', 'label' => 'Interested in', 'required' => true, 'options' => ['1 Bedroom', '2 Bedroom', '3 Bedroom', 'Penthouse', 'Still deciding']],
-                    ['name' => 'buyer_status', 'type' => 'select', 'label' => 'Buyer profile', 'required' => true, 'options' => ['Singapore Citizen', 'Singapore PR', 'Foreigner', 'Company/Trust']],
+                    ['name' => $this->demo('counsel.name_6ae999552a'), 'type' => 'text', 'label' => $this->demo('spotlight.name_709a23220f'), 'required' => true, 'options' => []],
+                    ['name' => $this->demo('counsel.email_a88b7dcd1a'), 'type' => 'email', 'label' => $this->demo('counsel.email_84add5b295'), 'required' => true, 'options' => []],
+                    ['name' => $this->demo('counsel.phone_f6be6ca910'), 'type' => 'tel', 'label' => $this->demo('counsel.phone_77064d5265'), 'required' => true, 'options' => []],
+                    ['name' => $this->demo('launchpad.unit_type_5d6c102160'), 'type' => 'select', 'label' => $this->demo('spotlight.interested_in_f165d748ae'), 'required' => true, 'options' => ['1 Bedroom', '2 Bedroom', '3 Bedroom', 'Penthouse', 'Still deciding']],
+                    ['name' => $this->demo('launchpad.buyer_status_1f61012a40'), 'type' => 'select', 'label' => $this->demo('spotlight.buyer_profile_6c5216dbcd'), 'required' => true, 'options' => ['Singapore Citizen', 'Singapore PR', 'Foreigner', 'Company/Trust']],
                 ],
-                'form_submit_text' => 'Get the brochure',
-                'form_success_message' => "Thank you. We'll be in touch with the brochure and priority preview details within 24 hours.",
+                'form_submit_text' => $this->demo('spotlight.get_the_brochure_45800248fc'),
+                'form_success_message' => $this->demo('spotlight.thank_you_we_ll_be_in_touch_with_the_bro_7478294628'),
                 'form_button_style' => 'btn-primary',
                 'form_card_style' => 'bg-base-100 shadow-2xl',
             ]),
-            $this->block('content_block', [
-                'title' => 'A quiet assertion of arrival',
-                'body' => "<p>[Project Name] is a [Tenure] development of [Unit Count] residences at [Address], [District #]. Designed by [Architect/Designer] for [Developer], its architecture draws from [design cue — e.g. \"the mature shade of the surrounding canopy\" / \"the rhythm of pre-war shophouses the estate is named for\"].</p><p>Residences range from [X] to [Y] square feet, with finishes and orientations specified to outlast fashion. Expected TOP: <strong>[Q# YYYY]</strong>.</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'spotlight.a_quiet_assertion_of_arrival_81952f2cef',
+                'body' => $this->demo('spotlight.p_project_name_is_a_tenure_development_26fa2927f3'),
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),
-            $this->block('stats', [
-                'heading' => 'At a glance',
+            $this->demoBlock('stats', [
+                'heading' => $this->demo('spotlight.at_a_glance_fca77b7e3a'),
                 'stats' => [
-                    ['value' => '[District #]', 'label' => 'District'],
-                    ['value' => '[Tenure]', 'label' => 'Tenure'],
-                    ['value' => '[Q# YYYY]', 'label' => 'Expected TOP'],
-                    ['value' => '[Unit Count]', 'label' => 'Residences'],
+                    ['value' => '[District #]', 'label' => $this->demo('launchpad.district_c0cb139cce')],
+                    ['value' => '[Tenure]', 'label' => $this->demo('launchpad.tenure_f63815b4ce')],
+                    ['value' => '[Q# YYYY]', 'label' => $this->demo('launchpad.expected_top_9e3750848f')],
+                    ['value' => '[Unit Count]', 'label' => $this->demo('spotlight.residences_139374b4f5')],
                 ],
                 'columns' => '4',
                 'background' => 'bg-base-200',
                 'padding' => 'py-24',
             ]),
-            $this->block('features', [
-                'heading' => 'The residences',
-                'subheading' => 'Each floorplan is considered — not just configured. Indicative starting prices, final pricing at preview.',
+            $this->demoBlock('features', [
+                'heading' => $this->demo('spotlight.the_residences_5f218ee12c'),
+                'subheading' => $this->demo('spotlight.each_floorplan_is_considered_not_just_co_68e6dca3dd'),
                 'features' => [
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-home', 'title' => '1 Bedroom', 'description' => "[XXX–XXX sqft] · From \$[X.XX]M"],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-home-modern', 'title' => '2 Bedroom', 'description' => "[XXX–XXX sqft] · From \$[X.XX]M"],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-building-office-2', 'title' => '3 Bedroom', 'description' => "[XXXX–XXXX sqft] · From \$[X.XX]M"],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-sparkles', 'title' => 'Penthouse', 'description' => "[XXXX+ sqft] · Upon application"],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-home', 'title_key' => 'launchpad.1_bedroom_a0c895ac49', 'description' => '[XXX–XXX sqft] · From $[X.XX]M'],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-home-modern', 'title_key' => 'launchpad.2_bedroom_d0853937ca', 'description' => '[XXX–XXX sqft] · From $[X.XX]M'],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-building-office-2', 'title_key' => 'launchpad.3_bedroom_bdb23bc861', 'description' => '[XXXX–XXXX sqft] · From $[X.XX]M'],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-sparkles', 'title_key' => 'launchpad.penthouse_4ca9996817', 'description' => '[XXXX+ sqft] · Upon application'],
                 ],
                 'columns' => '4',
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),
-            $this->block('features', [
-                'heading' => 'The day-to-day',
-                'subheading' => "Amenities designed for how residents actually live — not just what looks good in a brochure.",
+            $this->demoBlock('features', [
+                'heading' => $this->demo('spotlight.the_day_to_day_7da8ab94d6'),
+                'subheading' => $this->demo('spotlight.amenities_designed_for_how_residents_act_bf2c5cfc98'),
                 'features' => [
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-sun', 'title' => '50m Lap Pool', 'description' => 'Full-length pool with timber deck and private cabanas. Lit for evenings.'],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-bolt', 'title' => 'Gym & Wellness', 'description' => "Fully-equipped gym and dedicated yoga / stretch room. Residents-only, 24 hours."],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-fire', 'title' => 'Dining Pavilions', 'description' => 'Bookable pavilions for gatherings, with prep kitchens and shaded courtyards.'],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-building-library', 'title' => 'Residents\' Club', 'description' => "Clubhouse with lounge, library nook, and private event space."],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-cloud', 'title' => 'Sky Garden', 'description' => "Rooftop garden with panoramic views — the development's quiet centerpiece."],
-                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-user-group', 'title' => 'Children\'s Play', 'description' => "Thoughtfully-designed play area, shaded and safety-rated."],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-sun', 'title_key' => 'launchpad.50m_lap_pool_5c37478700', 'description' => $this->demo('spotlight.full_length_pool_with_timber_deck_and_pr_661487f62f')],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-bolt', 'title_key' => 'spotlight.gym_wellness_8ea1bd1262', 'description' => 'Fully-equipped gym and dedicated yoga / stretch room. Residents-only, 24 hours.'],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-fire', 'title_key' => 'spotlight.dining_pavilions_d3fb429065', 'description' => $this->demo('spotlight.bookable_pavilions_for_gatherings_with_p_790cb2e194')],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-building-library', 'title_key' => 'spotlight.residents_club_f84f021def', 'description' => 'Clubhouse with lounge, library nook, and private event space.'],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-cloud', 'title_key' => 'launchpad.sky_garden_3ba59cd6b1', 'description' => "Rooftop garden with panoramic views — the development's quiet centerpiece."],
+                    ['icon_type' => 'heroicon', 'icon' => 'heroicon-o-user-group', 'title_key' => 'spotlight.children_s_play_ae6efd962a', 'description' => 'Thoughtfully-designed play area, shaded and safety-rated.'],
                 ],
                 'columns' => '3',
                 'background' => 'bg-base-200',
                 'padding' => 'py-24',
             ]),
-            $this->block('content_block', [
-                'title' => 'Location — [Neighborhood Name]',
-                'body' => "<p>[Neighborhood Name] is [a single evocative sentence — e.g. \"one of the last low-rise enclaves of mature District [#]\" / \"where the city's formal streets give way to green\"]. The address is [X] minutes to [MRT Station] and [Y] minutes to the CBD by car.</p><p>Good neighbors within walking distance: [school], [park], [café/bakery], [provision shop], [clinic]. The daily convenience most new developments promise and rarely deliver.</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'launchpad.location_neighborhood_name_72de06cc43',
+                'body' => $this->demo('spotlight.p_neighborhood_name_is_a_single_evocati_9b3c8ec34b'),
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),
             // Requires the TallCMS Pro plugin. Swap coords/address/marker_title.
-            $this->block('pro-map', [
-                'heading' => 'The site',
-                'subheading' => '[Project address with postal code]',
+            $this->demoBlock('pro-map', [
+                'heading' => $this->demo('spotlight.the_site_a500256ebd'),
+                'subheading' => $this->demo('launchpad.project_address_with_postal_code_90bdd69220'),
                 'latitude' => '1.3521',
                 'longitude' => '103.8198',
                 'address' => '[Project address with postal code]',
@@ -294,28 +289,28 @@ class SeedSpotlightTemplate extends Command
                 'background' => 'bg-base-200',
                 'padding' => 'py-24',
             ]),
-            $this->block('stats', [
-                'heading' => 'Within reach',
+            $this->demoBlock('stats', [
+                'heading' => $this->demo('spotlight.within_reach_fd177de3bb'),
                 'stats' => [
-                    ['value' => '[X] min', 'label' => 'walk to [MRT]'],
-                    ['value' => '[X] min', 'label' => 'drive to CBD'],
-                    ['value' => '[X]', 'label' => 'top schools within 2km'],
-                    ['value' => '[X] min', 'label' => 'to Changi Airport'],
+                    ['value' => '[X] min', 'label' => $this->demo('spotlight.walk_to_mrt_f65adf05c1')],
+                    ['value' => '[X] min', 'label' => $this->demo('spotlight.drive_to_cbd_96a21fb1db')],
+                    ['value' => '[X]', 'label' => $this->demo('launchpad.top_schools_within_2km_8e84079e04')],
+                    ['value' => '[X] min', 'label' => $this->demo('spotlight.to_changi_airport_e0d2aee36a')],
                 ],
                 'columns' => '4',
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),
-            $this->block('content_block', [
-                'title' => 'About [Developer]',
-                'body' => "<p><strong>[Developer]</strong> has been shaping Singapore's residential landscape since [Year]. Past projects include [Project 1], [Project 2], and [Project 3] — each defined by [common trait: attention to proportion / thoughtful amenity planning / site-specific design]. [Project Name] is their [Xth] development in [District/Area] and continues that lineage.</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'spotlight.about_developer_facea923b9',
+                'body' => $this->demo('spotlight.p_strong_developer_strong_has_been_shap_6a87723a3b'),
                 'background' => 'bg-base-200',
                 'padding' => 'py-24',
             ]),
-            $this->block('cta', [
-                'title' => 'Ready to view?',
-                'description' => "Showflat previews are by appointment. WhatsApp us directly for the earliest available slot.",
-                'button_text' => 'WhatsApp to book',
+            $this->demoBlock('cta', [
+                'title_key' => 'spotlight.ready_to_view_25a00a9878',
+                'description' => 'Showflat previews are by appointment. WhatsApp us directly for the earliest available slot.',
+                'button_text' => $this->demo('spotlight.whatsapp_to_book_f93e96ab26'),
                 'button_link_type' => 'external',
                 'button_url' => 'https://wa.me/659999999?text=Hi%20I%20would%20like%20to%20book%20a%20showflat%20preview%20for%20[Project%20Name]',
                 'button_microcopy' => 'Replace 659999999 with your phone and update the project name in the text= parameter.',
@@ -324,9 +319,9 @@ class SeedSpotlightTemplate extends Command
                 'background' => 'bg-neutral',
                 'padding' => 'py-24',
             ]),
-            $this->block('content_block', [
-                'title' => 'Disclaimer',
-                'body' => "<p style=\"font-size: 0.9em; color: #666;\">This is an independent marketing website operated by <strong>[Agent Name]</strong>, a licensed salesperson (CEA Reg: [License #]) with <strong>[Agency Name]</strong>. This site is not the official developer's site and is not an official sales or marketing channel of [Developer].</p><p style=\"font-size: 0.9em; color: #666;\">All images are artist's impressions for illustrative purposes only. Specifications, unit mixes, prices, and availability are subject to change without notice. For binding information, refer to the official material at the showflat.</p><p style=\"font-size: 0.9em; color: #666;\">See the full <a href=\"/disclaimer\">disclaimer</a>.</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'launchpad.disclaimer_4c4a2e80cc',
+                'body' => $this->demo('spotlight.p_style_font_size_0_9em_color_666_this_ed1c265211'),
                 'background' => 'bg-base-200',
                 'padding' => 'py-16',
             ]),
@@ -336,10 +331,10 @@ class SeedSpotlightTemplate extends Command
     protected function thankYouContent(): string
     {
         return implode("\n", [
-            $this->block('hero', [
-                'heading' => '<p>Thank you.</p>',
-                'subheading' => "<p>Your details are in. We'll send the brochure and priority preview details within 24 hours. If it's urgent, WhatsApp us at [Phone].</p>",
-                'button_text' => 'Back to the residence',
+            $this->demoBlock('hero', [
+                'heading' => $this->demo('launchpad.p_thank_you_p_ea2fd536da'),
+                'subheading' => $this->demo('spotlight.p_your_details_are_in_we_ll_send_the_br_f52d44aba1'),
+                'button_text' => $this->demo('spotlight.back_to_the_residence_92ed948b35'),
                 'button_link_type' => 'page',
                 'layout' => 'centered',
                 'height' => 'min-h-[60vh]',
@@ -347,9 +342,9 @@ class SeedSpotlightTemplate extends Command
                 'background_color' => 'bg-gradient-to-br from-neutral to-base-300',
                 'overlay_opacity' => 0,
             ]),
-            $this->block('content_block', [
-                'title' => 'What happens next',
-                'body' => "<p>1. Check your inbox — the brochure is on its way.</p><p>2. A member of our team will reach out within 24 hours to answer questions and offer a priority showflat slot.</p><p>3. If you'd like to skip ahead, WhatsApp us directly at [Phone].</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'launchpad.what_happens_next_51ecc5b21f',
+                'body' => $this->demo('spotlight.p_1_check_your_inbox_the_brochure_is_on_e31c8566df'),
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),
@@ -359,18 +354,18 @@ class SeedSpotlightTemplate extends Command
     protected function disclaimerContent(): string
     {
         return implode("\n", [
-            $this->block('hero', [
-                'heading' => '<p>Disclaimer</p>',
-                'subheading' => '<p>The fine print for [Project Name].</p>',
+            $this->demoBlock('hero', [
+                'heading' => $this->demo('launchpad.p_disclaimer_p_b67167f4de'),
+                'subheading' => $this->demo('launchpad.p_the_fine_print_for_project_name_p_cc24f20acd'),
                 'layout' => 'centered',
                 'height' => 'min-h-[30vh]',
                 'text_alignment' => 'text-center',
                 'background_color' => 'bg-base-200',
                 'overlay_opacity' => 0,
             ]),
-            $this->block('content_block', [
-                'title' => 'Independent marketing website',
-                'body' => "<p>This website is owned and operated by <strong>[Agent Name]</strong>, a licensed salesperson registered with the Council for Estate Agencies (CEA Reg: <strong>[License #]</strong>) with <strong>[Agency Name]</strong> (Agency CEA Licence: [Agency License #]).</p><p>This is <strong>not</strong> the official developer's website and is <strong>not</strong> an official sales or marketing channel of [Developer]. We market [Project Name] as a licensed co-broker under the Estate Agents Act.</p><h3>Artist's Impressions</h3><p>All renderings, floor plans, site plans, images, and video content on this website are artist's impressions for illustrative purposes only. Actual building form, specifications, finishes, and external views may differ from what is shown.</p><h3>Pricing and availability</h3><p>Prices, unit mixes, and availability are correct at time of publication but are subject to change without notice at the developer's discretion. Official and binding pricing is provided only at the showflat or in the official sales material provided at the point of sale.</p><h3>Data protection</h3><p>When you submit a form on this website, your information is used solely to respond to your enquiry about [Project Name]. Your data is shared with the developer's authorized marketing agents for this purpose and is not sold or shared with unrelated third parties. You may request deletion of your data at any time by contacting us.</p><h3>No guarantees</h3><p>Any commentary about investment potential, rental yield, capital appreciation, or similar forward-looking statements is provided as general information and should not be taken as personalized financial or investment advice. Consult your own advisors for decisions about your specific circumstances.</p><h3>Contact</h3><p>For questions about this website or our marketing of [Project Name], use the form on the <a href=\"/\">project page</a> or WhatsApp us at [Phone].</p>",
+            $this->demoBlock('content_block', [
+                'title_key' => 'launchpad.independent_marketing_website_d77fecd9d5',
+                'body' => $this->demo('spotlight.p_this_website_is_owned_and_operated_by_b3f2674240'),
                 'background' => 'bg-base-100',
                 'padding' => 'py-24',
             ]),

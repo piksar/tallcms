@@ -6,7 +6,7 @@
         {{-- Author Header --}}
         <header class="max-w-4xl mx-auto text-center mb-12">
             <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Author</p>
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $author->name ?? 'Unknown Author' }}</h1>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $author->name ?? __('tallcms::frontend.unknown_author') }}</h1>
             @if($author->job_title ?? null)
                 <p class="text-base text-gray-500">
                     {{ $author->job_title }}{{ ($author->company ?? null) ? ', ' . $author->company : '' }}
@@ -93,7 +93,7 @@
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <h3 class="mt-4 text-lg font-medium text-gray-900">No posts found</h3>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">{{ __('tallcms::frontend.no_posts_found_heading') }}</h3>
                 <p class="mt-2 text-gray-500">This author hasn't published any posts yet.</p>
             </div>
         @endif

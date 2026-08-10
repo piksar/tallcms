@@ -109,11 +109,11 @@ class MergeTagService
             'post_title' => $post->title ?? '',
             'post_url' => url("{$prefix}/blog/{$post->slug}"),
             'post_excerpt' => $post->excerpt ?? '',
-            'post_author' => $post->author->name ?? 'Unknown Author',
+            'post_author' => $post->author->name ?? __('tallcms::frontend.unknown_author'),
             'post_author_email' => $post->author->email ?? '',
-            'post_categories' => $post->categories->pluck('name')->implode(', ') ?: 'Uncategorized',
-            'post_published_date' => $post->published_at ? $post->published_at->format('F j, Y') : 'Not Published',
-            'post_reading_time' => $post->reading_time.' min read',
+            'post_categories' => $post->categories->pluck('name')->implode(', ') ?: __('tallcms::frontend.uncategorized'),
+            'post_published_date' => $post->published_at ? $post->published_at->format('F j, Y') : __('tallcms::frontend.not_published'),
+            'post_reading_time' => __('tallcms::frontend.min_read', ['minutes' => $post->reading_time]),
             'related_posts' => '', // This could be implemented to show related posts HTML
         ];
     }

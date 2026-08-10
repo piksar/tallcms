@@ -103,7 +103,7 @@
                     @if($showDate && $post->reading_time)
                         <div class="flex items-center gap-1">
                             <x-heroicon-o-clock class="w-4 h-4" />
-                            <span>{{ $post->reading_time }} min read</span>
+                            <span>{{ __('tallcms::frontend.min_read', ['minutes' => $post->reading_time]) }}</span>
                         </div>
                     @endif
                 </div>
@@ -127,7 +127,7 @@
                 </div>
             @else
                 <p class="text-center py-8 text-base-content/70">
-                    This post has no content yet.
+                    {{ __('tallcms::frontend.this_post_has_no_content') }}
                 </p>
             @endif
         </div>
@@ -150,7 +150,7 @@
                 class="link link-primary inline-flex items-center gap-2 text-sm font-medium"
             >
                 <x-heroicon-o-arrow-left class="w-4 h-4" />
-                Back to all posts
+                {{ __('tallcms::frontend.back_to_all_posts') }}
             </a>
         </div>
     </footer>

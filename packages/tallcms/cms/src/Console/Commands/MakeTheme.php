@@ -25,6 +25,8 @@ class MakeTheme extends Command
 
     public function handle(): int
     {
+        $this->description = __('tallcms::console.make_theme.description');
+
         $themeInfo = $this->collectThemeInformation();
 
         $name = $themeInfo['name'];
@@ -34,12 +36,12 @@ class MakeTheme extends Command
         $themePath = base_path("themes/{$slug}");
 
         if (File::exists($themePath)) {
-            $this->error("Theme '{$slug}' already exists!");
+            $this->error(__('tallcms::console.make_theme.already_exists', ['slug' => $slug]));
 
             return 1;
         }
 
-        $this->info("Creating theme: {$name}");
+        $this->info(__('tallcms::console.make_theme.creating', ['name' => $name]));
 
         // Create theme directory structure
         $this->createDirectoryStructure($themePath);
@@ -68,18 +70,18 @@ class MakeTheme extends Command
         // Clear theme cache
         if (app()->bound('theme.manager')) {
             app('theme.manager')->clearCache();
-            $this->line('Theme cache cleared - theme is now discoverable');
+            $this->line(__('tallcms::console.make_theme.cache_cleared'));
         }
 
         $this->newLine();
-        $this->info("Theme '{$name}' created successfully!");
-        $this->line("Location: themes/{$slug}");
+        $this->info(__('tallcms::console.make_theme.created', ['name' => $name]));
+        $this->line(__('tallcms::console.make_theme.location', ['slug' => $slug]));
         $this->newLine();
-        $this->comment('Next steps:');
-        $this->line("1. Add a screenshot: themes/{$slug}/public/screenshot.png (1200x900px recommended)");
-        $this->line("2. cd themes/{$slug} && npm install && npm run build");
-        $this->line('3. cd ../../  # Back to project root');
-        $this->line("4. php artisan theme:activate {$slug}");
+        $this->comment(__('tallcms::console.make_theme.next_steps'));
+        $this->line(__('tallcms::console.make_theme.step_screenshot', ['slug' => $slug]));
+        $this->line(__('tallcms::console.make_theme.step_npm', ['slug' => $slug]));
+        $this->line(__('tallcms::console.make_theme.step_root'));
+        $this->line(__('tallcms::console.make_theme.step_activate', ['slug' => $slug]));
 
         return 0;
     }
@@ -98,43 +100,49 @@ class MakeTheme extends Command
 
     protected function collectInteractively(): array
     {
-        $this->info('TallCMS Theme Creator (daisyUI)');
-        $this->line('Create a theme with daisyUI presets for consistent styling.');
+        $this->info(__('tallcms::console.make_theme.creator_title'));
+        $this->line(__('tallcms::console.make_theme.creator_intro'));
         $this->newLine();
 
         // Theme name
-        $name = $this->argument('name') ?: $this->ask('What is the name of your theme?', 'My Theme');
+        $name = $this->argument('name') ?: $this->ask(
+            __('tallcms::console.make_theme.ask_name'),
+            __('tallcms::console.make_theme.default_name')
+        );
 
         // Theme description
         $description = $this->option('description') ?: $this->ask(
-            'Provide a brief description',
-            'A modern theme for TallCMS'
+            __('tallcms::console.make_theme.ask_description'),
+            __('tallcms::console.make_theme.default_description')
         );
 
         // Theme author
-        $author = $this->option('author') ?: $this->ask('Who is the author?', 'Theme Developer');
+        $author = $this->option('author') ?: $this->ask(
+            __('tallcms::console.make_theme.ask_author'),
+            __('tallcms::console.make_theme.default_author')
+        );
 
         // Theme version
-        $version = $this->option('theme-version') ?: $this->ask('Starting version?', '1.0.0');
+        $version = $this->option('theme-version') ?: $this->ask(__('tallcms::console.make_theme.ask_version'), '1.0.0');
 
         // Theme type selection
         $this->newLine();
-        $this->line('Theme Type:');
+        $this->line(__('tallcms::console.make_theme.theme_type_heading'));
         $modeChoice = $this->choice(
-            'What type of theme do you want to create?',
+            __('tallcms::console.make_theme.ask_theme_type'),
             [
-                '1' => 'DaisyUI - Single preset (one color scheme)',
-                '2' => 'DaisyUI - All presets (theme-controller switcher)',
-                '3' => 'DaisyUI - Custom theme (define your own colors)',
+                '1' => __('tallcms::console.make_theme.type_single'),
+                '2' => __('tallcms::console.make_theme.type_all'),
+                '3' => __('tallcms::console.make_theme.type_custom'),
             ],
             '1'
         );
 
         // Parse mode from choice
         $mode = match ($modeChoice) {
-            'DaisyUI - Single preset (one color scheme)', '1' => 'single',
-            'DaisyUI - All presets (theme-controller switcher)', '2' => 'all',
-            'DaisyUI - Custom theme (define your own colors)', '3' => 'custom',
+            __('tallcms::console.make_theme.type_single'), '1' => 'single',
+            __('tallcms::console.make_theme.type_all'), '2' => 'all',
+            __('tallcms::console.make_theme.type_custom'), '3' => 'custom',
             default => 'single',
         };
 
@@ -146,26 +154,26 @@ class MakeTheme extends Command
 
         if ($mode === 'custom') {
             $this->newLine();
-            $this->info('Custom daisyUI theme selected.');
-            $this->line('A starter color palette will be generated in your CSS file.');
-            $this->line('Customize colors using @plugin "daisyui/theme" { ... }');
+            $this->info(__('tallcms::console.make_theme.custom_selected'));
+            $this->line(__('tallcms::console.make_theme.custom_palette_hint'));
+            $this->line(__('tallcms::console.make_theme.custom_css_hint'));
             $customColors = [
                 'name' => Str::slug($name),
             ];
         } elseif ($mode === 'single') {
             $this->newLine();
-            $this->line('Popular presets: light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, dracula, nord');
+            $this->line(__('tallcms::console.make_theme.popular_presets'));
             $preset = $this->askWithValidation(
-                'Which daisyUI preset?',
+                __('tallcms::console.make_theme.ask_preset'),
                 'light',
                 fn ($value) => $this->validatePreset($value)
             );
 
             // Dark mode option
-            $wantsDark = $this->confirm('Enable automatic dark mode?', false);
+            $wantsDark = $this->confirm(__('tallcms::console.make_theme.ask_dark_mode'), false);
             if ($wantsDark) {
                 $prefersDark = $this->askWithValidation(
-                    'Which preset for dark mode?',
+                    __('tallcms::console.make_theme.ask_dark_preset'),
                     'dark',
                     fn ($value) => $this->validatePreset($value)
                 );
@@ -178,9 +186,9 @@ class MakeTheme extends Command
 
         // Optional header controls — drives supports.* in theme.json and component scaffolding.
         $this->newLine();
-        $this->line('Header controls (declare which optional UI controls this theme renders):');
-        $includeSearch = $this->confirm('Include a search box in the header?', false);
-        $includeLanguageSwitcher = $this->confirm('Include a language dropdown in the header?', false);
+        $this->line(__('tallcms::console.make_theme.header_controls_heading'));
+        $includeSearch = $this->confirm(__('tallcms::console.make_theme.ask_include_search'), false);
+        $includeLanguageSwitcher = $this->confirm(__('tallcms::console.make_theme.ask_include_language'), false);
 
         return [
             'name' => $name,
@@ -239,8 +247,8 @@ class MakeTheme extends Command
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'description' => $this->option('description') ?: 'A modern TallCMS theme',
-            'author' => $this->option('author') ?: 'Theme Developer',
+            'description' => $this->option('description') ?: __('tallcms::console.make_theme.default_description'),
+            'author' => $this->option('author') ?: __('tallcms::console.make_theme.default_author'),
             'version' => $this->option('theme-version') ?: '1.0.0',
             'mode' => $mode,
             'preset' => $preset,
@@ -649,6 +657,8 @@ GITIGNORE;
 
         $themeSwitcher = ltrim(implode("\n\n", $navbarEndParts));
 
+        $themeDisplayName = addslashes($themeInfo['name']);
+
         return <<<BLADE
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="{{ daisyui_default_preset() }}" data-default-theme="{{ daisyui_default_preset() }}">
@@ -762,13 +772,13 @@ GITIGNORE;
     <footer class="footer footer-center bg-base-200 text-base-content p-10">
         <aside>
             <p class="font-bold text-lg">{{ \$footerSiteName }}</p>
-            <p>{$studlyName} theme for TallCMS</p>
+            <p>{{ __('tallcms::frontend.theme_for_tallcms', ['name' => '{$themeDisplayName}']) }}</p>
         </aside>
         <nav>
             <x-menu location="footer" style="footer" />
         </nav>
         <aside>
-            <p>&copy; {{ date('Y') }} {{ \$footerSiteName }}. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ \$footerSiteName }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
             <x-tallcms::powered-by />
         </aside>
     </footer>
@@ -791,7 +801,7 @@ BLADE;
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
         </svg>
-        <span class="hidden sm:inline">Theme</span>
+        <span class="hidden sm:inline">{{ __('tallcms::frontend.theme') }}</span>
         <svg class="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
         </svg>
@@ -827,7 +837,7 @@ BLADE;
             type="search"
             name="q"
             value="{{ request('q') }}"
-            placeholder="{{ __('Search') }}"
+            placeholder="{{ __('tallcms::frontend.search_placeholder') }}"
             class="grow"
         />
     </label>
@@ -851,7 +861,7 @@ BLADE;
 
 @if(count($locales) >= 2)
     <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1" aria-label="{{ __('Change language') }}">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1" aria-label="{{ __('tallcms::frontend.select_language') }}">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3.6 9h16.8M3.6 15h16.8M11.5 3a16 16 0 010 18M12.5 3a16 16 0 010 18"/>
