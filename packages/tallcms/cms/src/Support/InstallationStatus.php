@@ -34,17 +34,14 @@ class InstallationStatus
             }
         }
 
-        // Standalone mode: full installation checks
-        // Installation is incomplete if:
+        // Standalone mode: installation is incomplete if:
         // 1. No installer lock file exists
-        // 2. Database tables don't exist
-        // 3. .env doesn't exist
+        // 2. Database is not configured / settings table missing
+        //
+        // Do not require base_path('.env'): Docker/K8s inject env via the
+        // process environment. A missing file does not mean install is incomplete.
 
         if (! File::exists(base_path('installer.lock')) && ! File::exists(storage_path('installer.lock'))) {
-            return true;
-        }
-
-        if (! File::exists(base_path('.env'))) {
             return true;
         }
 

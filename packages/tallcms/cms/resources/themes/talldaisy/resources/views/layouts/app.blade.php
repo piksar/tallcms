@@ -82,15 +82,15 @@
     </style>
     <x-tallcms::code-injection zone="head" />
 </head>
-<body class="min-h-screen bg-base-100 text-base-content">
+<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <x-tallcms::code-injection zone="body_start" />
     <!-- Navigation Progress Bar -->
     <div class="navigation-progress" id="nav-progress"></div>
     @if(supports_theme_controller())
     <!-- Theme Drawer Wrapper -->
-    <div class="drawer drawer-end">
+    <div class="drawer drawer-end min-h-screen">
         <input id="theme-drawer" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content">
+        <div class="drawer-content flex flex-col min-h-screen">
     @endif
             <!-- Navbar -->
             @if(function_exists('mega_menu_header_active') && mega_menu_header_active('header'))
@@ -162,7 +162,7 @@
             @endif
 
             <!-- Main Content -->
-            <main>
+            <main class="flex-1">
                 {{ $slot ?? '' }}
                 @yield('content')
             </main>
