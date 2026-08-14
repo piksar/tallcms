@@ -612,13 +612,13 @@
                 <x-heroicon-o-paint-brush class="w-6 h-6 text-gray-400 dark:text-gray-500" />
             </div>
             @if($this->themes->isEmpty())
-                <h3 class="text-base font-semibold text-gray-950 dark:text-white">No themes found</h3>
+                <h3 class="text-base font-semibold text-gray-950 dark:text-white">{{ __('tallcms::ui.no_themes_found') }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Add themes to the themes/ directory or generate one with <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">php artisan make:theme</code>
+                    {{ __('tallcms::ui.no_themes_found_hint', ['command' => 'php artisan make:theme']) }}
                 </p>
             @else
-                <h3 class="text-base font-semibold text-gray-950 dark:text-white">No themes match your search</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Try adjusting your search or filters.</p>
+                <h3 class="text-base font-semibold text-gray-950 dark:text-white">{{ __('tallcms::ui.no_themes_match_search') }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('tallcms::ui.try_adjusting_search_or_filters') }}</p>
                 <div class="flex gap-2 mt-3">
                     @if($search)
                         <x-filament::button
@@ -626,7 +626,7 @@
                             color="gray"
                             size="sm"
                         >
-                            Clear Search
+                            {{ __('tallcms::ui.clear_search') }}
                         </x-filament::button>
                     @endif
                     @if($filterDarkMode || $filterThemeController || $filterResponsive || $filterAnimations)
@@ -635,7 +635,7 @@
                             color="gray"
                             size="sm"
                         >
-                            Clear Filters
+                            {{ __('tallcms::ui.clear_filters') }}
                         </x-filament::button>
                     @endif
                     @if($search || $filterDarkMode || $filterThemeController || $filterResponsive || $filterAnimations || $sort !== 'active')
@@ -645,7 +645,7 @@
                             size="sm"
                             outlined
                         >
-                            Reset All
+                            {{ __('tallcms::ui.reset_all') }}
                         </x-filament::button>
                     @endif
                 </div>
@@ -895,7 +895,7 @@
                             <span class="text-warning-700 dark:text-warning-300">License Required</span>
                         </x-slot>
                         <p class="text-sm text-warning-600 dark:text-warning-400">
-                            This theme requires a license for updates and premium features.
+                            {{ __('tallcms::ui.theme_requires_license') }}
                         </p>
                     </x-filament::section>
                 @endif

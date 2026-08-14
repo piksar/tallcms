@@ -725,7 +725,7 @@ class ThemeManager extends Page implements HasForms
 
         Notification::make()
             ->title(__('tallcms::ui.t_default_preset_updated'))
-            ->body("Default preset changed to '".ucfirst($preset)."'.")
+            ->body(__('tallcms::ui.n_default_preset_changed', ['preset' => ucfirst($preset)]))
             ->success()
             ->send();
 

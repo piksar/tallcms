@@ -376,6 +376,20 @@ TallCmsPlugin::make()->pageLabel('Articles', 'Article');
 
 Leave config values `null` to use package translations for the current `APP_LOCALE`.
 
+### Upgrading from older package versions
+
+If you previously ran `vendor:publish` for TallCMS, your app's `config/tallcms.php` may still contain **literal English** defaults for `labels` and `navigation.groups` (e.g. `'categories' => ['singular' => 'Category', …]`, `'platform' => 'Sites'`).
+
+`tallcms_label()` / `tallcms_nav_group()` treat any non-empty string as an intentional white-label override. That means a published config with stock English values will **keep the admin UI in English** even when `APP_LOCALE=de`.
+
+**Fix:** set those keys to `null` (or remove them) in your published config so package translations apply. Keep only the labels you intentionally renamed.
+
+Check with:
+
+```bash
+php artisan tallcms:diagnose
+```
+
 **Do not** resolve labels with `config('tallcms.navigation.groups.*', 'English')` or `config('tallcms.labels.*', 'English')`. Laravel does not apply that default when the value is explicitly `null`, and Filament requires a real string for navigation group labels. Always use `tallcms_nav_group()` / `tallcms_label()`.
 
 Package translations are registered during the service provider **register** phase (not only `boot`) so Filament plugins and nested providers can resolve `tallcms::` keys without poisoning Laravel’s translator cache with empty groups.

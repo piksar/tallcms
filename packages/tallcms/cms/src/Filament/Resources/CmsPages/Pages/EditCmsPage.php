@@ -227,8 +227,10 @@ class EditCmsPage extends EditRecord
                 Notification::make()
                     ->title(__('tallcms::ui.t_page_approved'))
                     ->body($this->record->isScheduled()
-                        ? 'Page approved and scheduled for '.$this->record->published_at->format('M j, Y g:i A')
-                        : 'Page approved and published.')
+                        ? __('tallcms::ui.n_page_approved_scheduled', [
+                            'date' => $this->record->published_at->format('M j, Y g:i A'),
+                        ])
+                        : __('tallcms::ui.n_page_approved_published'))
                     ->success()
                     ->send();
 
@@ -276,10 +278,10 @@ class EditCmsPage extends EditRecord
                 Radio::make('expiry')
                     ->label(__('tallcms::fields.link_expires_in'))
                     ->options([
-                        '1' => '1 hour',
-                        '24' => '24 hours',
-                        '168' => '7 days',
-                        '720' => '30 days',
+                        '1' => __('tallcms::ui.expiry_1_hour'),
+                        '24' => __('tallcms::ui.expiry_24_hours'),
+                        '168' => __('tallcms::ui.expiry_7_days'),
+                        '720' => __('tallcms::ui.expiry_30_days'),
                     ])
                     ->default('24')
                     ->required(),
@@ -317,7 +319,9 @@ class EditCmsPage extends EditRecord
             ->visible(fn () => $this->record->hasActivePreviewTokens() && auth()->user()?->can('GeneratePreviewLink:CmsPage'))
             ->requiresConfirmation()
             ->modalHeading(__('tallcms::ui.t_revoke_preview_links'))
-            ->modalDescription(fn () => "This will invalidate all {$this->record->getActivePreviewTokenCount()} active preview link(s). This action cannot be undone.")
+            ->modalDescription(fn () => __('tallcms::ui.n_revoke_preview_links_confirm', [
+                'count' => $this->record->getActivePreviewTokenCount(),
+            ]))
             ->modalSubmitActionLabel(__('tallcms::ui.t_revoke_all'))
             ->action(function () {
                 $count = $this->record->revokeAllPreviewTokens();

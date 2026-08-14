@@ -174,7 +174,7 @@ class {{CLASS_NAME}} extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription(__('tallcms::ui.t_configure_the_title_name_block'))
+            ->modalDescription(__('tallcms::ui.t_configure_the_title_name_block', ['name' => '{{TITLE_NAME}}']))
             ->schema([
                 TextInput::make('title')->label(__('tallcms::fields.title'))
                     ->required()

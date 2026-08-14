@@ -3,12 +3,16 @@
 declare(strict_types=1);
 
 return [
-    'dashboard_scope' => [
-        'heading' => 'Dashboard scope',
-        'description' => "Pick which site's data to show in the widgets below. This is separate from the site switcher in the navbar — that one takes you into a site's edit page.",
-        'all_sites' => 'All Sites',
+    'all_sites' => 'All Sites',
+    'content_health' => [
+        'heading' => 'Content Health',
+        'heading_site' => 'Content Health — :site',
+        'published_posts' => 'Published Posts',
+        'needs_review' => 'Needs Review',
+        'needs_review_desc' => 'Not reviewed in 6+ months',
+        'missing_meta' => 'Missing Meta',
+        'missing_image_also' => ':count also missing image',
     ],
-
     'content_overview' => [
         'heading' => 'Content Overview',
         'heading_site' => 'Content Overview — :site',
@@ -20,17 +24,11 @@ return [
         'avg_per_menu' => ':count avg per menu',
         'no_menus' => 'No menus',
     ],
-
-    'content_health' => [
-        'heading' => 'Content Health',
-        'heading_site' => 'Content Health — :site',
-        'published_posts' => 'Published Posts',
-        'needs_review' => 'Needs Review',
-        'needs_review_desc' => 'Not reviewed in 6+ months',
-        'missing_meta' => 'Missing Meta',
-        'missing_image_also' => ':count also missing image',
+    'dashboard_scope' => [
+        'heading' => 'Dashboard scope',
+        'description' => 'Pick which site\'s data to show in the widgets below. This is separate from the site switcher in the navbar — that one takes you into a site\'s edit page.',
+        'all_sites' => 'All Sites',
     ],
-
     'plugin_updates' => [
         'heading' => 'Plugin Updates Available',
         'refresh' => 'Refresh',
@@ -43,6 +41,4 @@ return [
         'check_complete' => 'Update check complete',
         'updates_available' => ':count update(s) available',
     ],
-
-    'all_sites' => 'All Sites',
 ];

@@ -91,7 +91,7 @@ class CmsCategoryForm
                     ->nullable(),
 
                 ColorPicker::make('color')
-                    ->label(tallcms_label('categories', 'singular').' Color')
+                    ->label(__('tallcms::fields.category_color'))
                     ->nullable()
                     ->helperText(__('tallcms::ui.t_optional_color_for_visual_organization')),
 

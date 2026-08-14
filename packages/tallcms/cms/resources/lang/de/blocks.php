@@ -11,28 +11,6 @@ return [
         'forms' => 'Formulare',
         'other' => 'Sonstiges',
     ],
-
-    'labels' => [
-        'call_to_action' => 'Call-to-Action',
-        'contact_form' => 'Kontaktformular',
-        'content_block' => 'Inhalt',
-        'divider' => 'Trenner',
-        'document_list' => 'Dokumentenliste',
-        'faq' => 'FAQ',
-        'features' => 'Funktionen',
-        'hero' => 'Hero',
-        'how_to' => 'Anleitung',
-        'image_gallery' => 'Mediengalerie',
-        'logos' => 'Logos',
-        'parallax' => 'Parallax-Bereich',
-        'posts' => 'Beiträge',
-        'pricing' => 'Preistabelle',
-        'stats' => 'Statistiken',
-        'team' => 'Team',
-        'testimonials' => 'Testimonials',
-        'timeline' => 'Zeitachse',
-    ],
-
     'descriptions' => [
         'call_to_action' => 'Werbebereich mit Aktions-Buttons',
         'contact_form' => 'Kontaktformular mit anpassbaren Feldern',
@@ -53,34 +31,26 @@ return [
         'testimonials' => 'Kundenstimmen und Bewertungen',
         'timeline' => 'Chronologische Ereignisse oder Meilensteine',
     ],
-
-    'templates' => [
-        'default' => [
-            'label' => 'Standard',
-            'description' => 'Standard-Seitenlayout',
-        ],
-        'full-width' => [
-            'label' => 'Volle Breite',
-            'description' => 'Vollbreites Layout ohne Begrenzung',
-        ],
-        'sidebar-left' => [
-            'label' => 'Sidebar (links)',
-            'description' => 'Inhalt mit konfigurierbarer linker Sidebar',
-        ],
-        'sidebar-right' => [
-            'label' => 'Sidebar (rechts)',
-            'description' => 'Inhalt mit konfigurierbarer rechter Sidebar',
-        ],
-        'documentation' => [
-            'label' => 'Dokumentation',
-            'description' => 'Dokumentationslayout mit Inhaltsverzeichnis-Sidebar',
-        ],
-        'landing' => [
-            'label' => 'Landingpage',
-            'description' => 'Volle Breite mit minimalem Header/Footer',
-        ],
+    'labels' => [
+        'call_to_action' => 'Call-to-Action',
+        'contact_form' => 'Kontaktformular',
+        'content_block' => 'Inhalt',
+        'divider' => 'Trenner',
+        'document_list' => 'Dokumentenliste',
+        'faq' => 'FAQ',
+        'features' => 'Funktionen',
+        'hero' => 'Hero',
+        'how_to' => 'Anleitung',
+        'image_gallery' => 'Mediengalerie',
+        'logos' => 'Logos',
+        'parallax' => 'Parallax-Bereich',
+        'posts' => 'Beiträge',
+        'pricing' => 'Preistabelle',
+        'stats' => 'Statistiken',
+        'team' => 'Team',
+        'testimonials' => 'Testimonials',
+        'timeline' => 'Zeitachse',
     ],
-
     'options' => [
         'primary' => 'Primär',
         'secondary' => 'Sekundär',
@@ -132,5 +102,31 @@ return [
         'layout' => 'Layout',
         'text_alignment' => 'Textausrichtung',
         'section_padding' => 'Abschnittsabstand',
+    ],
+    'templates' => [
+        'default' => [
+            'label' => 'Standard',
+            'description' => 'Standard-Seitenlayout',
+        ],
+        'full-width' => [
+            'label' => 'Volle Breite',
+            'description' => 'Vollbreites Layout ohne Begrenzung',
+        ],
+        'sidebar-left' => [
+            'label' => 'Sidebar (links)',
+            'description' => 'Inhalt mit konfigurierbarer linker Sidebar',
+        ],
+        'sidebar-right' => [
+            'label' => 'Sidebar (rechts)',
+            'description' => 'Inhalt mit konfigurierbarer rechter Sidebar',
+        ],
+        'documentation' => [
+            'label' => 'Dokumentation',
+            'description' => 'Dokumentationslayout mit Inhaltsverzeichnis-Sidebar',
+        ],
+        'landing' => [
+            'label' => 'Landingpage',
+            'description' => 'Volle Breite mit minimalem Header/Footer',
+        ],
     ],
 ];

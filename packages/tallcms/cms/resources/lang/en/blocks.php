@@ -11,28 +11,6 @@ return [
         'forms' => 'Forms',
         'other' => 'Other',
     ],
-
-    'labels' => [
-        'call_to_action' => 'Call to action',
-        'contact_form' => 'Contact Form',
-        'content_block' => 'Content',
-        'divider' => 'Divider',
-        'document_list' => 'Document List',
-        'faq' => 'FAQ',
-        'features' => 'Features',
-        'hero' => 'Hero',
-        'how_to' => 'How To',
-        'image_gallery' => 'Media Gallery',
-        'logos' => 'Logos',
-        'parallax' => 'Parallax Section',
-        'posts' => 'Posts',
-        'pricing' => 'Pricing Block',
-        'stats' => 'Stats',
-        'team' => 'Team',
-        'testimonials' => 'Testimonials',
-        'timeline' => 'Timeline',
-    ],
-
     'descriptions' => [
         'call_to_action' => 'Promotional section with action buttons',
         'contact_form' => 'Contact form with customizable fields',
@@ -53,34 +31,26 @@ return [
         'testimonials' => 'Customer testimonials and reviews',
         'timeline' => 'Chronological events or milestones',
     ],
-
-    'templates' => [
-        'default' => [
-            'label' => 'Default',
-            'description' => 'Standard page layout',
-        ],
-        'full-width' => [
-            'label' => 'Full Width',
-            'description' => 'Full-width layout without constraints',
-        ],
-        'sidebar-left' => [
-            'label' => 'Sidebar (Left)',
-            'description' => 'Content with configurable left sidebar',
-        ],
-        'sidebar-right' => [
-            'label' => 'Sidebar (Right)',
-            'description' => 'Content with configurable right sidebar',
-        ],
-        'documentation' => [
-            'label' => 'Documentation',
-            'description' => 'Documentation layout with TOC sidebar',
-        ],
-        'landing' => [
-            'label' => 'Landing Page',
-            'description' => 'Full-width with minimal header/footer',
-        ],
+    'labels' => [
+        'call_to_action' => 'Call to action',
+        'contact_form' => 'Contact Form',
+        'content_block' => 'Content',
+        'divider' => 'Divider',
+        'document_list' => 'Document List',
+        'faq' => 'FAQ',
+        'features' => 'Features',
+        'hero' => 'Hero',
+        'how_to' => 'How To',
+        'image_gallery' => 'Media Gallery',
+        'logos' => 'Logos',
+        'parallax' => 'Parallax Section',
+        'posts' => 'Posts',
+        'pricing' => 'Pricing Block',
+        'stats' => 'Stats',
+        'team' => 'Team',
+        'testimonials' => 'Testimonials',
+        'timeline' => 'Timeline',
     ],
-
     'options' => [
         'primary' => 'Primary',
         'secondary' => 'Secondary',
@@ -132,5 +102,31 @@ return [
         'layout' => 'Layout',
         'text_alignment' => 'Text Alignment',
         'section_padding' => 'Section Padding',
+    ],
+    'templates' => [
+        'default' => [
+            'label' => 'Default',
+            'description' => 'Standard page layout',
+        ],
+        'full-width' => [
+            'label' => 'Full Width',
+            'description' => 'Full-width layout without constraints',
+        ],
+        'sidebar-left' => [
+            'label' => 'Sidebar (Left)',
+            'description' => 'Content with configurable left sidebar',
+        ],
+        'sidebar-right' => [
+            'label' => 'Sidebar (Right)',
+            'description' => 'Content with configurable right sidebar',
+        ],
+        'documentation' => [
+            'label' => 'Documentation',
+            'description' => 'Documentation layout with TOC sidebar',
+        ],
+        'landing' => [
+            'label' => 'Landing Page',
+            'description' => 'Full-width with minimal header/footer',
+        ],
     ],
 ];

@@ -42,19 +42,19 @@
     @if($updateAvailable)
         {{-- Preflight Checks --}}
         <x-filament::section>
-            <x-slot name="heading">Pre-Update Checks</x-slot>
+            <x-slot name="heading">{{ __('tallcms::ui.pre_update_checks') }}</x-slot>
 
             <div class="space-y-3">
                 @foreach($preflightChecks as $check => $result)
                     <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-white/5 last:border-0">
                         <span class="text-sm text-gray-700 dark:text-gray-300">
                             {{ match($check) {
-                                'sodium' => 'Signature Verification',
-                                'public_key' => 'Public Key Configuration',
-                                'disk_space' => 'Disk Space',
-                                'lock' => 'Update Lock',
-                                'exec' => 'Background Execution',
-                                'queue' => 'Queue System',
+                                'sodium' => __('tallcms::ui.check_signature_verification'),
+                                'public_key' => __('tallcms::ui.check_public_key_configuration'),
+                                'disk_space' => __('tallcms::ui.check_disk_space'),
+                                'lock' => __('tallcms::ui.check_update_lock'),
+                                'exec' => __('tallcms::ui.check_background_execution'),
+                                'queue' => __('tallcms::ui.check_queue_system'),
                                 default => ucfirst(str_replace('_', ' ', $check))
                             } }}
                         </span>

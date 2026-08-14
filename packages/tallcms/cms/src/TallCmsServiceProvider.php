@@ -984,6 +984,7 @@ class TallCmsServiceProvider extends PackageServiceProvider
             Console\Commands\SeedPushsgTemplate::class,
             Console\Commands\SeedSpotlightTemplate::class,
             Console\Commands\ShieldSyncSiteOwner::class,
+            Console\Commands\TallCmsDiagnose::class,
             Console\Commands\TallCmsInstall::class,
             Console\Commands\TallCmsPostInstall::class,
             Console\Commands\TallCmsSetup::class,
