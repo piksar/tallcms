@@ -44,7 +44,7 @@ class TeamBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Team member profiles with photos';
+        return __('tallcms::blocks.descriptions.team');
     }
 
     public static function getKeywords(): array
@@ -73,49 +73,49 @@ class TeamBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Team';
+        return __('tallcms::blocks.labels.team');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Display team members with photos, roles, and social links')
-            ->modalHeading('Configure Team Block')
+            ->modalDescription(__('tallcms::ui.t_display_team_members_with_photos_roles_and_social_links'))
+            ->modalHeading(__('tallcms::ui.t_configure_team_block'))
             ->modalWidth('6xl')
             ->schema([
                 Tabs::make('Team Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-users')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Meet Our Team')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_meet_our_team'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Section Subheading')
-                                    ->placeholder('The talented people behind our success')
+                                    ->label(__('tallcms::fields.section_subheading'))
+                                    ->placeholder(__('tallcms::ui.t_the_talented_people_behind_our_success'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Repeater::make('members')
-                                    ->label('Team Members')
+                                    ->label(__('tallcms::fields.team_members'))
                                     ->schema([
                                         TextInput::make('name')
-                                            ->label('Name')
+                                            ->label(__('tallcms::fields.name'))
                                             ->required()
-                                            ->placeholder('Jane Smith')
+                                            ->placeholder(__('tallcms::ui.t_jane_smith'))
                                             ->maxLength(100),
 
                                         TextInput::make('role')
-                                            ->label('Role / Title')
+                                            ->label(__('tallcms::fields.role_title'))
                                             ->required()
-                                            ->placeholder('CEO & Founder')
+                                            ->placeholder(__('tallcms::ui.t_ceo_founder'))
                                             ->maxLength(150),
 
                                         FileUpload::make('photo')
-                                            ->label('Photo')
+                                            ->label(__('tallcms::fields.photo'))
                                             ->image()
                                             ->disk(\cms_media_disk())
                                             ->directory('team')
@@ -127,16 +127,16 @@ class TeamBlock extends RichContentCustomBlock
                                             ->imageResizeTargetHeight('400'),
 
                                         Textarea::make('bio')
-                                            ->label('Short Bio')
-                                            ->placeholder('A brief description about this team member...')
+                                            ->label(__('tallcms::fields.short_bio'))
+                                            ->placeholder(__('tallcms::ui.t_a_brief_description_about_this_team_member'))
                                             ->maxLength(500)
                                             ->rows(3),
 
                                         Repeater::make('social_links')
-                                            ->label('Social Links')
+                                            ->label(__('tallcms::fields.social_links'))
                                             ->schema([
                                                 Select::make('platform')
-                                                    ->label('Platform')
+                                                    ->label(__('tallcms::fields.platform'))
                                                     ->options([
                                                         'linkedin' => 'LinkedIn',
                                                         'twitter' => 'Twitter / X',
@@ -149,7 +149,7 @@ class TeamBlock extends RichContentCustomBlock
                                                     ->required(),
 
                                                 TextInput::make('url')
-                                                    ->label('URL')
+                                                    ->label(__('tallcms::fields.url'))
                                                     ->required()
                                                     ->placeholder('https://linkedin.com/in/username')
                                                     ->maxLength(500),
@@ -177,13 +177,13 @@ class TeamBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Grid Layout')
+                                Section::make(__('tallcms::ui.t_grid_layout'))
                                     ->schema([
                                         Select::make('columns')
-                                            ->label('Columns')
+                                            ->label(__('tallcms::fields.columns'))
                                             ->options([
                                                 '2' => '2 Columns',
                                                 '3' => '3 Columns',
@@ -192,12 +192,12 @@ class TeamBlock extends RichContentCustomBlock
                                             ->default('3'),
 
                                         Select::make('card_style')
-                                            ->label('Card Style')
+                                            ->label(__('tallcms::fields.card_style'))
                                             ->options(static::getTeamCardStyleOptions())
                                             ->default('card bg-base-200 shadow-lg'),
 
                                         Select::make('image_style')
-                                            ->label('Photo Style')
+                                            ->label(__('tallcms::fields.photo_style'))
                                             ->options([
                                                 'rounded-full' => 'Circle',
                                                 'rounded-xl' => 'Rounded Square',
@@ -206,42 +206,42 @@ class TeamBlock extends RichContentCustomBlock
                                             ->default('rounded-full'),
 
                                         Select::make('text_alignment')
-                                            ->label('Text Alignment')
+                                            ->label(__('tallcms::fields.text_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('Content Display')
+                                Section::make(__('tallcms::ui.t_content_display'))
                                     ->schema([
                                         Toggle::make('show_bio')
-                                            ->label('Show Bio')
-                                            ->helperText('Display short biography text')
+                                            ->label(__('tallcms::fields.show_bio'))
+                                            ->helperText(__('tallcms::ui.t_display_short_biography_text'))
                                             ->default(true),
 
                                         Toggle::make('show_social')
-                                            ->label('Show Social Links')
+                                            ->label(__('tallcms::fields.show_social_links'))
                                             ->default(true),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(3),

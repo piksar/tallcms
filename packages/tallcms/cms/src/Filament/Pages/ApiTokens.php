@@ -21,9 +21,12 @@ class ApiTokens extends Page implements HasForms
     use HasPageShield;
     use InteractsWithForms;
 
-    protected static ?string $title = 'API Tokens';
-
     protected string $view = 'tallcms::filament.pages.api-tokens';
+
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.api_tokens.title');
+    }
 
     public ?string $newToken = null;
 
@@ -34,12 +37,12 @@ class ApiTokens extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return 'API Tokens';
+        return __('tallcms::pages.api_tokens.navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.system', 'System');
+        return tallcms_nav_group('system');
     }
 
     public static function getNavigationSort(): ?int
@@ -93,17 +96,17 @@ class ApiTokens extends Page implements HasForms
     public function createTokenAction(): Action
     {
         return Action::make('createToken')
-            ->label('Create Token')
+            ->label(__('tallcms::fields.create_token'))
             ->icon('heroicon-o-plus')
             ->color('primary')
             ->form([
                 TextInput::make('name')
-                    ->label('Token Name')
-                    ->placeholder('e.g., API Client, CI/CD, Mobile App')
+                    ->label(__('tallcms::fields.token_name'))
+                    ->placeholder(__('tallcms::ui.t_e_g_api_client_ci_cd_mobile_app'))
                     ->required()
                     ->maxLength(255),
                 CheckboxList::make('abilities')
-                    ->label('Permissions')
+                    ->label(__('tallcms::fields.permissions'))
                     ->options([
                         'pages:read' => 'Read Pages',
                         'pages:write' => 'Create/Update Pages',
@@ -122,7 +125,7 @@ class ApiTokens extends Page implements HasForms
                     ->columns(2)
                     ->required(),
                 TextInput::make('expires_in_days')
-                    ->label('Expires In (Days)')
+                    ->label(__('tallcms::fields.expires_in_days'))
                     ->numeric()
                     ->default(config('tallcms.api.token_expiry_days', 365))
                     ->minValue(1)
@@ -158,8 +161,8 @@ class ApiTokens extends Page implements HasForms
                 $this->dispatch('open-modal', id: 'token-created-modal');
 
                 Notification::make()
-                    ->title('Token created')
-                    ->body('Your new API token has been created. Copy it now - it won\'t be shown again!')
+                    ->title(__('tallcms::ui.t_token_created'))
+                    ->body(__('tallcms::ui.t_your_new_api_token_has_been_created_copy_it_now_it_won_t_be_shown_ag'))
                     ->success()
                     ->send();
             });
@@ -171,21 +174,21 @@ class ApiTokens extends Page implements HasForms
     public function revokeTokenAction(): Action
     {
         return Action::make('revokeToken')
-            ->label('Revoke')
+            ->label(__('tallcms::fields.revoke'))
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->requiresConfirmation()
-            ->modalHeading('Revoke Token')
-            ->modalDescription('Are you sure you want to revoke this token? Applications using this token will no longer be able to access the API.')
-            ->modalSubmitActionLabel('Yes, Revoke')
+            ->modalHeading(__('tallcms::ui.t_revoke_token'))
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_revoke_this_token_applications_using_this_t'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_revoke'))
             ->action(function (array $arguments) {
                 auth()->user()->tokens()->where('id', $arguments['id'])->delete();
 
                 unset($this->tokens);
 
                 Notification::make()
-                    ->title('Token revoked')
-                    ->body('The API token has been revoked.')
+                    ->title(__('tallcms::ui.t_token_revoked'))
+                    ->body(__('tallcms::ui.t_the_api_token_has_been_revoked'))
                     ->success()
                     ->send();
             });

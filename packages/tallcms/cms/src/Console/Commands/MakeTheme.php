@@ -2,10 +2,10 @@
 
 namespace TallCms\Cms\Console\Commands;
 
-use TallCms\Cms\Models\Theme;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use TallCms\Cms\Models\Theme;
 
 class MakeTheme extends Command
 {
@@ -218,7 +218,7 @@ class MakeTheme extends Command
             if (! $this->validatePreset($preset)) {
                 $this->error("Invalid preset: {$preset}");
                 $this->line('Valid presets: '.implode(', ', Theme::ALL_DAISYUI_PRESETS));
-                $this->line("Use --preset=custom for a custom Tailwind theme without daisyUI");
+                $this->line('Use --preset=custom for a custom Tailwind theme without daisyUI');
                 exit(1);
             }
 
@@ -361,7 +361,6 @@ class MakeTheme extends Command
         File::put("{$themePath}/theme.json", json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $this->line('Created: theme.json');
     }
-
 
     protected function createPackageJson(string $themePath, array $themeInfo): void
     {
@@ -697,7 +696,7 @@ GITIGNORE;
     <style>[x-cloak] { display: none !important; }</style>
     <x-tallcms::code-injection zone="head" />
 </head>
-<body class="min-h-screen bg-base-100 text-base-content">
+<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <x-tallcms::code-injection zone="body_start" />
     <!-- Header -->
     @if(function_exists('mega_menu_header_active') && mega_menu_header_active('header'))
@@ -753,7 +752,7 @@ GITIGNORE;
     @endif
 
     <!-- Main Content -->
-    <main>
+    <main class="flex-1">
         {{ \$slot ?? '' }}
         @yield('content')
     </main>

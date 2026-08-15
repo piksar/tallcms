@@ -66,17 +66,17 @@ class ContentHealthWidget extends BaseWidget
             ->count();
 
         return [
-            Stat::make('Published Posts', $publishedPosts)
+            Stat::make(__('tallcms::widgets.content_health.published_posts'), $publishedPosts)
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('success'),
 
-            Stat::make('Needs Review', $needsReview)
-                ->description('Not reviewed in 6+ months')
+            Stat::make(__('tallcms::widgets.content_health.needs_review'), $needsReview)
+                ->description(__('tallcms::widgets.content_health.needs_review_desc'))
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color($needsReview > 0 ? 'danger' : 'success'),
 
-            Stat::make('Missing Meta', $missingMeta)
-                ->description("{$missingImage} also missing image")
+            Stat::make(__('tallcms::widgets.content_health.missing_meta'), $missingMeta)
+                ->description(__('tallcms::widgets.content_health.missing_image_also', ['count' => $missingImage]))
                 ->descriptionIcon('heroicon-m-magnifying-glass')
                 ->color($missingMeta > 0 ? 'warning' : 'success'),
         ];
@@ -92,7 +92,9 @@ class ContentHealthWidget extends BaseWidget
         $siteId = $this->getMultisiteSiteId();
         $siteName = $this->getMultisiteName($siteId);
 
-        return $siteName ? "Content Health — {$siteName}" : 'Content Health';
+        return $siteName
+            ? __('tallcms::widgets.content_health.heading_site', ['site' => $siteName])
+            : __('tallcms::widgets.content_health.heading');
     }
-
 }
+

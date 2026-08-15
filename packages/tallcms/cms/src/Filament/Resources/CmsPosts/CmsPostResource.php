@@ -63,22 +63,22 @@ class CmsPostResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.posts.singular', 'Post');
+        return tallcms_label('posts', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.posts.plural', 'Posts');
+        return tallcms_label('posts', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.posts.navigation', 'Posts');
+        return tallcms_label('posts', 'navigation');
     }
 
     public static function getNavigationSort(): ?int
@@ -120,15 +120,17 @@ class CmsPostResource extends Resource
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
-        return $record->title ?? __('Untitled');
+        return $record->title ?? __('tallcms::ui.untitled');
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
+        $status = \TallCms\Cms\Enums\ContentStatus::tryFrom($record->status ?? 'draft');
+
         return [
-            __('Type') => static::getModelLabel(),
-            __('Status') => __(ucfirst($record->status ?? 'draft')),
-            __('Author') => $record->author?->name ?? __('Unknown'),
+            __('tallcms::fields.type') => static::getModelLabel(),
+            __('tallcms::fields.status') => $status?->getLabel() ?? ($record->status ?? __('tallcms::fields.status_draft')),
+            __('tallcms::fields.author') => $record->author?->name ?? __('tallcms::ui.unknown'),
         ];
     }
 

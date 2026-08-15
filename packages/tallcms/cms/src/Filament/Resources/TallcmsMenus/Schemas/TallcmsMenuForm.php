@@ -15,14 +15,14 @@ class TallcmsMenuForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Menu Name')
+                    ->label(__('tallcms::fields.menu_name'))
                     ->required()
                     ->maxLength(255)
-                    ->placeholder('Header Menu')
-                    ->helperText('Internal name for this menu'),
+                    ->placeholder(__('tallcms::ui.t_header_menu'))
+                    ->helperText(__('tallcms::ui.t_internal_name_for_this_menu')),
 
                 Select::make('location')
-                    ->label('Menu Location')
+                    ->label(__('tallcms::fields.menu_location'))
                     ->options([
                         'header' => 'Header',
                         'footer' => 'Footer',
@@ -31,20 +31,20 @@ class TallcmsMenuForm
                     ])
                     ->required()
                     ->searchable()
-                    ->helperText('Where this menu will appear on the site'),
+                    ->helperText(__('tallcms::ui.t_where_this_menu_will_appear_on_the_site')),
 
                 Textarea::make('description')
-                    ->label('Description')
+                    ->label(__('tallcms::fields.description'))
                     ->maxLength(500)
                     ->rows(3)
-                    ->placeholder('Brief description of this menu')
-                    ->helperText('Optional description for administrative purposes')
+                    ->placeholder(__('tallcms::ui.t_brief_description_of_this_menu'))
+                    ->helperText(__('tallcms::ui.t_optional_description_for_administrative_purposes'))
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
-                    ->label('Active')
+                    ->label(__('tallcms::fields.active'))
                     ->default(true)
-                    ->helperText('Enable or disable this menu'),
+                    ->helperText(__('tallcms::ui.t_enable_or_disable_this_menu')),
             ]);
     }
 }

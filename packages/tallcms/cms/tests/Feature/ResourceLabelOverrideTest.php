@@ -66,17 +66,33 @@ class ResourceLabelOverrideTest extends TestCase
 
     public function test_defaults_apply_when_no_override_is_configured(): void
     {
-        // Restore config to known defaults for a known resource and
-        // assert the resource honors them (proves the fallback branch).
+        // Null overrides fall through to package translations (APP_LOCALE).
         config(['tallcms.labels.categories' => [
-            'singular' => 'Category',
-            'plural' => 'Categories',
-            'navigation' => 'Categories',
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
         ]]);
+
+        app()->setLocale('en');
 
         $this->assertSame('Category', CmsCategoryResource::getModelLabel());
         $this->assertSame('Categories', CmsCategoryResource::getPluralModelLabel());
         $this->assertSame('Categories', CmsCategoryResource::getNavigationLabel());
+    }
+
+    public function test_defaults_follow_app_locale_when_no_override_is_configured(): void
+    {
+        config(['tallcms.labels.categories' => [
+            'singular' => null,
+            'plural' => null,
+            'navigation' => null,
+        ]]);
+
+        app()->setLocale('de');
+
+        $this->assertSame('Kategorie', CmsCategoryResource::getModelLabel());
+        $this->assertSame('Kategorien', CmsCategoryResource::getPluralModelLabel());
+        $this->assertSame('Kategorien', CmsCategoryResource::getNavigationLabel());
     }
 
     public function test_fluent_api_only_overwrites_plural_when_singular_and_navigation_are_omitted(): void
@@ -151,7 +167,7 @@ class ResourceLabelOverrideTest extends TestCase
 
         $details = CmsPostResource::getGlobalSearchResultDetails($post);
 
-        $this->assertSame('Article', $details[__('Type')],
+        $this->assertSame('Article', $details[__('tallcms::fields.type')],
             'Global search "Type" metadata must reflect the renamed label, '.
             'not a hardcoded "Post" string.');
     }
@@ -165,7 +181,7 @@ class ResourceLabelOverrideTest extends TestCase
 
         $details = CmsPageResource::getGlobalSearchResultDetails($page);
 
-        $this->assertSame('Listing', $details[__('Type')],
+        $this->assertSame('Listing', $details[__('tallcms::fields.type')],
             'Global search "Type" metadata must reflect the renamed label, '.
             'not a hardcoded "Page" string.');
     }

@@ -26,17 +26,17 @@ class TallcmsMenuResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.menus.navigation', 'Menus');
+        return tallcms_label('menus', 'navigation');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.menus.singular', 'Menu');
+        return tallcms_label('menus', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.menus.plural', 'Menus');
+        return tallcms_label('menus', 'plural');
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -52,7 +52,7 @@ class TallcmsMenuResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getNavigationSort(): ?int

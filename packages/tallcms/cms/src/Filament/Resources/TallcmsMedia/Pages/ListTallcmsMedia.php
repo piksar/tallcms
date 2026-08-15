@@ -22,24 +22,24 @@ class ListTallcmsMedia extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All Media')
+            'all' => Tab::make(__('tallcms::ui.t_all_media'))
                 ->badge(static::getResource()::getEloquentQuery()->count())
                 ->badgeColor('gray'),
 
-            'unassigned' => Tab::make('Unassigned')
+            'unassigned' => Tab::make(__('tallcms::ui.t_unassigned'))
                 ->badge(static::getResource()::getEloquentQuery()->doesntHave('collections')->count())
                 ->badgeColor('warning')
                 ->modifyQueryUsing(fn (Builder $query) => $query->doesntHave('collections')),
 
-            'images' => Tab::make('Images')
+            'images' => Tab::make(__('tallcms::fields.images'))
                 ->icon('heroicon-o-photo')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('mime_type', 'like', 'image/%')),
 
-            'videos' => Tab::make('Videos')
+            'videos' => Tab::make(__('tallcms::ui.t_videos'))
                 ->icon('heroicon-o-video-camera')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('mime_type', 'like', 'video/%')),
 
-            'documents' => Tab::make('Documents')
+            'documents' => Tab::make(__('tallcms::ui.t_documents'))
                 ->icon('heroicon-o-document')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('mime_type', 'like', 'application/%')),
         ];

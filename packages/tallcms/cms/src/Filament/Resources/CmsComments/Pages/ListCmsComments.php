@@ -21,16 +21,16 @@ class ListCmsComments extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All'),
-            'pending' => Tab::make('Pending')
+            'all' => Tab::make(__('tallcms::ui.filter_all')),
+            'pending' => Tab::make(__('tallcms::ui.filter_pending'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))
                 ->badge(fn () => $this->getBadgeCount('pending'))
                 ->badgeColor('warning'),
-            'approved' => Tab::make('Approved')
+            'approved' => Tab::make(__('tallcms::ui.filter_approved'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'approved')),
-            'rejected' => Tab::make('Rejected')
+            'rejected' => Tab::make(__('tallcms::ui.filter_rejected'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'rejected')),
-            'spam' => Tab::make('Spam')
+            'spam' => Tab::make(__('tallcms::ui.filter_spam'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'spam')),
         ];
     }

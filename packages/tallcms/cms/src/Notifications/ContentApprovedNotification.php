@@ -76,7 +76,10 @@ class ContentApprovedNotification extends Notification
         return FilamentNotification::make()
             ->success()
             ->icon('heroicon-o-check-circle')
-            ->title("{$contentType} Approved: {$this->content->title}")
+            ->title(__('tallcms::ui.n_content_approved', [
+                'type' => $contentType,
+                'title' => $this->content->title,
+            ]))
             ->body($body)
             ->actions([
                 FilamentAction::make('view')

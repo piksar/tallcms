@@ -18,26 +18,26 @@ class TallcmsMenusTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('name')->label(__('tallcms::fields.name'))
                     ->searchable(),
-                TextColumn::make('location')
+                TextColumn::make('location')->label(__('tallcms::fields.location'))
                     ->searchable()
                     ->badge()
                     ->color('gray'),
                 TextColumn::make('items_count')
-                    ->label('Menu Items')
+                    ->label(__('tallcms::fields.menu_items'))
                     ->state(fn ($record) => $record->allItems()->count())
                     ->badge()
                     ->color('primary')
                     ->formatStateUsing(fn ($state) => $state.' items'),
 
-                IconColumn::make('is_active')
+                IconColumn::make('is_active')->label(__('tallcms::fields.active'))
                     ->boolean(),
-                TextColumn::make('created_at')
+                TextColumn::make('created_at')->label(__('tallcms::fields.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+                TextColumn::make('updated_at')->label(__('tallcms::fields.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -49,14 +49,14 @@ class TallcmsMenusTable
             ])
             ->recordActions([
                 Action::make('manage_items')
-                    ->label('Manage Items')
+                    ->label(__('tallcms::fields.manage_items'))
                     ->icon('heroicon-o-bars-3')
                     ->color('primary')
                     ->url(fn ($record): string => MenuItemsManager::getUrl(['activeTab' => $record->id]))
                     ->openUrlInNewTab(false),
 
                 Action::make('preview')
-                    ->label('Preview')
+                    ->label(__('tallcms::fields.preview'))
                     ->icon('heroicon-o-eye')
                     ->color('gray')
                     ->modalHeading(fn ($record) => 'Preview: '.$record->name)
@@ -65,7 +65,7 @@ class TallcmsMenusTable
                     ->modalCancelActionLabel('Close'),
 
                 EditAction::make()
-                    ->label('Settings'),
+                    ->label(__('tallcms::fields.settings')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -97,7 +97,7 @@ class TallcmsMenusTable
 
         return [
             TextColumn::make('site_id')
-                ->label('Site')
+                ->label(__('tallcms::fields.site'))
                 ->formatStateUsing(fn ($state) => $sites[$state] ?? 'Unassigned')
                 ->badge()
                 ->color(fn ($state) => $state ? 'primary' : 'gray')

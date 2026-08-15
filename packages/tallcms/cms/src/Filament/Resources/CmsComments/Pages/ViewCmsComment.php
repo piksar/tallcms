@@ -27,10 +27,10 @@ class ViewCmsComment extends ViewRecord
     {
         return $schema
             ->schema([
-                Section::make('Comment')
+                Section::make(__('tallcms::ui.t_comment'))
                     ->schema([
                         TextEntry::make('content')
-                            ->label('Content')
+                            ->label(__('tallcms::fields.content'))
                             ->columnSpanFull(),
                         TextEntry::make('status')
                             ->badge()
@@ -42,53 +42,53 @@ class ViewCmsComment extends ViewRecord
                                 default => 'gray',
                             }),
                         TextEntry::make('created_at')
-                            ->label('Submitted')
+                            ->label(__('tallcms::fields.submitted'))
                             ->dateTime(),
                     ])
                     ->columns(2),
 
-                Section::make('Author')
+                Section::make(__('tallcms::fields.author'))
                     ->schema([
                         TextEntry::make('author_name_display')
-                            ->label('Name')
+                            ->label(__('tallcms::fields.name'))
                             ->state(fn ($record) => $record->getAuthorName() ?? 'Anonymous'),
                         TextEntry::make('author_email_display')
-                            ->label('Email')
+                            ->label(__('tallcms::fields.email'))
                             ->state(fn ($record) => $record->getAuthorEmail()),
                         TextEntry::make('user_type')
-                            ->label('Type')
+                            ->label(__('tallcms::fields.type'))
                             ->state(fn ($record) => $record->isGuest() ? 'Guest' : 'Registered User'),
                     ])
                     ->columns(3),
 
-                Section::make('Post')
+                Section::make(__('tallcms::fields.post'))
                     ->schema([
                         TextEntry::make('post.title')
-                            ->label('Post Title')
+                            ->label(__('tallcms::fields.post_title'))
                             ->url(fn ($record) => $record->post ? route(
                                 'filament.'.config('tallcms.filament.panel_id', 'admin').'.resources.cms-posts.edit',
                                 $record->post
                             ) : null),
                         TextEntry::make('parent_info')
-                            ->label('In Reply To')
+                            ->label(__('tallcms::fields.in_reply_to'))
                             ->state(fn ($record) => $record->parent ? 'Comment by '.($record->parent->getAuthorName() ?? 'Anonymous') : 'Top-level comment')
                             ->visible(fn ($record) => $record->parent_id !== null),
                     ])
                     ->columns(2),
 
-                Section::make('Moderation')
+                Section::make(__('tallcms::ui.t_moderation'))
                     ->schema([
                         TextEntry::make('approvedBy.name')
-                            ->label('Approved By')
+                            ->label(__('tallcms::fields.approved_by'))
                             ->visible(fn ($record) => $record->approved_by !== null),
                         TextEntry::make('approved_at')
-                            ->label('Approved At')
+                            ->label(__('tallcms::fields.approved_at'))
                             ->dateTime()
                             ->visible(fn ($record) => $record->approved_at !== null),
                         TextEntry::make('ip_address')
-                            ->label('IP Address'),
+                            ->label(__('tallcms::fields.ip_address')),
                         TextEntry::make('user_agent')
-                            ->label('User Agent')
+                            ->label(__('tallcms::fields.user_agent'))
                             ->limit(100),
                     ])
                     ->columns(2)
@@ -100,7 +100,7 @@ class ViewCmsComment extends ViewRecord
     {
         return [
             Action::make('approve')
-                ->label('Approve')
+                ->label(__('tallcms::fields.approve'))
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
                 ->visible(fn () => $this->record->isPending() && auth()->user()?->can('Approve:CmsComment'))
@@ -111,7 +111,7 @@ class ViewCmsComment extends ViewRecord
                 }),
 
             Action::make('reject')
-                ->label('Reject')
+                ->label(__('tallcms::fields.reject'))
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
                 ->visible(fn () => ($this->record->isPending() || $this->record->isApproved()) && auth()->user()?->can('Reject:CmsComment'))
@@ -122,7 +122,7 @@ class ViewCmsComment extends ViewRecord
                 }),
 
             Action::make('unreject')
-                ->label('Unreject')
+                ->label(__('tallcms::fields.unreject'))
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->color('warning')
                 ->visible(fn () => $this->record->isRejected() && auth()->user()?->can('Reject:CmsComment'))
@@ -133,7 +133,7 @@ class ViewCmsComment extends ViewRecord
                 }),
 
             Action::make('mark_spam')
-                ->label('Mark as Spam')
+                ->label(__('tallcms::fields.mark_as_spam'))
                 ->icon('heroicon-o-shield-exclamation')
                 ->color('gray')
                 ->visible(fn () => ! $this->record->isSpam() && auth()->user()?->can('MarkAsSpam:CmsComment'))
@@ -144,7 +144,7 @@ class ViewCmsComment extends ViewRecord
                 }),
 
             Action::make('not_spam')
-                ->label('Not Spam')
+                ->label(__('tallcms::fields.not_spam'))
                 ->icon('heroicon-o-shield-check')
                 ->color('warning')
                 ->visible(fn () => $this->record->isSpam() && auth()->user()?->can('MarkAsSpam:CmsComment'))

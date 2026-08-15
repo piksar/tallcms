@@ -11,9 +11,9 @@
             <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                 <div class="flex-1">
                     <div class="text-sm font-medium text-gray-900 dark:text-white">
-                        Managing theme for:
+                        {{ __('tallcms::ui.managing_theme_for') }}
                         <span class="font-semibold">
-                            {{ $currentContext?->name ?? 'Select a site' }}
+                            {{ $currentContext?->name ?? __('tallcms::ui.select_a_site') }}
                             @if($currentContext)
                                 <span class="text-gray-500 dark:text-gray-400 font-normal text-xs">
                                     ({{ $currentContext->domain }})
@@ -22,7 +22,7 @@
                         </span>
                     </div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Switch sites to configure a different site's theme and preset.
+                        {{ __('tallcms::ui.switch_sites_theme') }}
                     </p>
                 </div>
                 <div class="sm:w-80">
@@ -30,7 +30,7 @@
                         wire:change="switchSite($event.target.value)"
                         class="block w-full rounded-lg border border-gray-200 bg-white text-sm text-gray-900 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                     >
-                        <option value="">— Select a site —</option>
+                        <option value="">{{ __('tallcms::ui.select_a_site_option') }}</option>
                         @foreach($manageableSites as $siteId => $label)
                             <option value="{{ $siteId }}" @selected($currentContext?->id === $siteId)>
                                 {{ $label }}
@@ -49,11 +49,11 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <x-heroicon-o-sparkles class="w-5 h-5 text-primary-500" />
-                        From the Marketplace
+                        {{ __('tallcms::ui.from_the_marketplace') }}
                     </div>
                     @if(config('tallcms.plugins.marketplace_url'))
                         <a href="{{ config('tallcms.plugins.marketplace_url') }}" target="_blank" class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
-                            Browse Marketplace &rarr;
+                            {{ __('tallcms::ui.browse_marketplace') }}
                         </a>
                     @endif
                 </div>
@@ -64,7 +64,7 @@
                     <x-filament::section class="!p-0 overflow-hidden relative">
                         @if($theme['featured'] ?? false)
                             <x-filament::badge color="primary" class="absolute top-2 right-2 z-10">
-                                Featured
+                                {{ __('tallcms::ui.featured') }}
                             </x-filament::badge>
                         @endif
 
@@ -93,7 +93,7 @@
                                         size="xs"
                                         icon="heroicon-o-shopping-cart"
                                     >
-                                        Purchase
+                                        {{ __('tallcms::ui.purchase') }}
                                     </x-filament::button>
                                 @endif
                                 @if($theme['download_url'] ?? null)
@@ -106,7 +106,7 @@
                                         icon="heroicon-o-arrow-down-tray"
                                         :outlined="(bool) ($theme['purchase_url'] ?? null)"
                                     >
-                                        Download
+                                        {{ __('tallcms::ui.download') }}
                                     </x-filament::button>
                                 @endif
                             </div>
@@ -125,16 +125,16 @@
                     <x-filament::input
                         wire:model.live.debounce.300ms="search"
                         type="search"
-                        placeholder="Search themes by name, description, author, preset, or tag..."
+                        placeholder="{{ __('tallcms::ui.search_themes') }}"
                     />
                 </x-filament::input.wrapper>
             </div>
             <div class="sm:shrink-0">
                 <x-filament::input.wrapper>
                     <x-filament::input.select wire:model.live="sort">
-                        <option value="active">Active First</option>
-                        <option value="name">Name A&ndash;Z</option>
-                        <option value="preset">Group by Preset</option>
+                        <option value="active">{{ __('tallcms::ui.sort_active_first') }}</option>
+                        <option value="name">{{ __('tallcms::ui.sort_name_asc') }}</option>
+                        <option value="preset">{{ __('tallcms::ui.sort_group_by_preset') }}</option>
                     </x-filament::input.select>
                 </x-filament::input.wrapper>
             </div>
@@ -144,10 +144,10 @@
         <div class="flex flex-wrap gap-2">
             @php
                 $chips = [
-                    ['prop' => 'filterDarkMode', 'label' => 'Dark Mode', 'icon' => 'heroicon-o-moon', 'active' => $filterDarkMode],
-                    ['prop' => 'filterThemeController', 'label' => 'Theme Controller', 'icon' => 'heroicon-o-swatch', 'active' => $filterThemeController],
-                    ['prop' => 'filterResponsive', 'label' => 'Responsive', 'icon' => 'heroicon-o-device-phone-mobile', 'active' => $filterResponsive],
-                    ['prop' => 'filterAnimations', 'label' => 'Animations', 'icon' => 'heroicon-o-sparkles', 'active' => $filterAnimations],
+                    ['prop' => 'filterDarkMode', 'label' => __('tallcms::ui.filter_dark_mode'), 'icon' => 'heroicon-o-moon', 'active' => $filterDarkMode],
+                    ['prop' => 'filterThemeController', 'label' => __('tallcms::ui.filter_theme_controller'), 'icon' => 'heroicon-o-swatch', 'active' => $filterThemeController],
+                    ['prop' => 'filterResponsive', 'label' => __('tallcms::ui.filter_responsive'), 'icon' => 'heroicon-o-device-phone-mobile', 'active' => $filterResponsive],
+                    ['prop' => 'filterAnimations', 'label' => __('tallcms::ui.filter_animations'), 'icon' => 'heroicon-o-sparkles', 'active' => $filterAnimations],
                 ];
             @endphp
             @foreach($chips as $chip)
@@ -190,7 +190,7 @@
                     {{-- Theme info --}}
                     <div class="flex items-center gap-2 min-w-0">
                         <span class="font-semibold text-gray-950 dark:text-white truncate">{{ $active['name'] }}</span>
-                        <x-filament::badge color="success" size="sm">Active</x-filament::badge>
+                        <x-filament::badge color="success" size="sm">{{ __('tallcms::ui.status_active') }}</x-filament::badge>
                         <span class="text-xs text-gray-400 dark:text-gray-500">v{{ $active['version'] }}</span>
                         @if($active['daisyuiPreset'])
                             <x-filament::badge color="info" size="sm">{{ ucfirst($active['daisyuiPreset']) }}</x-filament::badge>
@@ -202,13 +202,13 @@
                         @if($active['hasDarkMode'])
                             <span class="inline-flex items-center gap-1">
                                 <x-heroicon-o-moon class="w-3.5 h-3.5" />
-                                Dark Mode
+                                {{ __('tallcms::ui.filter_dark_mode') }}
                             </span>
                         @endif
                         @if($active['hasThemeController'])
                             <span class="inline-flex items-center gap-1">
                                 <x-heroicon-o-swatch class="w-3.5 h-3.5" />
-                                Theme Controller
+                                {{ __('tallcms::ui.filter_theme_controller') }}
                             </span>
                         @endif
                     </div>
@@ -219,7 +219,7 @@
                     {{-- Default Preset Selector --}}
                     @if($active['hasThemeController'] && !empty($active['presets']))
                         <div class="flex items-center gap-2">
-                            <span class="text-xs text-gray-500 dark:text-gray-400">Default:</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ __('tallcms::ui.default_preset') }}</span>
                             <x-filament::input.wrapper class="!w-auto">
                                 <x-filament::input.select
                                     wire:change="changeDefaultPreset($event.target.value)"
@@ -243,7 +243,7 @@
                         size="xs"
                         icon="heroicon-o-arrow-top-right-on-square"
                     >
-                        Visit Site
+                        {{ __('tallcms::ui.visit_site') }}
                     </x-filament::button>
                     <x-filament::button
                         wire:click="previewTheme('{{ $active['slug'] }}')"
@@ -251,7 +251,7 @@
                         size="xs"
                         outlined
                     >
-                        Preview
+                        {{ __('tallcms::ui.preview') }}
                     </x-filament::button>
 
                     {{-- Rollback info --}}
@@ -402,10 +402,10 @@
                     {{-- Feature Badges --}}
                     <div class="flex flex-wrap gap-1">
                         @if($theme['hasDarkMode'])
-                            <x-filament::badge color="gray" size="sm">Dark Mode</x-filament::badge>
+                            <x-filament::badge color="gray" size="sm">{{ __('tallcms::ui.filter_dark_mode') }}</x-filament::badge>
                         @endif
                         @if($theme['hasThemeController'])
-                            <x-filament::badge color="gray" size="sm">Theme Controller</x-filament::badge>
+                            <x-filament::badge color="gray" size="sm">{{ __('tallcms::ui.filter_theme_controller') }}</x-filament::badge>
                         @endif
                         @if($theme['hasResponsive'])
                             <x-filament::badge color="gray" size="sm">Responsive</x-filament::badge>
@@ -443,7 +443,7 @@
                         @if($theme['isActive'])
                             <span class="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400">
                                 <x-heroicon-s-check-circle class="w-3.5 h-3.5" />
-                                Active theme
+                                {{ __('tallcms::ui.active_theme') }}
                             </span>
                         @elseif($theme['requiresLicense'] && !($theme['licenseStatus']['is_valid'] ?? false))
                             <span class="inline-flex items-center gap-1 text-yellow-600 dark:text-yellow-400">
@@ -475,7 +475,7 @@
                                 wire:click="previewTheme('{{ $theme['slug'] }}')"
                                 size="xs"
                             >
-                                Preview
+                                {{ __('tallcms::ui.preview') }}
                             </x-filament::button>
 
                             <x-filament::button
@@ -544,7 +544,7 @@
                                         outlined
                                         icon="heroicon-o-shopping-cart"
                                     >
-                                        Purchase
+                                        {{ __('tallcms::ui.purchase') }}
                                     </x-filament::button>
                                 @endif
                             @endif
@@ -612,13 +612,13 @@
                 <x-heroicon-o-paint-brush class="w-6 h-6 text-gray-400 dark:text-gray-500" />
             </div>
             @if($this->themes->isEmpty())
-                <h3 class="text-base font-semibold text-gray-950 dark:text-white">No themes found</h3>
+                <h3 class="text-base font-semibold text-gray-950 dark:text-white">{{ __('tallcms::ui.no_themes_found') }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Add themes to the themes/ directory or generate one with <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">php artisan make:theme</code>
+                    {{ __('tallcms::ui.no_themes_found_hint', ['command' => 'php artisan make:theme']) }}
                 </p>
             @else
-                <h3 class="text-base font-semibold text-gray-950 dark:text-white">No themes match your search</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Try adjusting your search or filters.</p>
+                <h3 class="text-base font-semibold text-gray-950 dark:text-white">{{ __('tallcms::ui.no_themes_match_search') }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('tallcms::ui.try_adjusting_search_or_filters') }}</p>
                 <div class="flex gap-2 mt-3">
                     @if($search)
                         <x-filament::button
@@ -626,7 +626,7 @@
                             color="gray"
                             size="sm"
                         >
-                            Clear Search
+                            {{ __('tallcms::ui.clear_search') }}
                         </x-filament::button>
                     @endif
                     @if($filterDarkMode || $filterThemeController || $filterResponsive || $filterAnimations)
@@ -635,7 +635,7 @@
                             color="gray"
                             size="sm"
                         >
-                            Clear Filters
+                            {{ __('tallcms::ui.clear_filters') }}
                         </x-filament::button>
                     @endif
                     @if($search || $filterDarkMode || $filterThemeController || $filterResponsive || $filterAnimations || $sort !== 'active')
@@ -645,7 +645,7 @@
                             size="sm"
                             outlined
                         >
-                            Reset All
+                            {{ __('tallcms::ui.reset_all') }}
                         </x-filament::button>
                     @endif
                 </div>
@@ -665,7 +665,7 @@
                     @if($themeDetails['isActive'])
                         <x-filament::badge color="success" size="sm">
                             <x-heroicon-s-check-circle class="w-3 h-3 mr-1" />
-                            Active
+                            {{ __('tallcms::ui.status_active') }}
                         </x-filament::badge>
                     @endif
                 @endif
@@ -791,7 +791,7 @@
                             wire:click="previewTheme('{{ $themeDetails['slug'] }}')"
                             size="sm"
                         >
-                            Preview
+                            {{ __('tallcms::ui.preview') }}
                         </x-filament::button>
                         <x-filament::button
                             wire:click="activateTheme('{{ $themeDetails['slug'] }}')"
@@ -895,7 +895,7 @@
                             <span class="text-warning-700 dark:text-warning-300">License Required</span>
                         </x-slot>
                         <p class="text-sm text-warning-600 dark:text-warning-400">
-                            This theme requires a license for updates and premium features.
+                            {{ __('tallcms::ui.theme_requires_license') }}
                         </p>
                     </x-filament::section>
                 @endif

@@ -21,9 +21,10 @@ class SeoSettings extends Page implements HasForms
 
     protected string $view = 'tallcms::filament.pages.seo-settings';
 
-    protected static ?string $navigationLabel = 'SEO Settings';
-
-    protected static ?string $title = 'SEO Settings';
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.seo_settings.title');
+    }
 
     public ?array $data = [];
 
@@ -32,9 +33,14 @@ class SeoSettings extends Page implements HasForms
         return 'heroicon-o-magnifying-glass-circle';
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return __('tallcms::pages.seo_settings.navigation');
+    }
+
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.configuration', 'Configuration');
+        return tallcms_nav_group('configuration');
     }
 
     public static function getNavigationSort(): ?int
@@ -72,113 +78,113 @@ class SeoSettings extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            Section::make('RSS Feed')
-                ->description('Configure RSS feed settings')
+            Section::make(__('tallcms::ui.rss_feed'))
+                ->description(__('tallcms::ui.help_configure_rss'))
                 ->schema([
                     Toggle::make('seo_rss_enabled')
-                        ->label('Enable RSS Feed')
-                        ->helperText('Allow visitors to subscribe to your posts via RSS')
+                        ->label(__('tallcms::fields.enable_rss_feed'))
+                        ->helperText(__('tallcms::ui.help_allow_rss_subscribe'))
                         ->live(),
 
                     Select::make('seo_rss_limit')
-                        ->label('Posts in Feed')
+                        ->label(__('tallcms::fields.posts_in_feed'))
                         ->options([
-                            '10' => '10 posts',
-                            '20' => '20 posts',
-                            '30' => '30 posts',
-                            '50' => '50 posts',
+                            '10' => __('tallcms::ui.n_posts', ['count' => 10]),
+                            '20' => __('tallcms::ui.n_posts', ['count' => 20]),
+                            '30' => __('tallcms::ui.n_posts', ['count' => 30]),
+                            '50' => __('tallcms::ui.n_posts', ['count' => 50]),
                         ])
                         ->default('20')
                         ->visible(fn ($get) => $get('seo_rss_enabled'))
-                        ->helperText('Number of most recent posts to include'),
+                        ->helperText(__('tallcms::ui.help_rss_post_count')),
 
                     Toggle::make('seo_rss_full_content')
-                        ->label('Include Full Content')
-                        ->helperText('Include complete post content instead of just excerpt')
+                        ->label(__('tallcms::fields.include_full_content'))
+                        ->helperText(__('tallcms::ui.help_rss_full_content'))
                         ->visible(fn ($get) => $get('seo_rss_enabled')),
                 ])
                 ->columns(3),
 
-            Section::make('XML Sitemap')
-                ->description('Configure sitemap generation for search engines')
+            Section::make(__('tallcms::ui.xml_sitemap'))
+                ->description(__('tallcms::ui.help_configure_sitemap'))
                 ->schema([
                     Toggle::make('seo_sitemap_enabled')
-                        ->label('Enable XML Sitemap')
-                        ->helperText('Generate sitemap.xml for search engine crawlers')
+                        ->label(__('tallcms::fields.enable_xml_sitemap'))
+                        ->helperText(__('tallcms::ui.help_generate_sitemap'))
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('robots.txt')
-                ->description('Control how search engines crawl your site')
+            Section::make(__('tallcms::ui.robots_txt'))
+                ->description(__('tallcms::ui.help_control_robots'))
                 ->schema([
                     Textarea::make('seo_robots_txt')
-                        ->label('robots.txt Content')
+                        ->label(__('tallcms::fields.robots_txt_content'))
                         ->rows(8)
                         ->placeholder($this->getDefaultRobots())
-                        ->helperText('Customize your robots.txt file. Leave empty for default.')
+                        ->helperText(__('tallcms::ui.help_customize_robots'))
                         ->columnSpanFull(),
 
                     Toggle::make('seo_robots_append_sitemap')
-                        ->label('Auto-append Sitemap URL')
-                        ->helperText('Automatically add Sitemap: directive to robots.txt')
+                        ->label(__('tallcms::fields.auto_append_sitemap_url'))
+                        ->helperText(__('tallcms::ui.help_auto_append_sitemap'))
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('Default Open Graph Image')
-                ->description('Fallback image for social media sharing')
+            Section::make(__('tallcms::ui.default_og_image_section'))
+                ->description(__('tallcms::ui.help_fallback_og'))
                 ->schema([
                     FileUpload::make('seo_default_og_image')
-                        ->label('Default OG Image')
+                        ->label(__('tallcms::fields.default_og_image'))
                         ->image()
                         ->directory('site-assets')
                         ->disk(\cms_media_disk())
                         ->visibility(\cms_media_visibility())
-                        ->helperText('Used when pages/posts don\'t have a featured image. Recommended: 1200x630 pixels.')
+                        ->helperText(__('tallcms::ui.help_og_image_usage'))
                         ->nullable()
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('llms.txt')
-                ->description('Machine-readable content index for AI systems. The file is auto-generated from your published content — these settings control what is included.')
+            Section::make(__('tallcms::ui.llms_txt'))
+                ->description(__('tallcms::ui.help_llms_txt'))
                 ->schema([
                     Toggle::make('seo_llms_txt_enabled')
-                        ->label('Enable llms.txt')
-                        ->helperText('Publish a /llms.txt file for AI consumption')
+                        ->label(__('tallcms::fields.enable_llms_txt'))
+                        ->helperText(__('tallcms::ui.help_publish_llms'))
                         ->live()
                         ->columnSpanFull(),
 
                     Textarea::make('seo_llms_txt_preamble')
-                        ->label('Preamble')
+                        ->label(__('tallcms::fields.preamble'))
                         ->rows(3)
                         ->maxLength(500)
-                        ->placeholder('e.g., TallCMS is a Laravel-based CMS built on the TALL stack...')
-                        ->helperText('A short intro paragraph shown at the top. Keep it factual and concise.')
+                        ->placeholder(__('tallcms::ui.placeholder_llms_preamble'))
+                        ->helperText(__('tallcms::ui.help_llms_preamble'))
                         ->visible(fn ($get) => $get('seo_llms_txt_enabled'))
                         ->columnSpanFull(),
 
                     Toggle::make('seo_llms_txt_include_pages')
-                        ->label('Include Pages')
-                        ->helperText('List published pages')
+                        ->label(__('tallcms::fields.include_pages'))
+                        ->helperText(__('tallcms::ui.help_list_published_pages'))
                         ->default(true)
                         ->visible(fn ($get) => $get('seo_llms_txt_enabled')),
 
                     Toggle::make('seo_llms_txt_include_posts')
-                        ->label('Include Posts')
-                        ->helperText('List published posts grouped by category')
+                        ->label(__('tallcms::fields.include_posts'))
+                        ->helperText(__('tallcms::ui.help_list_published_posts'))
                         ->default(true)
                         ->visible(fn ($get) => $get('seo_llms_txt_enabled')),
 
                     Select::make('seo_llms_txt_post_limit')
-                        ->label('Post Limit')
+                        ->label(__('tallcms::fields.post_limit'))
                         ->options([
-                            '0' => 'All posts',
-                            '10' => '10 most recent',
-                            '25' => '25 most recent',
-                            '50' => '50 most recent',
-                            '100' => '100 most recent',
+                            '0' => __('tallcms::ui.option_all_posts'),
+                            '10' => __('tallcms::ui.option_n_most_recent', ['count' => 10]),
+                            '25' => __('tallcms::ui.option_n_most_recent', ['count' => 25]),
+                            '50' => __('tallcms::ui.option_n_most_recent', ['count' => 50]),
+                            '100' => __('tallcms::ui.option_n_most_recent', ['count' => 100]),
                         ])
                         ->default('0')
-                        ->helperText('Limit total posts to keep the file focused')
+                        ->helperText(__('tallcms::ui.help_limit_posts_focused'))
                         ->visible(fn ($get) => $get('seo_llms_txt_enabled') && $get('seo_llms_txt_include_posts')),
                 ])
                 ->columns(3),
@@ -218,7 +224,7 @@ class SeoSettings extends Page implements HasForms
         SitemapService::clearCache();
 
         Notification::make()
-            ->title('SEO settings saved successfully!')
+            ->title(__('tallcms::ui.notify_seo_saved'))
             ->success()
             ->send();
     }
@@ -228,8 +234,8 @@ class SeoSettings extends Page implements HasForms
         SitemapService::clearCache();
 
         Notification::make()
-            ->title('Sitemap cache cleared')
-            ->body('The sitemap will be regenerated on the next request.')
+            ->title(__('tallcms::ui.notify_sitemap_cache_cleared'))
+            ->body(__('tallcms::ui.t_the_sitemap_will_be_regenerated_on_the_next_request'))
             ->success()
             ->send();
     }

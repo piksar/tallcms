@@ -21,7 +21,7 @@ class TallcmsMediaForm
         return $schema
             ->components([
                 FileUpload::make('upload')
-                    ->label('Upload Files')
+                    ->label(__('tallcms::fields.upload_files'))
                     ->multiple()
                     ->maxFiles(50)
                     ->directory('media')
@@ -38,7 +38,7 @@ class TallcmsMediaForm
                     ->hiddenOn(['edit']),
 
                 Placeholder::make('current_file_preview')
-                    ->label('Current File')
+                    ->label(__('tallcms::fields.current_file'))
                     ->content(function ($record) {
                         if (! $record || ! $record->path) {
                             return 'No file uploaded';
@@ -87,7 +87,7 @@ class TallcmsMediaForm
                     ->visibleOn(['edit']),
 
                 FileUpload::make('new_file')
-                    ->label('Replace File')
+                    ->label(__('tallcms::fields.replace_file'))
                     ->directory('media')
                     ->disk(\cms_media_disk())
                     ->visibility(\cms_media_visibility())
@@ -97,18 +97,18 @@ class TallcmsMediaForm
                     ->downloadable()
                     ->openable()
                     ->columnSpanFull()
-                    ->helperText('Upload a new file to replace the current one (leave empty to keep existing file)')
+                    ->helperText(__('tallcms::ui.t_upload_a_new_file_to_replace_the_current_one_leave_empty_to_keep_exi'))
                     ->visibleOn(['edit']),
 
                 TextInput::make('name')
-                    ->label('File Name')
+                    ->label(__('tallcms::fields.file_name'))
                     ->required()
                     ->maxLength(255)
                     ->visibleOn(['edit']),
 
                 // For bulk upload - manual handling (relationship() only syncs to returned record)
                 Select::make('collection_ids')
-                    ->label('Collections')
+                    ->label(__('tallcms::fields.collections'))
                     ->multiple()
                     ->options(function () {
                         $query = MediaCollection::query();
@@ -122,16 +122,16 @@ class TallcmsMediaForm
                     ->searchable()
                     ->preload()
                     ->visibleOn(['create'])
-                    ->helperText('Selected collections will be applied to all uploaded files')
+                    ->helperText(__('tallcms::ui.t_selected_collections_will_be_applied_to_all_uploaded_files'))
                     ->createOptionForm([
                         TextInput::make('name')
-                            ->label('Collection Name')
+                            ->label(__('tallcms::fields.collection_name'))
                             ->required()
                             ->maxLength(255)
                             ->rules([UserAwareUnique::rule('tallcms_media_collections', 'name')]),
 
                         Textarea::make('description')
-                            ->label('Description')
+                            ->label(__('tallcms::fields.description'))
                             ->maxLength(500)
                             ->rows(2),
                     ])
@@ -141,28 +141,28 @@ class TallcmsMediaForm
 
                 // For edit - automatic relationship sync
                 Select::make('collections')
-                    ->label('Collections')
+                    ->label(__('tallcms::fields.collections'))
                     ->relationship('collections', 'name')
                     ->multiple()
                     ->searchable()
                     ->preload()
                     ->createOptionForm([
                         TextInput::make('name')
-                            ->label('Collection Name')
+                            ->label(__('tallcms::fields.collection_name'))
                             ->required()
                             ->maxLength(255)
                             ->rules([UserAwareUnique::rule('tallcms_media_collections', 'name')]),
 
                         Textarea::make('description')
-                            ->label('Description')
+                            ->label(__('tallcms::fields.description'))
                             ->maxLength(500)
                             ->rows(2),
                     ])
                     ->visibleOn(['edit']),
 
                 TextInput::make('alt_text')
-                    ->label('Alt Text')
-                    ->helperText('Describe the image for accessibility. Recommended: under 125 characters.')
+                    ->label(__('tallcms::fields.alt_text'))
+                    ->helperText(__('tallcms::ui.t_describe_the_image_for_accessibility_recommended_under_125_character'))
                     ->maxLength(255)
                     ->hint(fn ($state) => strlen($state ?? '').'/125 chars')
                     ->suffixAction(
@@ -175,7 +175,7 @@ class TallcmsMediaForm
                     ),
 
                 Textarea::make('caption')
-                    ->label('Caption')
+                    ->label(__('tallcms::fields.caption'))
                     ->maxLength(500)
                     ->rows(3),
             ]);

@@ -55,11 +55,14 @@ class ContentRejectedNotification extends Notification
         return FilamentNotification::make()
             ->danger()
             ->icon('heroicon-o-x-circle')
-            ->title("{$contentType} Rejected: {$this->content->title}")
+            ->title(__('tallcms::ui.n_content_rejected', [
+                'type' => $contentType,
+                'title' => $this->content->title,
+            ]))
             ->body($this->reason)
             ->actions([
                 FilamentAction::make('edit')
-                    ->label('Edit')
+                    ->label(__('tallcms::fields.edit'))
                     ->url($this->getEditUrl())
                     ->markAsRead(),
             ])

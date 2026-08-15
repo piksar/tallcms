@@ -140,7 +140,7 @@ trait HasFromSiteContext
         }
 
         return Action::make('back_to_site')
-            ->label('Back to site')
+            ->label(__('tallcms::fields.back_to_site'))
             ->icon('heroicon-m-arrow-left')
             ->color('gray')
             ->url($url);

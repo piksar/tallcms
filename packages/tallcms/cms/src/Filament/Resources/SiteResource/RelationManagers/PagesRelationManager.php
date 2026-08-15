@@ -24,27 +24,27 @@ class PagesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('title')
+                TextColumn::make('title')->label(__('tallcms::fields.title'))
                     ->searchable()
                     ->sortable()
                     ->limit(40),
 
-                TextColumn::make('slug')
+                TextColumn::make('slug')->label(__('tallcms::fields.slug'))
                     ->searchable()
                     ->limit(30)
                     ->color('gray'),
 
-                TextColumn::make('status')
+                TextColumn::make('status')->label(__('tallcms::fields.status'))
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => ContentStatus::from($state)->getLabel())
                     ->color(fn (string $state): string => ContentStatus::from($state)->getColor()),
 
                 IconColumn::make('is_homepage')
-                    ->label('Home')
+                    ->label(__('tallcms::fields.home'))
                     ->boolean()
                     ->sortable(),
 
-                TextColumn::make('updated_at')
+                TextColumn::make('updated_at')->label(__('tallcms::fields.updated_at'))
                     ->dateTime()
                     ->since()
                     ->sortable(),
@@ -52,7 +52,7 @@ class PagesRelationManager extends RelationManager
             ->defaultSort('sort_order')
             ->headerActions([
                 Action::make('create_page')
-                    ->label('Create Page')
+                    ->label(__('tallcms::fields.create_page'))
                     ->icon('heroicon-m-plus')
                     // ?site=<id> sets site_id explicitly on save; ?from_site=<id>
                     // is the navigation breadcrumb that lands the user back on
@@ -68,7 +68,7 @@ class PagesRelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make('edit')
-                    ->label('Edit')
+                    ->label(__('tallcms::fields.edit'))
                     ->icon('heroicon-m-pencil-square')
                     ->url(fn ($record) => CmsPageResource::getUrl('edit', [
                         'record' => $record,

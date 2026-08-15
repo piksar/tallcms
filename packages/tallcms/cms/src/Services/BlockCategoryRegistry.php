@@ -26,32 +26,32 @@ class BlockCategoryRegistry
     {
         return [
             'content' => [
-                'label' => 'Content',
+                'label' => __('tallcms::blocks.categories.content'),
                 'icon' => 'heroicon-o-document-text',
                 'order' => 10,
             ],
             'media' => [
-                'label' => 'Media',
+                'label' => __('tallcms::blocks.categories.media'),
                 'icon' => 'heroicon-o-photo',
                 'order' => 20,
             ],
             'social-proof' => [
-                'label' => 'Social Proof',
+                'label' => __('tallcms::blocks.categories.social-proof'),
                 'icon' => 'heroicon-o-star',
                 'order' => 30,
             ],
             'dynamic' => [
-                'label' => 'Dynamic',
+                'label' => __('tallcms::blocks.categories.dynamic'),
                 'icon' => 'heroicon-o-newspaper',
                 'order' => 40,
             ],
             'forms' => [
-                'label' => 'Forms',
+                'label' => __('tallcms::blocks.categories.forms'),
                 'icon' => 'heroicon-o-envelope',
                 'order' => 50,
             ],
             'other' => [
-                'label' => 'Other',
+                'label' => __('tallcms::blocks.categories.other'),
                 'icon' => 'heroicon-o-squares-plus',
                 'order' => 100,
             ],

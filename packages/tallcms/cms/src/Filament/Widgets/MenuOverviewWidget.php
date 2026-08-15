@@ -64,18 +64,20 @@ class MenuOverviewWidget extends BaseWidget
             : 0;
 
         return [
-            Stat::make('Pages', $totalPages)
-                ->description("{$publishedPages} published")
+            Stat::make(__('tallcms::widgets.content_overview.pages'), $totalPages)
+                ->description(__('tallcms::widgets.content_overview.pages_published', ['count' => $publishedPages]))
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('success'),
 
-            Stat::make('Menus', $totalMenus)
-                ->description("{$activeMenus} active")
+            Stat::make(__('tallcms::widgets.content_overview.menus'), $totalMenus)
+                ->description(__('tallcms::widgets.content_overview.menus_active', ['count' => $activeMenus]))
                 ->descriptionIcon('heroicon-m-bars-3')
                 ->color('info'),
 
-            Stat::make('Menu Items', $totalItems)
-                ->description($totalMenus > 0 ? round($totalItems / $totalMenus, 1).' avg per menu' : 'No menus')
+            Stat::make(__('tallcms::widgets.content_overview.menu_items'), $totalItems)
+                ->description($totalMenus > 0
+                    ? __('tallcms::widgets.content_overview.avg_per_menu', ['count' => round($totalItems / $totalMenus, 1)])
+                    : __('tallcms::widgets.content_overview.no_menus'))
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color('warning'),
         ];
@@ -91,7 +93,9 @@ class MenuOverviewWidget extends BaseWidget
         $siteId = $this->getMultisiteSiteId();
         $siteName = $this->getMultisiteName($siteId);
 
-        return $siteName ? "Content Overview — {$siteName}" : 'Content Overview';
+        return $siteName
+            ? __('tallcms::widgets.content_overview.heading_site', ['site' => $siteName])
+            : __('tallcms::widgets.content_overview.heading');
     }
-
 }
+

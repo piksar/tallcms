@@ -25,22 +25,22 @@ class CmsCommentResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.comments.singular', 'Comment');
+        return tallcms_label('comments', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.comments.plural', 'Comments');
+        return tallcms_label('comments', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.comments.navigation', 'Comments');
+        return tallcms_label('comments', 'navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getNavigationSort(): ?int

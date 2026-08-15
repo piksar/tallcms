@@ -35,15 +35,15 @@ class CmsPageForm
     {
         return $schema
             ->components([
-                Tabs::make('Page Management')
+                Tabs::make(__('tallcms::fields.page_management'))
                     ->tabs([
-                        Tabs\Tab::make('Content')
+                        Tabs\Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-o-document-text')
                             ->schema([
                                 Section::make()
                                     ->columns(2)
                                     ->schema([
-                                        TextInput::make('title')
+                                        TextInput::make('title')->label(__('tallcms::fields.title'))
                                             ->required(function ($livewire) {
                                                 if (! tallcms_i18n_enabled()) {
                                                     return true;
@@ -60,7 +60,7 @@ class CmsPageForm
                                             )
                                             ->columnSpan(1),
 
-                                        TextInput::make('slug')
+                                        TextInput::make('slug')->label(__('tallcms::fields.slug'))
                                             ->required(function ($livewire) {
                                                 if (! tallcms_i18n_enabled()) {
                                                     return true;
@@ -121,12 +121,12 @@ class CmsPageForm
                                                 return $rules;
                                             })
                                             ->validationMessages([
-                                                'not_in' => 'This slug is reserved (matches a language code).',
+                                                'not_in' => __('tallcms::fields.slug_reserved_language_code'),
                                             ])
-                                            ->helperText('Used as the URL segment. The full URL includes parent page slugs automatically.')
+                                            ->helperText(__('tallcms::fields.help_used_as_url_segment'))
                                             ->columnSpan(1),
                                     ]),
-                                CmsRichEditor::make('content')
+                                CmsRichEditor::make('content')->label(__('tallcms::fields.content'))
                                     ->columnSpanFull()
                                     ->activePanel('customBlocks')
                                     ->mergeTags([
@@ -153,16 +153,16 @@ class CmsPageForm
                                     ->extraInputAttributes([
                                         'style' => 'min-height: 40rem;',
                                     ])
-                                    ->helperText('Create rich page content with custom blocks, merge tags, and text formatting. Use merge tags like {{site_name}} or {{current_year}}.'),
+                                    ->helperText(__('tallcms::fields.help_create_rich_page_content')),
                             ]),
 
-                        Tabs\Tab::make('Settings')
+                        Tabs\Tab::make(__('tallcms::fields.settings'))
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                Section::make('Page Settings')
+                                Section::make(__('tallcms::fields.page_settings'))
                                     ->columns(2)
                                     ->schema([
-                                        Select::make('status')
+                                        Select::make('status')->label(__('tallcms::fields.status'))
                                             ->options(function () {
                                                 // When review workflow is disabled, all users can publish directly
                                                 if (! tallcms_review_workflow_enabled()) {
@@ -188,23 +188,23 @@ class CmsPageForm
                                             })
                                             ->helperText(function (?CmsPage $record) {
                                                 if ($record?->wasRejected()) {
-                                                    return 'This content was rejected. Reason: '.$record->getRejectionReason();
+                                                    return __('tallcms::fields.help_content_rejected', ['reason' => $record->getRejectionReason()]);
                                                 }
                                                 if ($record?->isPending()) {
-                                                    return 'This content is pending review.';
+                                                    return __('tallcms::fields.help_content_pending_review');
                                                 }
 
                                                 return null;
                                             }),
 
                                         DateTimePicker::make('published_at')
-                                            ->label('Publish Date')
+                                            ->label(__('tallcms::fields.publish_date'))
                                             ->nullable()
-                                            ->helperText('Leave empty to publish immediately, or set a future date to schedule.')
+                                            ->helperText(__('tallcms::fields.help_leave_empty_publish_schedule'))
                                             ->visible(fn () => ! tallcms_review_workflow_enabled() || auth()->user()?->can('Approve:CmsPage')),
 
                                         Select::make('author_id')
-                                            ->label('Author')
+                                            ->label(__('tallcms::fields.author'))
                                             ->relationship(
                                                 name: 'author',
                                                 titleAttribute: 'name',
@@ -217,31 +217,31 @@ class CmsPageForm
                                             ->nullable(),
 
                                         Toggle::make('is_homepage')
-                                            ->label('Set as Homepage')
-                                            ->helperText('Only one page can be set as homepage. This will override any existing homepage setting.')
+                                            ->label(__('tallcms::fields.set_as_homepage'))
+                                            ->helperText(__('tallcms::fields.help_only_one_homepage'))
                                             ->columnSpan(2),
 
                                         Select::make('parent_id')
-                                            ->label('Parent Page')
+                                            ->label(__('tallcms::fields.parent_page'))
                                             ->options(fn ($livewire) => \TallCms\Cms\Filament\Forms\OwnerSitePicker::parentPageOptions($livewire))
                                             ->searchable()
                                             ->nullable()
                                             ->live()
                                             ->columnSpan(1),
 
-                                        TextInput::make('sort_order')
+                                        TextInput::make('sort_order')->label(__('tallcms::fields.sort_order'))
                                             ->numeric()
                                             ->default(0)
                                             ->columnSpan(1),
 
                                         Toggle::make('show_breadcrumbs')
-                                            ->label('Show Breadcrumbs')
+                                            ->label(__('tallcms::fields.show_breadcrumbs'))
                                             ->default(true)
-                                            ->helperText('Display navigation breadcrumbs on this page. Homepage never shows breadcrumbs.')
+                                            ->helperText(__('tallcms::fields.help_display_breadcrumbs'))
                                             ->columnSpan(2),
 
                                         Select::make('template')
-                                            ->label('Page Template')
+                                            ->label(__('tallcms::fields.page_template'))
                                             ->options(fn () => app(TemplateRegistry::class)->getTemplateOptions())
                                             ->default('default')
                                             ->live()
@@ -253,19 +253,19 @@ class CmsPageForm
                                             ->columnSpan(1),
 
                                         Select::make('content_width')
-                                            ->label('Content Width')
+                                            ->label(__('tallcms::fields.content_width'))
                                             ->options([
                                                 'narrow' => 'Narrow (672px)',
                                                 'standard' => 'Standard (1152px)',
                                                 'wide' => 'Wide (1280px)',
                                             ])
                                             ->default('standard')
-                                            ->helperText('Default width for inline content. Blocks can override.')
+                                            ->helperText(__('tallcms::fields.help_default_content_width'))
                                             ->columnSpan(1),
                                     ]),
 
-                                Section::make('Sidebar Widgets')
-                                    ->description('Configure widgets for templates with sidebars. Leave empty to use template defaults.')
+                                Section::make(__('tallcms::fields.sidebar_widgets'))
+                                    ->description(__('tallcms::fields.help_sidebar_widgets'))
                                     ->visible(function (Get $get) {
                                         $template = $get('template') ?? 'default';
                                         $config = app(TemplateRegistry::class)->getTemplateConfig($template);
@@ -277,40 +277,40 @@ class CmsPageForm
                                             ->label('')
                                             ->schema([
                                                 Select::make('widget')
-                                                    ->label('Widget')
+                                                    ->label(__('tallcms::fields.widget'))
                                                     ->options(fn () => app(WidgetRegistry::class)->getWidgetOptions(auth()->user()))
                                                     ->required()
                                                     ->live()
                                                     ->columnSpan(1),
 
                                                 TextInput::make('settings.limit')
-                                                    ->label('Limit')
+                                                    ->label(__('tallcms::fields.limit'))
                                                     ->numeric()
                                                     ->default(5)
                                                     ->visible(fn (Get $get) => in_array($get('widget'), ['recent-posts']))
                                                     ->columnSpan(1),
 
                                                 Toggle::make('settings.show_image')
-                                                    ->label('Show thumbnails')
+                                                    ->label(__('tallcms::fields.show_thumbnails'))
                                                     ->default(true)
                                                     ->visible(fn (Get $get) => $get('widget') === 'recent-posts')
                                                     ->columnSpan(1),
 
                                                 Toggle::make('settings.show_count')
-                                                    ->label('Show post count')
+                                                    ->label(__('tallcms::fields.show_post_count'))
                                                     ->default(true)
                                                     ->visible(fn (Get $get) => $get('widget') === 'categories')
                                                     ->columnSpan(1),
 
                                                 Select::make('settings.style')
-                                                    ->label('Display Style')
+                                                    ->label(__('tallcms::fields.display_style'))
                                                     ->options(['cloud' => 'Cloud', 'list' => 'List'])
                                                     ->default('cloud')
                                                     ->visible(fn (Get $get) => $get('widget') === 'tags')
                                                     ->columnSpan(1),
 
                                                 TextInput::make('settings.max_depth')
-                                                    ->label('Max Heading Depth')
+                                                    ->label(__('tallcms::fields.max_heading_depth'))
                                                     ->numeric()
                                                     ->default(3)
                                                     ->minValue(2)
@@ -319,7 +319,7 @@ class CmsPageForm
                                                     ->columnSpan(1),
 
                                                 Textarea::make('settings.content')
-                                                    ->label('HTML Content')
+                                                    ->label(__('tallcms::fields.html_content'))
                                                     ->rows(4)
                                                     ->visible(fn (Get $get) => $get('widget') === 'custom-html')
                                                     ->columnSpanFull(),
@@ -333,25 +333,25 @@ class CmsPageForm
                                     ]),
                             ]),
 
-                        Tabs\Tab::make('SEO')
+                        Tabs\Tab::make(__('tallcms::fields.seo'))
                             ->icon('heroicon-o-magnifying-glass')
                             ->schema([
-                                Section::make('Search Engine Optimization')
-                                    ->description('Optimize your page for search engines and social media sharing')
+                                Section::make(__('tallcms::fields.search_engine_optimization'))
+                                    ->description(__('tallcms::fields.help_optimize_page_seo'))
                                     ->schema([
                                         TextInput::make('meta_title')
-                                            ->label('Meta Title')
+                                            ->label(__('tallcms::fields.meta_title'))
                                             ->maxLength(60)
-                                            ->helperText('Recommended: 50-60 characters. If empty, page title will be used.'),
+                                            ->helperText(__('tallcms::fields.help_meta_title_page')),
 
                                         Textarea::make('meta_description')
-                                            ->label('Meta Description')
+                                            ->label(__('tallcms::fields.meta_description'))
                                             ->maxLength(160)
                                             ->rows(3)
-                                            ->helperText('Recommended: 150-160 characters. Brief description for search results.'),
+                                            ->helperText(__('tallcms::fields.help_meta_description_page')),
 
                                         FileUpload::make('featured_image')
-                                            ->label('Featured Image')
+                                            ->label(__('tallcms::fields.featured_image'))
                                             ->image()
                                             ->directory('cms/pages/featured-images')
                                             ->disk(\cms_media_disk())
@@ -364,44 +364,44 @@ class CmsPageForm
                                                 '1.91:1', // Facebook recommended
                                                 '2:1',    // Twitter header
                                             ])
-                                            ->helperText('Used for social media sharing and page headers. Recommended: 1200x630px for best compatibility.'),
+                                            ->helperText(__('tallcms::fields.help_featured_image_page')),
                                     ]),
                             ]),
 
-                        Tabs\Tab::make('Attribution')
+                        Tabs\Tab::make(__('tallcms::fields.attribution'))
                             ->icon('heroicon-o-shield-check')
                             ->visible(fn () => DbSchema::hasColumn('tallcms_pages', 'last_reviewed_at'))
                             ->schema([
-                                Section::make('Content Review')
-                                    ->description('Track when this content was last reviewed for accuracy')
+                                Section::make(__('tallcms::fields.content_review'))
+                                    ->description(__('tallcms::fields.help_track_content_reviewed'))
                                     ->schema([
                                         Placeholder::make('last_reviewed_display')
-                                            ->label('Last Reviewed')
+                                            ->label(__('tallcms::fields.last_reviewed'))
                                             ->content(fn (?CmsPage $record) => $record?->last_reviewed_at
                                                 ? $record->last_reviewed_at->format('F j, Y \a\t g:i A')
-                                                : 'Never reviewed'),
+                                                : __('tallcms::fields.never_reviewed')),
 
                                         Placeholder::make('reviewed_by_display')
-                                            ->label('Reviewed By')
-                                            ->content(fn (?CmsPage $record) => $record?->reviewer?->name ?? 'Not yet reviewed'),
+                                            ->label(__('tallcms::fields.reviewed_by'))
+                                            ->content(fn (?CmsPage $record) => $record?->reviewer?->name ?? __('tallcms::fields.not_yet_reviewed')),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Expert Reviewer')
-                                    ->description('Optional external expert who reviewed this content for accuracy')
+                                Section::make(__('tallcms::fields.expert_reviewer'))
+                                    ->description(__('tallcms::fields.help_optional_expert_reviewer'))
                                     ->schema([
                                         TextInput::make('expert_reviewer_name')
-                                            ->label('Reviewer Name')
+                                            ->label(__('tallcms::fields.reviewer_name'))
                                             ->maxLength(255)
-                                            ->placeholder('e.g., Dr. Jane Smith'),
+                                            ->placeholder(__('tallcms::fields.placeholder_expert_name')),
 
                                         TextInput::make('expert_reviewer_title')
-                                            ->label('Reviewer Title / Credentials')
+                                            ->label(__('tallcms::fields.reviewer_title_credentials'))
                                             ->maxLength(255)
-                                            ->placeholder('e.g., Medical Doctor, CPA'),
+                                            ->placeholder(__('tallcms::fields.placeholder_expert_title')),
 
                                         TextInput::make('expert_reviewer_url')
-                                            ->label('Reviewer URL')
+                                            ->label(__('tallcms::fields.reviewer_url'))
                                             ->url()
                                             ->maxLength(500)
                                             ->placeholder('https://...'),
@@ -409,19 +409,19 @@ class CmsPageForm
                                     ->columns(3)
                                     ->collapsible(),
 
-                                Section::make('Citation Sources')
-                                    ->description('References and sources cited in this content')
+                                Section::make(__('tallcms::fields.citation_sources'))
+                                    ->description(__('tallcms::fields.help_citation_sources'))
                                     ->schema([
                                         Repeater::make('sources')
                                             ->label('')
                                             ->schema([
                                                 TextInput::make('title')
-                                                    ->label('Source Title')
+                                                    ->label(__('tallcms::fields.source_title'))
                                                     ->required()
                                                     ->maxLength(255),
 
                                                 TextInput::make('url')
-                                                    ->label('Source URL')
+                                                    ->label(__('tallcms::fields.source_url'))
                                                     ->url()
                                                     ->required()
                                                     ->maxLength(500),
@@ -432,12 +432,12 @@ class CmsPageForm
                                             ->collapsible()
                                             ->reorderable()
                                             ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
-                                            ->addActionLabel('Add Source'),
+                                            ->addActionLabel(__('tallcms::fields.add_source')),
                                     ])
                                     ->collapsible(),
                             ]),
 
-                        Tabs\Tab::make('Revisions')
+                        Tabs\Tab::make(__('tallcms::fields.revisions'))
                             ->icon('heroicon-o-clock')
                             ->visible(fn (?CmsPage $record) => $record !== null && auth()->user()?->can('ViewRevisions:CmsPage'))
                             ->schema([

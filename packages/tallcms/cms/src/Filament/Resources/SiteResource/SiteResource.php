@@ -26,22 +26,22 @@ class SiteResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.site_settings.navigation', 'Site Settings');
+        return tallcms_label('site_settings', 'navigation');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.site_settings.singular', 'Site');
+        return tallcms_label('site_settings', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.site_settings.plural', 'Sites');
+        return tallcms_label('site_settings', 'plural');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.configuration', 'Configuration');
+        return tallcms_nav_group('configuration');
     }
 
     public static function form(Schema $schema): Schema

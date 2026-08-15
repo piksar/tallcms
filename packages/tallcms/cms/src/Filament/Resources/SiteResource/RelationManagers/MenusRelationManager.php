@@ -23,33 +23,33 @@ class MenusRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('name')->label(__('tallcms::fields.name'))
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('location')
+                TextColumn::make('location')->label(__('tallcms::fields.location'))
                     ->badge()
                     ->color('gray')
                     ->sortable(),
 
                 TextColumn::make('items_count')
-                    ->label('Items')
+                    ->label(__('tallcms::fields.items'))
                     ->state(fn ($record) => $record->allItems()->count())
                     ->badge()
                     ->color('primary'),
 
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label(__('tallcms::fields.active'))
                     ->boolean(),
 
-                TextColumn::make('updated_at')
+                TextColumn::make('updated_at')->label(__('tallcms::fields.updated_at'))
                     ->dateTime()
                     ->since()
                     ->sortable(),
             ])
             ->headerActions([
                 Action::make('create_menu')
-                    ->label('Create Menu')
+                    ->label(__('tallcms::fields.create_menu'))
                     ->icon('heroicon-m-plus')
                     // The ?site=<id> query param tells CreateTallcmsMenu which site
                     // the new menu belongs to, so site_id is set explicitly on save.
@@ -59,13 +59,13 @@ class MenusRelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make('manage_items')
-                    ->label('Manage Items')
+                    ->label(__('tallcms::fields.manage_items'))
                     ->icon('heroicon-o-bars-3')
                     ->color('primary')
                     ->url(fn ($record) => \TallCms\Cms\Filament\Pages\MenuItemsManager::getUrl(['activeTab' => $record->id])),
 
                 Action::make('edit')
-                    ->label('Edit')
+                    ->label(__('tallcms::fields.edit'))
                     ->icon('heroicon-m-pencil-square')
                     ->url(fn ($record) => TallcmsMenuResource::getUrl('edit', ['record' => $record])),
             ]);

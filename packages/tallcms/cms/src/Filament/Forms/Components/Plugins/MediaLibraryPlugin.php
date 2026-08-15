@@ -20,7 +20,7 @@ class MediaLibraryPlugin implements RichContentPlugin
     {
         return [
             RichEditorTool::make('insertMedia')
-                ->label('Insert from Media Library')
+                ->label(__('tallcms::fields.insert_from_media_library'))
                 ->action()
                 ->icon(Heroicon::Photo),
         ];

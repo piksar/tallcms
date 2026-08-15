@@ -19,39 +19,39 @@ class CmsCategoriesTable
         return $table
             ->columns([
                 ColorColumn::make('color')
-                    ->label('Color'),
+                    ->label(__('tallcms::fields.color')),
 
-                TextColumn::make('name')
+                TextColumn::make('name')->label(__('tallcms::fields.name'))
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
 
-                TextColumn::make('slug')
+                TextColumn::make('slug')->label(__('tallcms::fields.slug'))
                     ->searchable()
                     ->copyable()
                     ->limit(30)
                     ->color('gray'),
 
                 TextColumn::make('parent.name')
-                    ->label('Parent')
+                    ->label(__('tallcms::fields.parent'))
                     ->placeholder('—')
                     ->limit(20),
 
                 TextColumn::make('posts_count')
-                    ->label('Posts')
+                    ->label(__('tallcms::fields.posts'))
                     ->counts('posts')
                     ->badge(),
 
-                TextColumn::make('sort_order')
+                TextColumn::make('sort_order')->label(__('tallcms::fields.sort_order'))
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('description')
+                TextColumn::make('description')->label(__('tallcms::fields.description'))
                     ->limit(50)
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('created_at')
+                TextColumn::make('created_at')->label(__('tallcms::fields.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

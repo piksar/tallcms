@@ -24,7 +24,7 @@ trait HasContentWidth
     public static function getContentWidthField(): Select
     {
         return Select::make('content_width')
-            ->label('Content Width')
+            ->label(__('tallcms::fields.content_width'))
             ->options([
                 'inherit' => 'Inherit from Page/Post',
                 'narrow' => 'Narrow (672px)',

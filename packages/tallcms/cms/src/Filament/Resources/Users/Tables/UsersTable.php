@@ -19,26 +19,26 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Full Name')
+                    ->label(__('tallcms::fields.full_name'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('email')
-                    ->label('Email Address')
+                    ->label(__('tallcms::fields.email_address'))
                     ->searchable()
                     ->sortable()
                     ->copyable()
                     ->copyMessage('Email address copied'),
 
                 TagsColumn::make('roles.name')
-                    ->label('Roles')
+                    ->label(__('tallcms::fields.roles'))
                     ->badge()
                     ->separator(',')
                     ->limitList(2)
                     ->expandableLimitedList(),
 
                 TextColumn::make('created_at')
-                    ->label('Joined')
+                    ->label(__('tallcms::fields.joined'))
                     ->dateTime()
                     ->sortable()
                     ->since()
@@ -46,7 +46,7 @@ class UsersTable
             ])
             ->filters([
                 SelectFilter::make('roles')
-                    ->label('Role')
+                    ->label(__('tallcms::fields.role'))
                     ->relationship('roles', 'name')
                     ->searchable()
                     ->preload(),

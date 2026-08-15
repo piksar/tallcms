@@ -45,7 +45,7 @@ class FeaturesBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Feature grid with icons and descriptions';
+        return __('tallcms::blocks.descriptions.features');
     }
 
     public static function getKeywords(): array
@@ -65,7 +65,7 @@ class FeaturesBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Features';
+        return __('tallcms::blocks.labels.features');
     }
 
     protected static function getCardStyleOptions(): array
@@ -85,31 +85,31 @@ class FeaturesBlock extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Showcase product or service features in a grid layout')
-            ->modalHeading('Configure Features Block')
+            ->modalDescription(__('tallcms::ui.t_showcase_product_or_service_features_in_a_grid_layout'))
+            ->modalHeading(__('tallcms::ui.t_configure_features_block'))
             ->modalWidth('6xl')
             ->schema([
                 Tabs::make('Features Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('Our Features')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_our_features'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Section Subheading')
-                                    ->placeholder('Everything you need to succeed')
+                                    ->label(__('tallcms::fields.section_subheading'))
+                                    ->placeholder(__('tallcms::ui.t_everything_you_need_to_succeed'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Repeater::make('features')
-                                    ->label('Features')
+                                    ->label(__('tallcms::fields.features'))
                                     ->schema([
                                         Select::make('icon_type')
-                                            ->label('Icon Type')
+                                            ->label(__('tallcms::fields.icon_type'))
                                             ->options([
                                                 'heroicon' => 'Heroicon',
                                                 'image' => 'Custom Image',
@@ -119,13 +119,13 @@ class FeaturesBlock extends RichContentCustomBlock
                                             ->live(),
 
                                         TextInput::make('icon')
-                                            ->label('Heroicon Name')
+                                            ->label(__('tallcms::fields.heroicon_name'))
                                             ->placeholder('heroicon-o-check-circle')
-                                            ->helperText('e.g., heroicon-o-bolt, heroicon-o-shield-check')
+                                            ->helperText(__('tallcms::ui.t_e_g_heroicon_o_bolt_heroicon_o_shield_check'))
                                             ->visible(fn (Get $get): bool => $get('icon_type') === 'heroicon'),
 
                                         FileUpload::make('icon_image')
-                                            ->label('Icon Image')
+                                            ->label(__('tallcms::fields.icon_image'))
                                             ->image()
                                             ->disk(\cms_media_disk())
                                             ->directory('features')
@@ -133,27 +133,27 @@ class FeaturesBlock extends RichContentCustomBlock
                                             ->visible(fn (Get $get): bool => $get('icon_type') === 'image'),
 
                                         TextInput::make('emoji')
-                                            ->label('Emoji')
+                                            ->label(__('tallcms::fields.emoji'))
                                             ->placeholder('🚀')
                                             ->maxLength(10)
                                             ->visible(fn (Get $get): bool => $get('icon_type') === 'emoji'),
 
                                         TextInput::make('title')
-                                            ->label('Feature Title')
+                                            ->label(__('tallcms::fields.feature_title'))
                                             ->required()
-                                            ->placeholder('Fast Performance')
+                                            ->placeholder(__('tallcms::ui.t_fast_performance'))
                                             ->maxLength(100),
 
                                         Textarea::make('description')
-                                            ->label('Feature Description')
-                                            ->placeholder('Lightning fast load times and optimized performance.')
+                                            ->label(__('tallcms::fields.feature_description'))
+                                            ->placeholder(__('tallcms::ui.t_lightning_fast_load_times_and_optimized_performance'))
                                             ->maxLength(500)
                                             ->rows(2),
 
                                         TextInput::make('link')
-                                            ->label('Link (Optional)')
+                                            ->label(__('tallcms::fields.link_optional'))
                                             ->placeholder('https://example.com/features')
-                                            ->helperText('Use full URLs (https://...) or relative paths (/page)')
+                                            ->helperText(__('tallcms::ui.t_use_full_urls_https_or_relative_paths_page'))
                                             ->maxLength(255),
                                     ])
                                     ->defaultItems(3)
@@ -164,13 +164,13 @@ class FeaturesBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Grid Layout')
+                                Section::make(__('tallcms::ui.t_grid_layout'))
                                     ->schema([
                                         Select::make('columns')
-                                            ->label('Columns')
+                                            ->label(__('tallcms::fields.columns'))
                                             ->options([
                                                 '2' => '2 Columns',
                                                 '3' => '3 Columns',
@@ -179,12 +179,12 @@ class FeaturesBlock extends RichContentCustomBlock
                                             ->default('3'),
 
                                         Select::make('card_style')
-                                            ->label('Card Style')
+                                            ->label(__('tallcms::fields.card_style'))
                                             ->options(static::getCardStyleOptions())
                                             ->default('card shadow-xl bg-base-100'),
 
                                         Select::make('icon_position')
-                                            ->label('Icon Position')
+                                            ->label(__('tallcms::fields.icon_position'))
                                             ->options([
                                                 'top' => 'Top (Centered)',
                                                 'left' => 'Left (Inline)',
@@ -192,7 +192,7 @@ class FeaturesBlock extends RichContentCustomBlock
                                             ->default('top'),
 
                                         Select::make('text_alignment')
-                                            ->label('Text Alignment')
+                                            ->label(__('tallcms::fields.text_alignment'))
                                             ->options([
                                                 'text-left' => 'Left',
                                                 'text-center' => 'Center',
@@ -201,12 +201,12 @@ class FeaturesBlock extends RichContentCustomBlock
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('icon_size')
-                                            ->label('Icon Size')
+                                            ->label(__('tallcms::fields.icon_size'))
                                             ->options([
                                                 'w-8 h-8' => 'Small',
                                                 'w-10 h-10' => 'Medium',
@@ -215,18 +215,18 @@ class FeaturesBlock extends RichContentCustomBlock
                                             ->default('w-10 h-10'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for icons and highlights'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_icons_and_highlights')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Spacing)')
+                                            ->label(__('tallcms::fields.first_section_remove_top_spacing'))
                                             ->default(false),
                                     ])
                                     ->columns(4),

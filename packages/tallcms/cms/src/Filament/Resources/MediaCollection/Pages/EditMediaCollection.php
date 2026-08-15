@@ -17,7 +17,7 @@ class EditMediaCollection extends EditRecord
     {
         return [
             Action::make('viewMedia')
-                ->label('View Media')
+                ->label(__('tallcms::fields.view_media'))
                 ->icon(Heroicon::OutlinedPhoto)
                 ->color('gray')
                 ->url(fn () => TallcmsMediaResource::getUrl('index', [
@@ -30,8 +30,8 @@ class EditMediaCollection extends EditRecord
                     ],
                 ])),
             DeleteAction::make()
-                ->modalHeading('Delete Collection')
-                ->modalDescription('Are you sure you want to delete this collection? Media files will not be deleted, only unassigned from this collection.'),
+                ->modalHeading(__('tallcms::ui.t_delete_collection'))
+                ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_delete_this_collection_media_files_will_not')),
         ];
     }
 

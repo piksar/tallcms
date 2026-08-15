@@ -13,15 +13,21 @@ class UpdateManual extends Page
 
     protected string $view = 'tallcms::filament.pages.update-manual';
 
-    protected static ?string $navigationLabel = 'Manual Update';
-
-    protected static ?string $title = 'Manual Update Required';
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.update_manual.title');
+    }
 
     protected static bool $shouldRegisterNavigation = false;
 
     public static function getNavigationIcon(): string
     {
         return 'heroicon-o-command-line';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('tallcms::pages.update_manual.navigation');
     }
 
     #[Computed]

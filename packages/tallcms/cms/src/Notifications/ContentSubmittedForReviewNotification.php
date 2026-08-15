@@ -65,13 +65,20 @@ class ContentSubmittedForReviewNotification extends Notification
         return FilamentNotification::make()
             ->warning()
             ->icon('heroicon-o-document-text')
-            ->title("New {$contentType} for Review")
+            ->title(__('tallcms::ui.n_new_content_for_review', ['type' => $contentType]))
             ->body($this->getSiteName()
-                ? "{$submitterName} submitted on {$this->getSiteName()}: {$this->content->title}"
-                : "{$submitterName} submitted: {$this->content->title}")
+                ? __('tallcms::ui.n_submitted_on_site', [
+                    'name' => $submitterName,
+                    'site' => $this->getSiteName(),
+                    'title' => $this->content->title,
+                ])
+                : __('tallcms::ui.n_submitted_content', [
+                    'name' => $submitterName,
+                    'title' => $this->content->title,
+                ]))
             ->actions([
                 FilamentAction::make('review')
-                    ->label('Review')
+                    ->label(__('tallcms::ui.t_review'))
                     ->url($this->getEditUrl())
                     ->markAsRead(),
             ])

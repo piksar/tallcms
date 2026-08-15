@@ -38,7 +38,7 @@ class CmsRichEditor extends RichEditor
         // shows on the first empty node only, so this greets newcomers
         // without nagging anyone with content. Users can override by
         // calling ->placeholder() on the field.
-        $this->placeholder('Type / for blocks, or use the side panel');
+        $this->placeholder(__('tallcms::editor.type_for_blocks'));
 
         // Use enhanced view for Filament v4.x/v5.x
         if (static::isFilamentCompatible()) {

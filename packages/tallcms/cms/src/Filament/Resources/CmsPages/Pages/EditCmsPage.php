@@ -68,7 +68,7 @@ class EditCmsPage extends EditRecord
                 $this->getApproveAction(),
                 $this->getRejectAction(),
             ])
-                ->label('Workflow')
+                ->label(__('tallcms::fields.workflow'))
                 ->icon('heroicon-o-arrow-path')
                 ->color('primary')
                 ->button()
@@ -77,7 +77,7 @@ class EditCmsPage extends EditRecord
             // Preview Actions Group
             ActionGroup::make([
                 Action::make('preview')
-                    ->label('Preview')
+                    ->label(__('tallcms::fields.preview'))
                     ->icon('heroicon-o-eye')
                     ->url(fn () => route('tallcms.preview.page', ['page' => $this->record->id]))
                     ->openUrlInNewTab(),
@@ -85,7 +85,7 @@ class EditCmsPage extends EditRecord
                 $this->getSharePreviewAction(),
                 $this->getRevokePreviewLinksAction(),
             ])
-                ->label('Preview')
+                ->label(__('tallcms::fields.preview'))
                 ->icon('heroicon-o-eye')
                 ->color('info')
                 ->button(),
@@ -104,14 +104,14 @@ class EditCmsPage extends EditRecord
     protected function getMarkAsReviewedAction(): Action
     {
         return Action::make('markAsReviewed')
-            ->label('Mark as Reviewed')
+            ->label(__('tallcms::fields.mark_as_reviewed'))
             ->icon('heroicon-o-check-badge')
             ->color('success')
             ->visible(fn () => $this->record !== null && Schema::hasColumn('tallcms_pages', 'last_reviewed_at'))
             ->requiresConfirmation()
-            ->modalHeading('Mark Content as Reviewed')
-            ->modalDescription('This will update the review timestamp and set you as the reviewer.')
-            ->modalSubmitActionLabel('Confirm Review')
+            ->modalHeading(__('tallcms::ui.t_mark_content_as_reviewed'))
+            ->modalDescription(__('tallcms::ui.t_this_will_update_the_review_timestamp_and_set_you_as_the_reviewer'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_confirm_review'))
             ->action(function () {
                 $this->record->update([
                     'last_reviewed_at' => now(),
@@ -120,7 +120,7 @@ class EditCmsPage extends EditRecord
 
                 Notification::make()
                     ->success()
-                    ->title('Content Marked as Reviewed')
+                    ->title(__('tallcms::ui.t_content_marked_as_reviewed'))
                     ->send();
 
                 $this->refreshFormData(['last_reviewed_at', 'reviewed_by']);
@@ -130,19 +130,19 @@ class EditCmsPage extends EditRecord
     protected function getSaveSnapshotAction(): Action
     {
         return Action::make('saveSnapshot')
-            ->label('Save Snapshot')
+            ->label(__('tallcms::fields.save_snapshot'))
             ->icon('heroicon-o-camera')
             ->color('gray')
             ->visible(fn () => $this->record !== null && auth()->user()?->can('ViewRevisions:CmsPage'))
             ->form([
                 Textarea::make('notes')
-                    ->label('Snapshot Notes (optional)')
-                    ->placeholder('Describe this milestone...')
+                    ->label(__('tallcms::fields.snapshot_notes_optional'))
+                    ->placeholder(__('tallcms::ui.t_describe_this_milestone'))
                     ->rows(2),
             ])
-            ->modalHeading('Save Snapshot')
-            ->modalDescription('Save your current changes and create a pinned milestone in the revision history.')
-            ->modalSubmitActionLabel('Save Snapshot')
+            ->modalHeading(__('tallcms::fields.save_snapshot'))
+            ->modalDescription(__('tallcms::ui.t_save_your_current_changes_and_create_a_pinned_milestone_in_the_revis'))
+            ->modalSubmitActionLabel(__('tallcms::fields.save_snapshot'))
             ->action(function (array $data) {
                 // Skip ALL auto revision hooks for this save
                 $this->record->skipRevisions();
@@ -156,8 +156,8 @@ class EditCmsPage extends EditRecord
 
                 Notification::make()
                     ->success()
-                    ->title('Snapshot Saved')
-                    ->body('Changes saved and snapshot created.')
+                    ->title(__('tallcms::ui.t_snapshot_saved'))
+                    ->body(__('tallcms::ui.t_changes_saved_and_snapshot_created'))
                     ->send();
             });
     }
@@ -165,20 +165,20 @@ class EditCmsPage extends EditRecord
     protected function getSubmitForReviewAction(): Action
     {
         return Action::make('submitForReview')
-            ->label('Submit for Review')
+            ->label(__('tallcms::fields.submit_for_review'))
             ->icon('heroicon-o-paper-airplane')
             ->color('warning')
             ->visible(fn () => $this->record->canSubmitForReview() && auth()->user()?->can('SubmitForReview:CmsPage'))
             ->requiresConfirmation()
-            ->modalHeading('Submit for Review')
-            ->modalDescription('Are you sure you want to submit this page for review? An editor will need to approve it before it can be published.')
-            ->modalSubmitActionLabel('Submit')
+            ->modalHeading(__('tallcms::fields.submit_for_review'))
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_submit_this_page_for_review_an_editor_will_'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_submit'))
             ->action(function () {
                 app(PublishingWorkflowService::class)->submitForReview($this->record);
 
                 Notification::make()
-                    ->title('Submitted for Review')
-                    ->body('Your page has been submitted for review.')
+                    ->title(__('tallcms::ui.t_submitted_for_review'))
+                    ->body(__('tallcms::ui.t_your_page_has_been_submitted_for_review'))
                     ->success()
                     ->send();
 
@@ -189,20 +189,20 @@ class EditCmsPage extends EditRecord
     protected function getRetractSubmissionAction(): Action
     {
         return Action::make('retractSubmission')
-            ->label('Retract Submission')
+            ->label(__('tallcms::fields.retract_submission'))
             ->icon('heroicon-o-arrow-uturn-left')
             ->color('gray')
             ->visible(fn () => $this->record->canRetractSubmission())
             ->requiresConfirmation()
-            ->modalHeading('Retract Submission')
-            ->modalDescription('This will move the page back to draft so you can edit it. You can submit it for review again later.')
-            ->modalSubmitActionLabel('Retract')
+            ->modalHeading(__('tallcms::fields.retract_submission'))
+            ->modalDescription(__('tallcms::ui.t_this_will_move_the_page_back_to_draft_so_you_can_edit_it_you_can_sub'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_retract'))
             ->action(function () {
                 $this->record->retractSubmission();
 
                 Notification::make()
-                    ->title('Submission Retracted')
-                    ->body('The page has been moved back to draft.')
+                    ->title(__('tallcms::ui.t_submission_retracted'))
+                    ->body(__('tallcms::ui.t_the_page_has_been_moved_back_to_draft'))
                     ->success()
                     ->send();
 
@@ -213,22 +213,24 @@ class EditCmsPage extends EditRecord
     protected function getApproveAction(): Action
     {
         return Action::make('approve')
-            ->label('Approve & Publish')
+            ->label(__('tallcms::fields.approve_publish'))
             ->icon('heroicon-o-check-circle')
             ->color('success')
             ->visible(fn () => $this->record->canBeApproved() && auth()->user()?->can('Approve:CmsPage'))
             ->requiresConfirmation()
-            ->modalHeading('Approve & Publish')
-            ->modalDescription('Are you sure you want to approve and publish this page? It will be visible to the public.')
-            ->modalSubmitActionLabel('Approve')
+            ->modalHeading(__('tallcms::fields.approve_publish'))
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_approve_and_publish_this_page_it_will_be_vi'))
+            ->modalSubmitActionLabel(__('tallcms::fields.approve'))
             ->action(function () {
                 app(PublishingWorkflowService::class)->approve($this->record);
 
                 Notification::make()
-                    ->title('Page Approved')
+                    ->title(__('tallcms::ui.t_page_approved'))
                     ->body($this->record->isScheduled()
-                        ? 'Page approved and scheduled for '.$this->record->published_at->format('M j, Y g:i A')
-                        : 'Page approved and published.')
+                        ? __('tallcms::ui.n_page_approved_scheduled', [
+                            'date' => $this->record->published_at->format('M j, Y g:i A'),
+                        ])
+                        : __('tallcms::ui.n_page_approved_published'))
                     ->success()
                     ->send();
 
@@ -239,26 +241,26 @@ class EditCmsPage extends EditRecord
     protected function getRejectAction(): Action
     {
         return Action::make('reject')
-            ->label('Reject')
+            ->label(__('tallcms::fields.reject'))
             ->icon('heroicon-o-x-circle')
             ->color('danger')
             ->visible(fn () => $this->record->canBeRejected() && auth()->user()?->can('Approve:CmsPage'))
             ->form([
                 Textarea::make('rejection_reason')
-                    ->label('Reason for Rejection')
+                    ->label(__('tallcms::fields.reason_for_rejection'))
                     ->required()
                     ->rows(4)
-                    ->placeholder('Please explain why this page is being rejected and what changes are needed...'),
+                    ->placeholder(__('tallcms::ui.t_please_explain_why_this_page_is_being_rejected_and_what_changes_are_')),
             ])
-            ->modalHeading('Reject Page')
-            ->modalDescription('Please provide a reason for rejection. The author will be notified.')
-            ->modalSubmitActionLabel('Reject')
+            ->modalHeading(__('tallcms::ui.t_reject_page'))
+            ->modalDescription(__('tallcms::ui.t_please_provide_a_reason_for_rejection_the_author_will_be_notified'))
+            ->modalSubmitActionLabel(__('tallcms::fields.reject'))
             ->action(function (array $data) {
                 app(PublishingWorkflowService::class)->reject($this->record, $data['rejection_reason']);
 
                 Notification::make()
-                    ->title('Page Rejected')
-                    ->body('The author has been notified with your feedback.')
+                    ->title(__('tallcms::ui.t_page_rejected'))
+                    ->body(__('tallcms::ui.t_the_author_has_been_notified_with_your_feedback'))
                     ->warning()
                     ->send();
 
@@ -269,24 +271,24 @@ class EditCmsPage extends EditRecord
     protected function getSharePreviewAction(): Action
     {
         return Action::make('sharePreview')
-            ->label('Share Preview Link')
+            ->label(__('tallcms::fields.share_preview_link'))
             ->icon('heroicon-o-share')
             ->visible(fn () => auth()->user()?->can('GeneratePreviewLink:CmsPage'))
             ->form([
                 Radio::make('expiry')
-                    ->label('Link Expires In')
+                    ->label(__('tallcms::fields.link_expires_in'))
                     ->options([
-                        '1' => '1 hour',
-                        '24' => '24 hours',
-                        '168' => '7 days',
-                        '720' => '30 days',
+                        '1' => __('tallcms::ui.expiry_1_hour'),
+                        '24' => __('tallcms::ui.expiry_24_hours'),
+                        '168' => __('tallcms::ui.expiry_7_days'),
+                        '720' => __('tallcms::ui.expiry_30_days'),
                     ])
                     ->default('24')
                     ->required(),
             ])
-            ->modalHeading('Generate Shareable Preview Link')
-            ->modalDescription('Create a link that allows anyone to preview this content without logging in.')
-            ->modalSubmitActionLabel('Generate Link')
+            ->modalHeading(__('tallcms::ui.t_generate_shareable_preview_link'))
+            ->modalDescription(__('tallcms::ui.t_create_a_link_that_allows_anyone_to_preview_this_content_without_log'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_generate_link'))
             ->action(function (array $data) {
                 $hours = (int) $data['expiry'];
                 $token = $this->record->createPreviewToken(Carbon::now()->addHours($hours));
@@ -294,12 +296,12 @@ class EditCmsPage extends EditRecord
                 $url = $token->getPreviewUrl();
 
                 Notification::make()
-                    ->title('Preview Link Generated')
-                    ->body("Link expires in {$hours} hour(s). Click to copy.")
+                    ->title(__('tallcms::ui.t_preview_link_generated'))
+                    ->body(__('tallcms::ui.n_link_expires_hours', ['hours' => $hours]))
                     ->success()
                     ->actions([
                         Action::make('copy')
-                            ->label('Copy Link')
+                            ->label(__('tallcms::fields.copy_link'))
                             ->url($url)
                             ->openUrlInNewTab(),
                     ])
@@ -311,20 +313,22 @@ class EditCmsPage extends EditRecord
     protected function getRevokePreviewLinksAction(): Action
     {
         return Action::make('revokePreviewLinks')
-            ->label('Revoke All Preview Links')
+            ->label(__('tallcms::fields.revoke_all_preview_links'))
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->visible(fn () => $this->record->hasActivePreviewTokens() && auth()->user()?->can('GeneratePreviewLink:CmsPage'))
             ->requiresConfirmation()
-            ->modalHeading('Revoke Preview Links')
-            ->modalDescription(fn () => "This will invalidate all {$this->record->getActivePreviewTokenCount()} active preview link(s). This action cannot be undone.")
-            ->modalSubmitActionLabel('Revoke All')
+            ->modalHeading(__('tallcms::ui.t_revoke_preview_links'))
+            ->modalDescription(fn () => __('tallcms::ui.n_revoke_preview_links_confirm', [
+                'count' => $this->record->getActivePreviewTokenCount(),
+            ]))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_revoke_all'))
             ->action(function () {
                 $count = $this->record->revokeAllPreviewTokens();
 
                 Notification::make()
-                    ->title('Preview Links Revoked')
-                    ->body("{$count} preview link(s) have been revoked.")
+                    ->title(__('tallcms::ui.t_preview_links_revoked'))
+                    ->body(__('tallcms::ui.n_preview_links_revoked', ['count' => $count]))
                     ->success()
                     ->send();
             });

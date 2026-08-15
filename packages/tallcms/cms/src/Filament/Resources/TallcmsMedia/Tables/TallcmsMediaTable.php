@@ -25,7 +25,7 @@ class TallcmsMediaTable
         return $table
             ->columns([
                 ImageColumn::make('url')
-                    ->label('Preview')
+                    ->label(__('tallcms::fields.preview'))
                     ->height(50)
                     ->width(50)
                     ->getStateUsing(fn ($record) => $record->is_image ? $record->url : null)
@@ -33,7 +33,7 @@ class TallcmsMediaTable
                     ->visibleFrom('sm'),
 
                 TextColumn::make('name')
-                    ->label('File Name')
+                    ->label(__('tallcms::fields.file_name'))
                     ->searchable()
                     ->sortable()
                     ->limit(30)
@@ -44,16 +44,16 @@ class TallcmsMediaTable
                     }),
 
                 TextColumn::make('collections.name')
-                    ->label('Collections')
+                    ->label(__('tallcms::fields.collections'))
                     ->badge()
                     ->color(fn ($state, $record) => self::getCollectionColor($record))
                     ->separator(', ')
                     ->limit(2)
                     ->searchable()
-                    ->placeholder('No collections'),
+                    ->placeholder(__('tallcms::ui.t_no_collections')),
 
                 TextColumn::make('mime_type')
-                    ->label('Type')
+                    ->label(__('tallcms::fields.type'))
                     ->badge()
                     ->color(fn (string $state): string => match (true) {
                         str_starts_with($state, 'image/') => 'success',
@@ -64,17 +64,17 @@ class TallcmsMediaTable
                     ->formatStateUsing(fn (string $state): string => strtoupper(explode('/', $state)[0])),
 
                 TextColumn::make('human_size')
-                    ->label('Size')
+                    ->label(__('tallcms::fields.size'))
                     ->sortable(['size'])
                     ->alignEnd(),
 
                 TextColumn::make('dimensions')
-                    ->label('Dimensions')
-                    ->placeholder('N/A')
+                    ->label(__('tallcms::fields.dimensions'))
+                    ->placeholder(__('tallcms::ui.t_n_a'))
                     ->visibleFrom('lg'),
 
                 TextColumn::make('created_at')
-                    ->label('Uploaded')
+                    ->label(__('tallcms::fields.uploaded'))
                     ->dateTime()
                     ->sortable()
                     ->since()
@@ -84,21 +84,21 @@ class TallcmsMediaTable
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->modalHeading('Delete Media File')
-                    ->modalDescription('Are you sure you want to delete this media file? This action cannot be undone and the file will be permanently removed from storage.')
-                    ->modalSubmitActionLabel('Delete File'),
+                    ->modalHeading(__('tallcms::ui.t_delete_media_file'))
+                    ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_delete_this_media_file_this_action_cannot_b'))
+                    ->modalSubmitActionLabel(__('tallcms::ui.t_delete_file')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('update_alt_text')
-                        ->label('Update Alt Text')
+                        ->label(__('tallcms::fields.update_alt_text'))
                         ->icon('heroicon-o-pencil-square')
                         ->form([
                             TextInput::make('alt_text')
-                                ->label('Alt Text')
+                                ->label(__('tallcms::fields.alt_text'))
                                 ->required()
                                 ->maxLength(255)
-                                ->helperText('Will be applied to all selected images'),
+                                ->helperText(__('tallcms::ui.t_will_be_applied_to_all_selected_images')),
                         ])
                         ->action(fn (Collection $records, array $data) => $records->each->update(['alt_text' => $data['alt_text']]))
                         ->deselectRecordsAfterCompletion(),
@@ -131,13 +131,13 @@ class TallcmsMediaTable
 
         // Collection filter - always shown for filtering by collection
         $filters[] = SelectFilter::make('collections')
-            ->label('Collection')
+            ->label(__('tallcms::fields.collection'))
             ->relationship('collections', 'name')
             ->searchable()
             ->preload();
 
         $filters[] = SelectFilter::make('mime_type')
-            ->label('File Type')
+            ->label(__('tallcms::fields.file_type'))
             ->options([
                 'image/' => 'Images',
                 'video/' => 'Videos',
@@ -153,8 +153,8 @@ class TallcmsMediaTable
             });
 
         $filters[] = TernaryFilter::make('has_alt_text')
-            ->label('Alt Text')
-            ->placeholder('All')
+            ->label(__('tallcms::fields.alt_text'))
+            ->placeholder(__('tallcms::ui.filter_all'))
             ->trueLabel('Has alt text')
             ->falseLabel('Missing alt text')
             ->queries(
@@ -163,8 +163,8 @@ class TallcmsMediaTable
             );
 
         $filters[] = TernaryFilter::make('has_variants')
-            ->label('Optimized')
-            ->placeholder('All')
+            ->label(__('tallcms::fields.optimized'))
+            ->placeholder(__('tallcms::ui.filter_all'))
             ->trueLabel('Optimized')
             ->falseLabel('Unoptimized')
             ->queries(
@@ -173,7 +173,7 @@ class TallcmsMediaTable
             );
 
         $filters[] = Filter::make('recent')
-            ->label('Recently Uploaded')
+            ->label(__('tallcms::fields.recently_uploaded'))
             ->query(fn (Builder $query) => $query->where('created_at', '>=', now()->subDays(7)))
             ->toggle();
 

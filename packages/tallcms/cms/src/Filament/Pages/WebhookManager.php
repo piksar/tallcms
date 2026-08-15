@@ -25,9 +25,12 @@ class WebhookManager extends Page implements HasForms
     use HasPageShield;
     use InteractsWithForms;
 
-    protected static ?string $title = 'Webhooks';
-
     protected string $view = 'tallcms::filament.pages.webhook-manager';
+
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.webhook_manager.title');
+    }
 
     public ?int $selectedWebhookId = null;
 
@@ -40,12 +43,12 @@ class WebhookManager extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return 'Webhooks';
+        return __('tallcms::pages.webhook_manager.navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.system', 'System');
+        return tallcms_nav_group('system');
     }
 
     public static function getNavigationSort(): ?int
@@ -139,24 +142,24 @@ class WebhookManager extends Page implements HasForms
     public function createWebhookAction(): Action
     {
         return Action::make('createWebhook')
-            ->label('Add Webhook')
+            ->label(__('tallcms::fields.add_webhook'))
             ->icon('heroicon-o-plus')
             ->color('primary')
             ->form([
                 TextInput::make('name')
-                    ->label('Name')
-                    ->placeholder('e.g., Netlify Build Hook, Slack Notification')
+                    ->label(__('tallcms::fields.name'))
+                    ->placeholder(__('tallcms::ui.t_e_g_netlify_build_hook_slack_notification'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('url')
-                    ->label('Endpoint URL')
+                    ->label(__('tallcms::fields.endpoint_url'))
                     ->placeholder('https://example.com/webhook')
                     ->required()
                     ->url()
                     ->maxLength(2048)
-                    ->helperText('Must be HTTPS. IP addresses are not allowed.'),
+                    ->helperText(__('tallcms::ui.t_must_be_https_ip_addresses_are_not_allowed')),
                 CheckboxList::make('events')
-                    ->label('Events')
+                    ->label(__('tallcms::fields.events'))
                     ->options([
                         'page.created' => 'Page Created',
                         'page.updated' => 'Page Updated',
@@ -178,10 +181,10 @@ class WebhookManager extends Page implements HasForms
                     ->columns(2)
                     ->required(),
                 Toggle::make('is_active')
-                    ->label('Active')
+                    ->label(__('tallcms::fields.active'))
                     ->default(true),
                 TextInput::make('timeout')
-                    ->label('Timeout (seconds)')
+                    ->label(__('tallcms::fields.timeout_seconds'))
                     ->numeric()
                     ->default(30)
                     ->minValue(5)
@@ -194,7 +197,7 @@ class WebhookManager extends Page implements HasForms
 
                 if (! $result['valid']) {
                     Notification::make()
-                        ->title('Invalid URL')
+                        ->title(__('tallcms::ui.t_invalid_url'))
                         ->body($result['error'])
                         ->danger()
                         ->send();
@@ -214,8 +217,8 @@ class WebhookManager extends Page implements HasForms
                 unset($this->webhooks);
 
                 Notification::make()
-                    ->title('Webhook created')
-                    ->body('The webhook has been created successfully.')
+                    ->title(__('tallcms::ui.t_webhook_created'))
+                    ->body(__('tallcms::ui.t_the_webhook_has_been_created_successfully'))
                     ->success()
                     ->send();
             });
@@ -227,21 +230,21 @@ class WebhookManager extends Page implements HasForms
     public function editWebhookAction(): Action
     {
         return Action::make('editWebhook')
-            ->label('Edit')
+            ->label(__('tallcms::fields.edit'))
             ->icon('heroicon-o-pencil')
             ->color('gray')
             ->form([
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label(__('tallcms::fields.name'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('url')
-                    ->label('Endpoint URL')
+                    ->label(__('tallcms::fields.endpoint_url'))
                     ->required()
                     ->url()
                     ->maxLength(2048),
                 CheckboxList::make('events')
-                    ->label('Events')
+                    ->label(__('tallcms::fields.events'))
                     ->options([
                         'page.created' => 'Page Created',
                         'page.updated' => 'Page Updated',
@@ -263,9 +266,9 @@ class WebhookManager extends Page implements HasForms
                     ->columns(2)
                     ->required(),
                 Toggle::make('is_active')
-                    ->label('Active'),
+                    ->label(__('tallcms::fields.active')),
                 TextInput::make('timeout')
-                    ->label('Timeout (seconds)')
+                    ->label(__('tallcms::fields.timeout_seconds'))
                     ->numeric()
                     ->minValue(5)
                     ->maxValue(60),
@@ -295,7 +298,7 @@ class WebhookManager extends Page implements HasForms
 
                     if (! $result['valid']) {
                         Notification::make()
-                            ->title('Invalid URL')
+                            ->title(__('tallcms::ui.t_invalid_url'))
                             ->body($result['error'])
                             ->danger()
                             ->send();
@@ -310,8 +313,8 @@ class WebhookManager extends Page implements HasForms
                 $this->closeWebhookDetails();
 
                 Notification::make()
-                    ->title('Webhook updated')
-                    ->body('The webhook has been updated successfully.')
+                    ->title(__('tallcms::ui.t_webhook_updated'))
+                    ->body(__('tallcms::ui.t_the_webhook_has_been_updated_successfully'))
                     ->success()
                     ->send();
             });
@@ -323,13 +326,13 @@ class WebhookManager extends Page implements HasForms
     public function deleteWebhookAction(): Action
     {
         return Action::make('deleteWebhook')
-            ->label('Delete')
+            ->label(__('tallcms::fields.delete'))
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->requiresConfirmation()
-            ->modalHeading('Delete Webhook')
-            ->modalDescription('Are you sure you want to delete this webhook? This will also delete all delivery logs.')
-            ->modalSubmitActionLabel('Yes, Delete')
+            ->modalHeading(__('tallcms::ui.t_delete_webhook'))
+            ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_delete_this_webhook_this_will_also_delete_a'))
+            ->modalSubmitActionLabel(__('tallcms::ui.t_yes_delete'))
             ->action(function (array $arguments) {
                 $webhook = Webhook::find($arguments['id']);
 
@@ -341,8 +344,8 @@ class WebhookManager extends Page implements HasForms
                 $this->closeWebhookDetails();
 
                 Notification::make()
-                    ->title('Webhook deleted')
-                    ->body('The webhook and its delivery logs have been deleted.')
+                    ->title(__('tallcms::ui.t_webhook_deleted'))
+                    ->body(__('tallcms::ui.t_the_webhook_and_its_delivery_logs_have_been_deleted'))
                     ->success()
                     ->send();
             });
@@ -354,7 +357,7 @@ class WebhookManager extends Page implements HasForms
     public function testWebhookAction(): Action
     {
         return Action::make('testWebhook')
-            ->label('Send Test')
+            ->label(__('tallcms::fields.send_test'))
             ->icon('heroicon-o-paper-airplane')
             ->color('info')
             ->action(function (array $arguments) {
@@ -389,8 +392,8 @@ class WebhookManager extends Page implements HasForms
                 );
 
                 Notification::make()
-                    ->title('Test sent')
-                    ->body('A test webhook has been sent. Check the delivery logs for results.')
+                    ->title(__('tallcms::ui.t_test_sent'))
+                    ->body(__('tallcms::ui.t_a_test_webhook_has_been_sent_check_the_delivery_logs_for_results'))
                     ->success()
                     ->send();
 

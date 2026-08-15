@@ -24,22 +24,22 @@ class TallcmsContactSubmissionResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.contact_submissions.singular', 'Contact Submission');
+        return tallcms_label('contact_submissions', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.contact_submissions.plural', 'Contact Submissions');
+        return tallcms_label('contact_submissions', 'plural');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.contact_submissions.navigation', 'Contact Submissions');
+        return tallcms_label('contact_submissions', 'navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getNavigationSort(): ?int

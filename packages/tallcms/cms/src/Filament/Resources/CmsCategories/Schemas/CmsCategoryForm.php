@@ -20,7 +20,7 @@ class CmsCategoryForm
         return $schema
             ->columns(2)
             ->components([
-                TextInput::make('name')
+                TextInput::make('name')->label(__('tallcms::fields.name'))
                     ->required(function ($livewire) {
                         if (! tallcms_i18n_enabled()) {
                             return true;
@@ -36,7 +36,7 @@ class CmsCategoryForm
                     ->afterStateUpdated(fn (string $state, ?string $old, callable $set) => $set('slug', Str::slug($state))
                     ),
 
-                TextInput::make('slug')
+                TextInput::make('slug')->label(__('tallcms::fields.slug'))
                     ->required(function ($livewire) {
                         if (! tallcms_i18n_enabled()) {
                             return true;
@@ -72,12 +72,12 @@ class CmsCategoryForm
                         return $rules;
                     })
                     ->validationMessages([
-                        'not_in' => 'This slug is reserved (matches a language code).',
+                        'not_in' => __('tallcms::fields.slug_reserved_language_code'),
                     ])
-                    ->helperText('Used in the URL. Only letters, numbers, hyphens and underscores allowed.'),
+                    ->helperText(__('tallcms::fields.help_category_slug_url')),
 
                 Select::make('parent_id')
-                    ->label('Parent '.config('tallcms.labels.categories.singular', 'Category'))
+                    ->label(__('tallcms::fields.parent', ['resource' => tallcms_label('categories', 'singular')]))
                     ->options(function () {
                         $query = CmsCategory::query()->whereNull('parent_id');
                         if (auth()->check() && ! auth()->user()->hasRole('super_admin')
@@ -91,16 +91,16 @@ class CmsCategoryForm
                     ->nullable(),
 
                 ColorPicker::make('color')
-                    ->label(config('tallcms.labels.categories.singular', 'Category').' Color')
+                    ->label(__('tallcms::fields.category_color'))
                     ->nullable()
-                    ->helperText('Optional color for visual organization'),
+                    ->helperText(__('tallcms::ui.t_optional_color_for_visual_organization')),
 
-                TextInput::make('sort_order')
+                TextInput::make('sort_order')->label(__('tallcms::fields.sort_order'))
                     ->numeric()
                     ->default(0)
                     ->columnSpan(1),
 
-                Textarea::make('description')
+                Textarea::make('description')->label(__('tallcms::fields.description'))
                     ->maxLength(500)
                     ->columnSpanFull(),
             ]);

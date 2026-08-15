@@ -34,15 +34,15 @@ class CmsPostForm
     {
         return $schema
             ->components([
-                Tabs::make('Post Management')
+                Tabs::make(__('tallcms::fields.post_management'))
                     ->tabs([
-                        Tabs\Tab::make('Content')
+                        Tabs\Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-o-document-text')
                             ->schema([
                                 Section::make()
                                     ->columns(2)
                                     ->schema([
-                                        TextInput::make('title')
+                                        TextInput::make('title')->label(__('tallcms::fields.title'))
                                             ->required(function ($livewire) {
                                                 if (! tallcms_i18n_enabled()) {
                                                     return true;
@@ -59,7 +59,7 @@ class CmsPostForm
                                             )
                                             ->columnSpan(1),
 
-                                        TextInput::make('slug')
+                                        TextInput::make('slug')->label(__('tallcms::fields.slug'))
                                             ->required(function ($livewire) {
                                                 if (! tallcms_i18n_enabled()) {
                                                     return true;
@@ -95,20 +95,20 @@ class CmsPostForm
                                                 return $rules;
                                             })
                                             ->validationMessages([
-                                                'not_in' => 'This slug is reserved (matches a language code).',
+                                                'not_in' => __('tallcms::fields.slug_reserved_language_code'),
                                             ])
-                                            ->helperText('Used in the URL')
+                                            ->helperText(__('tallcms::fields.help_used_in_the_url'))
                                             ->columnSpan(1),
                                     ]),
 
                                 Textarea::make('excerpt')
-                                    ->label('Excerpt')
+                                    ->label(__('tallcms::fields.excerpt'))
                                     ->maxLength(500)
                                     ->rows(3)
-                                    ->helperText('Brief description shown in post listings')
+                                    ->helperText(__('tallcms::fields.help_brief_description_post_listings'))
                                     ->columnSpanFull(),
 
-                                CmsRichEditor::make('content')
+                                CmsRichEditor::make('content')->label(__('tallcms::fields.content'))
                                     ->columnSpanFull()
                                     ->activePanel('customBlocks')
                                     ->customBlocks(CustomBlockDiscoveryService::getBlocksArray())
@@ -130,16 +130,16 @@ class CmsPostForm
                                             'tableDelete',
                                         ],
                                     ])
-                                    ->helperText('Create rich post content using the editor toolbar.'),
+                                    ->helperText(__('tallcms::fields.help_create_rich_post_content')),
                             ]),
 
-                        Tabs\Tab::make('Settings')
+                        Tabs\Tab::make(__('tallcms::fields.settings'))
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                Section::make('Post Settings')
+                                Section::make(__('tallcms::fields.post_settings'))
                                     ->columns(2)
                                     ->schema([
-                                        Select::make('status')
+                                        Select::make('status')->label(__('tallcms::fields.status'))
                                             ->options(function () {
                                                 // When review workflow is disabled, all users can publish directly
                                                 if (! tallcms_review_workflow_enabled()) {
@@ -165,23 +165,23 @@ class CmsPostForm
                                             })
                                             ->helperText(function (?CmsPost $record) {
                                                 if ($record?->wasRejected()) {
-                                                    return 'This content was rejected. Reason: '.$record->getRejectionReason();
+                                                    return __('tallcms::fields.help_content_rejected', ['reason' => $record->getRejectionReason()]);
                                                 }
                                                 if ($record?->isPending()) {
-                                                    return 'This content is pending review.';
+                                                    return __('tallcms::fields.help_content_pending_review');
                                                 }
 
                                                 return null;
                                             }),
 
                                         DateTimePicker::make('published_at')
-                                            ->label('Publish Date')
+                                            ->label(__('tallcms::fields.publish_date'))
                                             ->nullable()
-                                            ->helperText('Leave empty to publish immediately, or set a future date to schedule.')
+                                            ->helperText(__('tallcms::fields.help_leave_empty_publish_schedule'))
                                             ->visible(fn () => ! tallcms_review_workflow_enabled() || auth()->user()?->can('Approve:CmsPost')),
 
                                         Select::make('author_id')
-                                            ->label('Author')
+                                            ->label(__('tallcms::fields.author'))
                                             ->relationship(
                                                 name: 'author',
                                                 titleAttribute: 'name',
@@ -194,13 +194,13 @@ class CmsPostForm
                                             ->required(),
 
                                         Toggle::make('is_featured')
-                                            ->label('Featured Post')
-                                            ->helperText('Featured posts appear prominently'),
+                                            ->label(__('tallcms::fields.featured_post'))
+                                            ->helperText(__('tallcms::fields.help_featured_posts_prominently')),
                                     ]),
 
-                                Section::make(config('tallcms.labels.categories.plural', 'Categories'))
+                                Section::make(tallcms_label('categories', 'plural'))
                                     ->schema([
-                                        Select::make('categories')
+                                        Select::make('categories')->label(__('tallcms::fields.categories'))
                                             ->multiple()
                                             ->relationship('categories', 'name')
                                             ->options(function () {
@@ -215,12 +215,12 @@ class CmsPostForm
                                             ->searchable()
                                             ->preload()
                                             ->createOptionForm([
-                                                TextInput::make('name')
+                                                TextInput::make('name')->label(__('tallcms::fields.name'))
                                                     ->required()
                                                     ->live(onBlur: true)
                                                     ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state))
                                                     ),
-                                                TextInput::make('slug')
+                                                TextInput::make('slug')->label(__('tallcms::fields.slug'))
                                                     ->required()
                                                     ->rules(function ($livewire) {
                                                         $rules = ['alpha_dash'];
@@ -245,34 +245,34 @@ class CmsPostForm
                                                         return $rules;
                                                     })
                                                     ->validationMessages([
-                                                        'not_in' => 'This slug is reserved (matches a language code).',
+                                                        'not_in' => __('tallcms::fields.slug_reserved_language_code'),
                                                     ]),
-                                                Textarea::make('description')
+                                                Textarea::make('description')->label(__('tallcms::fields.description'))
                                                     ->rows(2),
                                             ])
-                                            ->helperText('Select existing '.config('tallcms.labels.categories.plural', 'categories').' or create new ones for this post'),
+                                            ->helperText(__('tallcms::fields.help_select_or_create_categories_for_post', ['categories' => tallcms_label('categories', 'plural')])),
                                     ]),
                             ]),
 
-                        Tabs\Tab::make('SEO')
+                        Tabs\Tab::make(__('tallcms::fields.seo'))
                             ->icon('heroicon-o-magnifying-glass')
                             ->schema([
-                                Section::make('Search Engine Optimization')
-                                    ->description('Optimize your post for search engines and social media sharing')
+                                Section::make(__('tallcms::fields.search_engine_optimization'))
+                                    ->description(__('tallcms::fields.help_optimize_post_seo'))
                                     ->schema([
                                         TextInput::make('meta_title')
-                                            ->label('Meta Title')
+                                            ->label(__('tallcms::fields.meta_title'))
                                             ->maxLength(60)
-                                            ->helperText('Recommended: 50-60 characters. If empty, post title will be used.'),
+                                            ->helperText(__('tallcms::fields.help_meta_title_post')),
 
                                         Textarea::make('meta_description')
-                                            ->label('Meta Description')
+                                            ->label(__('tallcms::fields.meta_description'))
                                             ->maxLength(160)
                                             ->rows(3)
-                                            ->helperText('Recommended: 150-160 characters. If empty, excerpt will be used.'),
+                                            ->helperText(__('tallcms::fields.help_meta_description_post')),
 
                                         FileUpload::make('featured_image')
-                                            ->label('Featured Image')
+                                            ->label(__('tallcms::fields.featured_image'))
                                             ->image()
                                             ->directory('cms/posts/featured-images')
                                             ->disk(\cms_media_disk())
@@ -285,44 +285,44 @@ class CmsPostForm
                                                 '1.91:1', // Facebook recommended
                                                 '2:1',    // Twitter header
                                             ])
-                                            ->helperText('Used for social media sharing and post headers. Recommended: 1200x630px for best compatibility.'),
+                                            ->helperText(__('tallcms::fields.help_featured_image_post')),
                                     ]),
                             ]),
 
-                        Tabs\Tab::make('Attribution')
+                        Tabs\Tab::make(__('tallcms::fields.attribution'))
                             ->icon('heroicon-o-shield-check')
                             ->visible(fn () => DbSchema::hasColumn('tallcms_posts', 'last_reviewed_at'))
                             ->schema([
-                                Section::make('Content Review')
-                                    ->description('Track when this content was last reviewed for accuracy')
+                                Section::make(__('tallcms::fields.content_review'))
+                                    ->description(__('tallcms::fields.help_track_content_reviewed'))
                                     ->schema([
                                         Placeholder::make('last_reviewed_display')
-                                            ->label('Last Reviewed')
+                                            ->label(__('tallcms::fields.last_reviewed'))
                                             ->content(fn (?CmsPost $record) => $record?->last_reviewed_at
                                                 ? $record->last_reviewed_at->format('F j, Y \a\t g:i A')
-                                                : 'Never reviewed'),
+                                                : __('tallcms::fields.never_reviewed')),
 
                                         Placeholder::make('reviewed_by_display')
-                                            ->label('Reviewed By')
-                                            ->content(fn (?CmsPost $record) => $record?->reviewer?->name ?? 'Not yet reviewed'),
+                                            ->label(__('tallcms::fields.reviewed_by'))
+                                            ->content(fn (?CmsPost $record) => $record?->reviewer?->name ?? __('tallcms::fields.not_yet_reviewed')),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Expert Reviewer')
-                                    ->description('Optional external expert who reviewed this content for accuracy')
+                                Section::make(__('tallcms::fields.expert_reviewer'))
+                                    ->description(__('tallcms::fields.help_optional_expert_reviewer'))
                                     ->schema([
                                         TextInput::make('expert_reviewer_name')
-                                            ->label('Reviewer Name')
+                                            ->label(__('tallcms::fields.reviewer_name'))
                                             ->maxLength(255)
-                                            ->placeholder('e.g., Dr. Jane Smith'),
+                                            ->placeholder(__('tallcms::fields.placeholder_expert_name')),
 
                                         TextInput::make('expert_reviewer_title')
-                                            ->label('Reviewer Title / Credentials')
+                                            ->label(__('tallcms::fields.reviewer_title_credentials'))
                                             ->maxLength(255)
-                                            ->placeholder('e.g., Medical Doctor, CPA'),
+                                            ->placeholder(__('tallcms::fields.placeholder_expert_title')),
 
                                         TextInput::make('expert_reviewer_url')
-                                            ->label('Reviewer URL')
+                                            ->label(__('tallcms::fields.reviewer_url'))
                                             ->url()
                                             ->maxLength(500)
                                             ->placeholder('https://...'),
@@ -330,19 +330,19 @@ class CmsPostForm
                                     ->columns(3)
                                     ->collapsible(),
 
-                                Section::make('Citation Sources')
-                                    ->description('References and sources cited in this content')
+                                Section::make(__('tallcms::fields.citation_sources'))
+                                    ->description(__('tallcms::fields.help_citation_sources'))
                                     ->schema([
                                         Repeater::make('sources')
                                             ->label('')
                                             ->schema([
                                                 TextInput::make('title')
-                                                    ->label('Source Title')
+                                                    ->label(__('tallcms::fields.source_title'))
                                                     ->required()
                                                     ->maxLength(255),
 
                                                 TextInput::make('url')
-                                                    ->label('Source URL')
+                                                    ->label(__('tallcms::fields.source_url'))
                                                     ->url()
                                                     ->required()
                                                     ->maxLength(500),
@@ -353,12 +353,12 @@ class CmsPostForm
                                             ->collapsible()
                                             ->reorderable()
                                             ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
-                                            ->addActionLabel('Add Source'),
+                                            ->addActionLabel(__('tallcms::fields.add_source')),
                                     ])
                                     ->collapsible(),
                             ]),
 
-                        Tabs\Tab::make('Revisions')
+                        Tabs\Tab::make(__('tallcms::fields.revisions'))
                             ->icon('heroicon-o-clock')
                             ->visible(fn (?CmsPost $record) => $record !== null && auth()->user()?->can('ViewRevisions:CmsPost'))
                             ->schema([

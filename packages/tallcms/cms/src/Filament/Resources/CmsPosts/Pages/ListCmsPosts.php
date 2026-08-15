@@ -19,7 +19,7 @@ class ListCmsPosts extends ListRecords
         return [
             LocaleSwitcher::make(),
             CreateAction::make()
-                ->label('New Post'),
+                ->label(__('tallcms::fields.new_post')),
         ];
     }
 }

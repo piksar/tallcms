@@ -16,9 +16,10 @@ class SystemUpdates extends Page
 
     protected string $view = 'tallcms::filament.pages.system-updates';
 
-    protected static ?string $navigationLabel = 'System Updates';
-
-    protected static ?string $title = 'System Updates';
+    public function getTitle(): string
+    {
+        return __('tallcms::pages.system_updates.title');
+    }
 
     /**
      * Only register in standalone mode (not plugin mode)
@@ -59,9 +60,14 @@ class SystemUpdates extends Page
         return 'heroicon-o-arrow-path';
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return __('tallcms::pages.system_updates.navigation');
+    }
+
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.system', 'System');
+        return tallcms_nav_group('system');
     }
 
     public static function getNavigationSort(): ?int
@@ -99,7 +105,7 @@ class SystemUpdates extends Page
         $this->dbBackupCapability = $updater->checkDatabaseBackupCapability();
 
         Notification::make()
-            ->title('Update check complete')
+            ->title(__('tallcms::ui.t_update_check_complete'))
             ->success()
             ->send();
     }
@@ -112,7 +118,7 @@ class SystemUpdates extends Page
         foreach ($this->preflightChecks as $check => $result) {
             if ($result['status'] === 'fail') {
                 Notification::make()
-                    ->title('Preflight check failed')
+                    ->title(__('tallcms::ui.t_preflight_check_failed'))
                     ->body($result['message'])
                     ->danger()
                     ->send();
@@ -126,8 +132,8 @@ class SystemUpdates extends Page
         $dbCapable = $this->dbBackupCapability['capable'] ?? false;
         if ($requireDbBackup && ! $dbCapable && ! $this->skipDbBackup) {
             Notification::make()
-                ->title('Database backup acknowledgment required')
-                ->body('Please acknowledge the database backup warning before proceeding.')
+                ->title(__('tallcms::ui.t_database_backup_acknowledgment_required'))
+                ->body(__('tallcms::ui.t_please_acknowledge_the_database_backup_warning_before_proceeding'))
                 ->danger()
                 ->send();
 
@@ -140,7 +146,7 @@ class SystemUpdates extends Page
             $updater->verifySodiumAvailable();
         } catch (\Throwable $e) {
             Notification::make()
-                ->title('Cannot start update')
+                ->title(__('tallcms::ui.t_cannot_start_update'))
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
@@ -151,7 +157,7 @@ class SystemUpdates extends Page
         $targetVersion = $this->latestRelease['version'] ?? null;
         if (! $targetVersion) {
             Notification::make()
-                ->title('No update available')
+                ->title(__('tallcms::ui.t_no_update_available'))
                 ->warning()
                 ->send();
 
@@ -186,8 +192,8 @@ class SystemUpdates extends Page
         $updater->updateState(['execution_method' => $method]);
 
         Notification::make()
-            ->title('Update started')
-            ->body("Update to v{$targetVersion} has been initiated via {$method}.")
+            ->title(__('tallcms::ui.t_update_started'))
+            ->body(__('tallcms::ui.n_update_initiated', ['version' => $targetVersion, 'method' => $method]))
             ->success()
             ->send();
 
@@ -239,8 +245,8 @@ class SystemUpdates extends Page
         $updater->clearState();
 
         Notification::make()
-            ->title('Lock cleared')
-            ->body('You can now retry the update.')
+            ->title(__('tallcms::ui.t_lock_cleared'))
+            ->body(__('tallcms::ui.t_you_can_now_retry_the_update'))
             ->success()
             ->send();
 
@@ -251,7 +257,7 @@ class SystemUpdates extends Page
     {
         return [
             Action::make('refresh')
-                ->label('Check for Updates')
+                ->label(__('tallcms::fields.check_for_updates'))
                 ->icon('heroicon-o-arrow-path')
                 ->action('refreshUpdateCheck'),
         ];

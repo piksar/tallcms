@@ -32,27 +32,27 @@ class MediaCollectionResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return config('tallcms.labels.media_collections.navigation', 'Collections');
+        return tallcms_label('media_collections', 'navigation');
     }
 
     public static function getModelLabel(): string
     {
-        return config('tallcms.labels.media_collections.singular', 'Collection');
+        return tallcms_label('media_collections', 'singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return config('tallcms.labels.media_collections.plural', 'Collections');
+        return tallcms_label('media_collections', 'plural');
     }
 
     public static function getNavigationParentItem(): ?string
     {
-        return config('tallcms.labels.media.navigation', 'Media Library');
+        return tallcms_label('media', 'navigation');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('tallcms.navigation.groups.content', 'Content');
+        return tallcms_nav_group('content');
     }
 
     public static function getNavigationSort(): ?int
@@ -65,7 +65,7 @@ class MediaCollectionResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Collection Name')
+                    ->label(__('tallcms::fields.collection_name'))
                     ->required()
                     ->maxLength(255)
                     ->rules(fn (?MediaCollection $record) => [
@@ -74,20 +74,20 @@ class MediaCollectionResource extends Resource
                     ->autofocus(),
 
                 TextInput::make('slug')
-                    ->label('Slug')
+                    ->label(__('tallcms::fields.slug'))
                     ->maxLength(255)
                     ->rules(fn (?MediaCollection $record) => [
                         UserAwareUnique::rule('tallcms_media_collections', 'slug', $record?->id),
                     ])
-                    ->helperText('Leave empty to auto-generate from name'),
+                    ->helperText(__('tallcms::ui.t_leave_empty_to_auto_generate_from_name')),
 
                 ColorPicker::make('color')
-                    ->label('Color')
+                    ->label(__('tallcms::fields.color'))
                     ->default('#6366f1')
-                    ->helperText('Used for badges and visual identification'),
+                    ->helperText(__('tallcms::ui.t_used_for_badges_and_visual_identification')),
 
                 Textarea::make('description')
-                    ->label('Description')
+                    ->label(__('tallcms::fields.description'))
                     ->maxLength(500)
                     ->rows(3)
                     ->columnSpanFull(),
@@ -103,25 +103,25 @@ class MediaCollectionResource extends Resource
                     ->width(40),
 
                 TextColumn::make('name')
-                    ->label('Name')
+                    ->label(__('tallcms::fields.name'))
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 TextColumn::make('media_count')
-                    ->label('Media')
+                    ->label(__('tallcms::fields.media'))
                     ->counts('media')
                     ->badge()
                     ->color('primary'),
 
                 TextColumn::make('description')
-                    ->label('Description')
+                    ->label(__('tallcms::fields.description'))
                     ->limit(50)
-                    ->placeholder('No description')
+                    ->placeholder(__('tallcms::ui.t_no_description'))
                     ->toggleable(),
 
                 TextColumn::make('updated_at')
-                    ->label('Last Updated')
+                    ->label(__('tallcms::fields.last_updated'))
                     ->dateTime()
                     ->sortable()
                     ->since(),
@@ -130,8 +130,8 @@ class MediaCollectionResource extends Resource
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->modalHeading('Delete Collection')
-                    ->modalDescription('Are you sure you want to delete this collection? Media files will not be deleted, only unassigned from this collection.'),
+                    ->modalHeading(__('tallcms::ui.t_delete_collection'))
+                    ->modalDescription(__('tallcms::ui.t_are_you_sure_you_want_to_delete_this_collection_media_files_will_not')),
             ])
             ->toolbarActions([
                 DeleteBulkAction::make(),

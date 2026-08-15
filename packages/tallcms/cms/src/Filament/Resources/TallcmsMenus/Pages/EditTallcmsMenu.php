@@ -16,7 +16,7 @@ class EditTallcmsMenu extends EditRecord
     {
         return [
             Action::make('manage_items')
-                ->label('Manage Menu Items')
+                ->label(__('tallcms::fields.manage_menu_items'))
                 ->icon('heroicon-o-bars-3')
                 ->color('primary')
                 ->url(fn (): string => MenuItemsManager::getUrl(['activeTab' => $this->getRecord()->id]))

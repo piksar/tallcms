@@ -19,7 +19,7 @@ class ListCmsPages extends ListRecords
         return [
             LocaleSwitcher::make(),
             CreateAction::make()
-                ->label('New Page'),
+                ->label(__('tallcms::fields.new_page')),
         ];
     }
 }

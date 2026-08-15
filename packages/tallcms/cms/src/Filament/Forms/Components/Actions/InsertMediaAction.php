@@ -18,7 +18,7 @@ class InsertMediaAction
     public static function make(): Action
     {
         return Action::make('insertMedia')
-            ->modalHeading('Insert from Media Library')
+            ->modalHeading(__('tallcms::fields.insert_from_media_library'))
             ->modalWidth(Width::FourExtraLarge)
             ->schema(fn (): array => [
                 View::make('tallcms::filament.forms.components.media-library-picker')
@@ -30,8 +30,8 @@ class InsertMediaAction
                     ]),
                 Hidden::make('selected_media_id'),
                 TextInput::make('alt')
-                    ->label('Alt text')
-                    ->placeholder('Describe this image for accessibility'),
+                    ->label(__('tallcms::fields.alt_text'))
+                    ->placeholder(__('tallcms::fields.alt_text_placeholder')),
             ])
             ->action(function (array $arguments, array $data, RichEditor $component): void {
                 $media = TallcmsMedia::find($data['selected_media_id']);

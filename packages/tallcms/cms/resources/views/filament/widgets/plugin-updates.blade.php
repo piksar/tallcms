@@ -9,7 +9,7 @@
             <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
                     <h3 class="text-base font-semibold text-gray-900 dark:text-white">
-                        Plugin Updates Available
+                        {{ __('tallcms::widgets.plugin_updates.heading') }}
                     </h3>
                     <button
                         type="button"
@@ -18,12 +18,16 @@
                         class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50"
                     >
                         <x-heroicon-m-arrow-path class="h-4 w-4" wire:loading.class="animate-spin" wire:target="refresh" />
-                        <span wire:loading.remove wire:target="refresh">Refresh</span>
-                        <span wire:loading wire:target="refresh">Checking...</span>
+                        <span wire:loading.remove wire:target="refresh">{{ __('tallcms::widgets.plugin_updates.refresh') }}</span>
+                        <span wire:loading wire:target="refresh">{{ __('tallcms::widgets.plugin_updates.checking') }}</span>
                     </button>
                 </div>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ count($updates) }} {{ Str::plural('plugin', count($updates)) }} {{ count($updates) === 1 ? 'has' : 'have' }} updates available.
+                    @if (count($updates) === 1)
+                        {{ __('tallcms::widgets.plugin_updates.summary_one') }}
+                    @else
+                        {{ __('tallcms::widgets.plugin_updates.summary_many', ['count' => count($updates)]) }}
+                    @endif
                 </p>
 
                 <div class="mt-3 space-y-2">
@@ -43,7 +47,7 @@
                                     target="_blank"
                                     class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
                                 >
-                                    Download
+                                    {{ __('tallcms::widgets.plugin_updates.download') }}
                                 </a>
                             @endif
                         </div>
@@ -55,7 +59,7 @@
                         href="{{ tallcms_panel_route('pages.plugin-manager') }}"
                         class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
                     >
-                        Manage Plugins &rarr;
+                        {{ __('tallcms::widgets.plugin_updates.manage') }}
                     </a>
                 </div>
             </div>

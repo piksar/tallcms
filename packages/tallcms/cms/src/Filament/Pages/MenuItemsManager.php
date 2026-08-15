@@ -292,13 +292,13 @@ class MenuItemsManager extends NestedsetPage
                     : 'Menu Label')
                 ->required()
                 ->maxLength(255)
-                ->placeholder('Home')
+                ->placeholder(__('tallcms::fields.home'))
                 ->helperText(fn () => tallcms_i18n_enabled()
                     ? 'Switch language using the button in the header to translate this label.'
                     : null),
 
             Select::make('type')
-                ->label('Link Type')
+                ->label(__('tallcms::fields.link_type'))
                 ->options([
                     'page' => 'Page',
                     'external' => 'External URL',
@@ -312,7 +312,7 @@ class MenuItemsManager extends NestedsetPage
                 ->afterStateUpdated(fn (callable $set) => $set('url', null)),
 
             Select::make('page_id')
-                ->label('Select Page')
+                ->label(__('tallcms::fields.select_page'))
                 ->options(function () use ($arguments): array {
                     // Scope to the menu being edited, not the session site — the user
                     // may have navigated here from a site context that doesn't match.
@@ -345,13 +345,13 @@ class MenuItemsManager extends NestedsetPage
                 ->visible(fn (Get $get): bool => $get('type') === 'page'),
 
             TextInput::make('url')
-                ->label('URL')
+                ->label(__('tallcms::fields.url'))
                 ->required()
                 ->placeholder('https://example.com or /contact')
                 ->visible(fn (Get $get): bool => in_array($get('type'), ['external', 'custom'])),
 
             Toggle::make('is_active')
-                ->label('Active')
+                ->label(__('tallcms::fields.active'))
                 ->default(true),
         ];
     }

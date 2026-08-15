@@ -17,9 +17,9 @@ enum ContentStatus: string implements HasColor, HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Draft => 'Draft',
-            self::Pending => 'Pending Review',
-            self::Published => 'Published',
+            self::Draft => __('tallcms::fields.status_draft'),
+            self::Pending => __('tallcms::fields.status_pending_review'),
+            self::Published => __('tallcms::fields.status_published'),
         };
     }
 

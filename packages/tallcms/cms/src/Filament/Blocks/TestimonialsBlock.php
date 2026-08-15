@@ -44,7 +44,7 @@ class TestimonialsBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Customer testimonials and reviews';
+        return __('tallcms::blocks.descriptions.testimonials');
     }
 
     public static function getKeywords(): array
@@ -74,54 +74,54 @@ class TestimonialsBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Testimonials';
+        return __('tallcms::blocks.labels.testimonials');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Display customer testimonials and social proof')
-            ->modalHeading('Configure Testimonials Block')
+            ->modalDescription(__('tallcms::ui.t_display_customer_testimonials_and_social_proof'))
+            ->modalHeading(__('tallcms::ui.t_configure_testimonials_block'))
             ->modalWidth('6xl')
             ->schema([
                 Tabs::make('Testimonials Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-document-text')
                             ->schema([
                                 TextInput::make('heading')
-                                    ->label('Section Heading')
-                                    ->placeholder('What Our Customers Say')
+                                    ->label(__('tallcms::fields.section_heading'))
+                                    ->placeholder(__('tallcms::ui.t_what_our_customers_say'))
                                     ->maxLength(255),
 
                                 Textarea::make('subheading')
-                                    ->label('Section Subheading')
-                                    ->placeholder('Hear from people who love our product')
+                                    ->label(__('tallcms::fields.section_subheading'))
+                                    ->placeholder(__('tallcms::ui.t_hear_from_people_who_love_our_product'))
                                     ->maxLength(500)
                                     ->rows(2),
 
                                 Repeater::make('testimonials')
-                                    ->label('Testimonials')
+                                    ->label(__('tallcms::fields.testimonials'))
                                     ->schema([
                                         Textarea::make('quote')
-                                            ->label('Testimonial Quote')
+                                            ->label(__('tallcms::fields.testimonial_quote'))
                                             ->required()
-                                            ->placeholder('This product has completely transformed how we work...')
+                                            ->placeholder(__('tallcms::ui.t_this_product_has_completely_transformed_how_we_work'))
                                             ->rows(3),
 
                                         TextInput::make('author_name')
-                                            ->label('Author Name')
+                                            ->label(__('tallcms::fields.author_name'))
                                             ->required()
-                                            ->placeholder('Jane Smith')
+                                            ->placeholder(__('tallcms::ui.t_jane_smith'))
                                             ->maxLength(100),
 
                                         TextInput::make('author_title')
-                                            ->label('Title / Company')
-                                            ->placeholder('CEO at Acme Inc.')
+                                            ->label(__('tallcms::fields.title_company'))
+                                            ->placeholder(__('tallcms::ui.t_ceo_at_acme_inc'))
                                             ->maxLength(150),
 
                                         FileUpload::make('author_image')
-                                            ->label('Author Photo')
+                                            ->label(__('tallcms::fields.author_photo'))
                                             ->image()
                                             ->disk(\cms_media_disk())
                                             ->directory('testimonials')
@@ -130,14 +130,14 @@ class TestimonialsBlock extends RichContentCustomBlock
                                             ->circleCropper(),
 
                                         FileUpload::make('company_logo')
-                                            ->label('Company Logo (Optional)')
+                                            ->label(__('tallcms::fields.company_logo_optional'))
                                             ->image()
                                             ->disk(\cms_media_disk())
                                             ->directory('testimonials/logos')
                                             ->visibility(\cms_media_visibility()),
 
                                         Select::make('rating')
-                                            ->label('Star Rating')
+                                            ->label(__('tallcms::fields.star_rating'))
                                             ->options([
                                                 '' => 'No Rating',
                                                 '5' => '5 Stars',
@@ -156,13 +156,13 @@ class TestimonialsBlock extends RichContentCustomBlock
                                     ->reorderableWithButtons(),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Section::make('Display Options')
+                                Section::make(__('tallcms::ui.t_display_options'))
                                     ->schema([
                                         Select::make('layout')
-                                            ->label('Layout')
+                                            ->label(__('tallcms::fields.layout'))
                                             ->options([
                                                 'grid' => 'Grid',
                                                 'single' => 'Single (Large)',
@@ -170,7 +170,7 @@ class TestimonialsBlock extends RichContentCustomBlock
                                             ->default('grid'),
 
                                         Select::make('columns')
-                                            ->label('Columns (Grid Layout)')
+                                            ->label(__('tallcms::fields.columns_grid_layout'))
                                             ->options([
                                                 '1' => '1 Column',
                                                 '2' => '2 Columns',
@@ -179,52 +179,52 @@ class TestimonialsBlock extends RichContentCustomBlock
                                             ->default('3'),
 
                                         Select::make('card_style')
-                                            ->label('Card Style')
+                                            ->label(__('tallcms::fields.card_style'))
                                             ->options(static::getTestimonialCardStyleOptions())
                                             ->default('card bg-base-200 shadow-lg'),
 
                                         Select::make('text_alignment')
-                                            ->label('Header Alignment')
+                                            ->label(__('tallcms::fields.header_alignment'))
                                             ->options(static::getTextAlignmentOptions())
                                             ->default('text-center'),
                                     ])
                                     ->columns(2),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('accent_color')
-                                            ->label('Accent Color')
+                                            ->label(__('tallcms::fields.accent_color'))
                                             ->options(static::getAccentColorOptions())
                                             ->default('primary')
-                                            ->helperText('Color used for quote marks and avatar accents'),
+                                            ->helperText(__('tallcms::ui.t_color_used_for_quote_marks_and_avatar_accents')),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
                                     ])
                                     ->columns(3),
 
-                                Section::make('Content Display')
+                                Section::make(__('tallcms::ui.t_content_display'))
                                     ->schema([
                                         Toggle::make('show_rating')
-                                            ->label('Show Star Ratings')
+                                            ->label(__('tallcms::fields.show_star_ratings'))
                                             ->default(true),
 
                                         Toggle::make('show_company_logo')
-                                            ->label('Show Company Logos')
+                                            ->label(__('tallcms::fields.show_company_logos'))
                                             ->default(false),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(3),

@@ -46,7 +46,7 @@ class ContactFormBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Contact form with customizable fields';
+        return __('tallcms::blocks.descriptions.contact_form');
     }
 
     public static function getKeywords(): array
@@ -66,7 +66,7 @@ class ContactFormBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Contact Form';
+        return __('tallcms::blocks.labels.contact_form');
     }
 
     public static function getDefaultFields(): array
@@ -81,35 +81,35 @@ class ContactFormBlock extends RichContentCustomBlock
     public static function configureEditorAction(Action $action): Action
     {
         return $action
-            ->modalDescription('Configure your contact form fields and settings')
+            ->modalDescription(__('tallcms::ui.t_configure_your_contact_form_fields_and_settings'))
             ->modalWidth('6xl')
             ->schema([
                 Tabs::make('Contact Form Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-queue-list')
                             ->schema([
-                                Section::make('Form Header')
-                                    ->description('Optional title and description shown above the form')
+                                Section::make(__('tallcms::ui.t_form_header'))
+                                    ->description(__('tallcms::ui.t_optional_title_and_description_shown_above_the_form'))
                                     ->schema([
-                                        TextInput::make('title')
+                                        TextInput::make('title')->label(__('tallcms::fields.title'))
                                             ->maxLength(255)
-                                            ->placeholder('e.g., Get in Touch'),
+                                            ->placeholder(__('tallcms::ui.t_e_g_get_in_touch')),
 
-                                        Textarea::make('description')
+                                        Textarea::make('description')->label(__('tallcms::fields.description'))
                                             ->maxLength(500)
-                                            ->placeholder('e.g., Fill out the form below and we\'ll get back to you shortly.'),
+                                            ->placeholder(__('tallcms::ui.t_e_g_fill_out_the_form_below_and_we_ll_get_back_to_you_shortly')),
                                     ])
                                     ->collapsible(),
 
-                                Section::make('Form Fields')
-                                    ->description('Configure which fields appear in your form')
+                                Section::make(__('tallcms::fields.form_fields'))
+                                    ->description(__('tallcms::ui.t_configure_which_fields_appear_in_your_form'))
                                     ->schema([
                                         Repeater::make('fields')
                                             ->label('')
                                             ->schema([
                                                 Select::make('type')
-                                                    ->label('Field Type')
+                                                    ->label(__('tallcms::fields.field_type'))
                                                     ->options([
                                                         'text' => 'Text',
                                                         'email' => 'Email',
@@ -121,27 +121,27 @@ class ContactFormBlock extends RichContentCustomBlock
                                                     ->live(),
 
                                                 TextInput::make('name')
-                                                    ->label('Field Name')
+                                                    ->label(__('tallcms::fields.field_name'))
                                                     ->required()
                                                     ->alphaDash()
                                                     ->maxLength(50)
                                                     ->distinct()
-                                                    ->helperText('Unique identifier — letters, numbers, underscores, or dashes.'),
+                                                    ->helperText(__('tallcms::ui.t_unique_identifier_letters_numbers_underscores_or_dashes')),
 
                                                 TextInput::make('label')
-                                                    ->label('Display Label')
+                                                    ->label(__('tallcms::fields.display_label'))
                                                     ->required()
                                                     ->maxLength(255),
 
                                                 Toggle::make('required')
-                                                    ->label('Required')
+                                                    ->label(__('tallcms::fields.required'))
                                                     ->default(false)
                                                     ->inline(false),
 
                                                 TagsInput::make('options')
-                                                    ->label('Dropdown Options')
+                                                    ->label(__('tallcms::fields.dropdown_options'))
                                                     ->visible(fn (Get $get): bool => $get('type') === 'select')
-                                                    ->helperText('Press Enter after each option (max 50 options, 100 chars each)')
+                                                    ->helperText(__('tallcms::ui.t_press_enter_after_each_option_max_50_options_100_chars_each'))
                                                     ->nestedRecursiveRules([
                                                         'string',
                                                         'max:100',
@@ -165,74 +165,74 @@ class ContactFormBlock extends RichContentCustomBlock
                                             ->addActionLabel('Add Field'),
                                     ]),
 
-                                Section::make('Form Settings')
-                                    ->description('Customize button text and success message')
+                                Section::make(__('tallcms::ui.t_form_settings'))
+                                    ->description(__('tallcms::ui.t_customize_button_text_and_success_message'))
                                     ->schema([
                                         TextInput::make('submit_button_text')
-                                            ->label('Submit Button Text')
+                                            ->label(__('tallcms::fields.submit_button_text'))
                                             ->default('Send Message')
                                             ->maxLength(50),
 
                                         Textarea::make('success_message')
-                                            ->label('Success Message')
+                                            ->label(__('tallcms::fields.success_message'))
                                             ->default('Thank you for your message! We\'ll be in touch soon.')
                                             ->maxLength(500)
-                                            ->helperText('Shown after successful form submission'),
+                                            ->helperText(__('tallcms::ui.t_shown_after_successful_form_submission')),
 
                                         Textarea::make('auto_reply_message')
-                                            ->label('Auto-Reply Message')
+                                            ->label(__('tallcms::fields.auto_reply_message'))
                                             ->rows(4)
                                             ->maxLength(2000)
-                                            ->placeholder('Thank you for contacting us. We have received your submission and will respond within 1-2 business days.')
-                                            ->helperText('Custom body text for the auto-reply email sent to submitters. Leave blank to use the default. Submitter and site name are added automatically.'),
+                                            ->placeholder(__('tallcms::ui.t_thank_you_for_contacting_us_we_have_received_your_submission_and_wil'))
+                                            ->helperText(__('tallcms::ui.t_custom_body_text_for_the_auto_reply_email_sent_to_submitters_leave_b')),
 
                                         Select::make('redirect_page_id')
-                                            ->label('Redirect After Submission')
+                                            ->label(__('tallcms::fields.redirect_after_submission'))
                                             ->options(fn ($livewire) => \TallCms\Cms\Filament\Forms\OwnerSitePicker::publishedPages($livewire))
                                             ->searchable()
-                                            ->placeholder('Stay on page (show success message)')
-                                            ->helperText('Optionally redirect to a page after successful submission'),
+                                            ->placeholder(__('tallcms::ui.t_stay_on_page_show_success_message'))
+                                            ->helperText(__('tallcms::ui.t_optionally_redirect_to_a_page_after_successful_submission')),
                                     ])
                                     ->collapsible(),
                             ]),
 
-                        Tab::make('Appearance')
+                        Tab::make(__('tallcms::ui.t_appearance'))
                             ->icon('heroicon-m-paint-brush')
                             ->schema([
                                 static::getContentWidthField(),
 
                                 Select::make('button_style')
-                                    ->label('Submit Button Style')
+                                    ->label(__('tallcms::fields.submit_button_style'))
                                     ->options(static::getButtonVariantOptions())
                                     ->default('btn-primary'),
 
                                 Select::make('background')
-                                    ->label('Background')
+                                    ->label(__('tallcms::fields.background'))
                                     ->options(static::getBackgroundOptions())
                                     ->default('bg-base-100'),
 
                                 Select::make('padding')
-                                    ->label('Section Padding')
+                                    ->label(__('tallcms::fields.section_padding'))
                                     ->options(static::getPaddingOptions())
                                     ->default('py-16'),
 
                                 Toggle::make('first_section')
-                                    ->label('First Section (Remove Top Padding)')
-                                    ->helperText('Overrides padding setting above')
+                                    ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                    ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                     ->default(false),
                             ]),
 
-                        Tab::make('Animation')
+                        Tab::make(__('tallcms::ui.t_animation'))
                             ->icon('heroicon-m-sparkles')
                             ->schema([
                                 Select::make('animation_type')
-                                    ->label('Entrance Animation')
+                                    ->label(__('tallcms::fields.entrance_animation'))
                                     ->options(static::getAnimationTypeOptions())
                                     ->default('')
-                                    ->helperText('Animation plays when block scrolls into view'),
+                                    ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
                                 Select::make('animation_duration')
-                                    ->label('Animation Speed')
+                                    ->label(__('tallcms::fields.animation_speed'))
                                     ->options(static::getAnimationDurationOptions())
                                     ->default('anim-duration-700'),
                             ])

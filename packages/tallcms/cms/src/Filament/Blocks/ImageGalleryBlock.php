@@ -44,7 +44,7 @@ class ImageGalleryBlock extends RichContentCustomBlock
 
     public static function getDescription(): string
     {
-        return 'Media gallery with lightbox for images and videos';
+        return __('tallcms::blocks.descriptions.image_gallery');
     }
 
     public static function getKeywords(): array
@@ -64,36 +64,36 @@ class ImageGalleryBlock extends RichContentCustomBlock
 
     public static function getLabel(): string
     {
-        return 'Media Gallery';
+        return __('tallcms::blocks.labels.image_gallery');
     }
 
     public static function configureEditorAction(Action $action): Action
     {
         return $action
             ->modalWidth('4xl')
-            ->modalDescription('Create a media gallery with images and videos')
+            ->modalDescription(__('tallcms::ui.t_create_a_media_gallery_with_images_and_videos'))
             ->schema([
                 Tabs::make('Media Gallery Configuration')
                     ->tabs([
-                        Tab::make('Content')
+                        Tab::make(__('tallcms::fields.content'))
                             ->icon('heroicon-m-photo')
                             ->schema([
-                                TextInput::make('title')
+                                TextInput::make('title')->label(__('tallcms::fields.title'))
                                     ->maxLength(255)
-                                    ->placeholder('Gallery title (optional)'),
+                                    ->placeholder(__('tallcms::ui.t_gallery_title_optional')),
 
                                 Select::make('source')
-                                    ->label('Image Source')
+                                    ->label(__('tallcms::fields.image_source'))
                                     ->options([
                                         'manual' => 'Manual Upload',
                                         'collection' => 'Media Collection(s)',
                                     ])
                                     ->default('manual')
                                     ->live()
-                                    ->helperText('Use collections to reuse images from Media Library'),
+                                    ->helperText(__('tallcms::ui.t_use_collections_to_reuse_images_from_media_library')),
 
                                 Select::make('collection_ids')
-                                    ->label('Collections')
+                                    ->label(__('tallcms::fields.collections'))
                                     ->multiple()
                                     ->options(function () {
                                         $query = MediaCollection::query();
@@ -106,10 +106,10 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     })
                                     ->searchable()
                                     ->visible(fn (Get $get): bool => $get('source') === 'collection')
-                                    ->helperText('Select one or more collections'),
+                                    ->helperText(__('tallcms::ui.t_select_one_or_more_collections')),
 
                                 Select::make('media_type')
-                                    ->label('Media Type')
+                                    ->label(__('tallcms::fields.media_type'))
                                     ->options([
                                         'images' => 'Images Only',
                                         'videos' => 'Videos Only',
@@ -119,7 +119,7 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     ->visible(fn (Get $get): bool => $get('source') === 'collection'),
 
                                 Select::make('collection_order')
-                                    ->label('Order')
+                                    ->label(__('tallcms::fields.order'))
                                     ->options([
                                         'newest' => 'Newest First',
                                         'oldest' => 'Oldest First',
@@ -129,14 +129,14 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     ->visible(fn (Get $get): bool => $get('source') === 'collection'),
 
                                 TextInput::make('max_items')
-                                    ->label('Maximum Items')
+                                    ->label(__('tallcms::fields.maximum_items'))
                                     ->numeric()
                                     ->minValue(1)
                                     ->maxValue(50)
-                                    ->placeholder('No limit')
+                                    ->placeholder(__('tallcms::ui.t_no_limit'))
                                     ->visible(fn (Get $get): bool => $get('source') === 'collection'),
 
-                                FileUpload::make('images')
+                                FileUpload::make('images')->label(__('tallcms::fields.images'))
                                     ->image()
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->maxSize(5120)
@@ -155,13 +155,13 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     ])
                                     ->requiredIf('source', 'manual')
                                     ->visible(fn (Get $get): bool => $get('source') !== 'collection')
-                                    ->helperText('Recommended: 1200×800px or larger. Up to 12 images, max 5MB each. Formats: JPEG, PNG, WebP. Drag to reorder.'),
+                                    ->helperText(__('tallcms::ui.t_recommended_1200_800px_or_larger_up_to_12_images_max_5mb_each_format')),
                             ]),
 
-                        Tab::make('Layout')
+                        Tab::make(__('tallcms::fields.layout'))
                             ->icon('heroicon-m-squares-2x2')
                             ->schema([
-                                Select::make('layout')
+                                Select::make('layout')->label(__('tallcms::fields.layout'))
                                     ->options([
                                         'grid-1' => 'Grid (1 column)',
                                         'grid-2' => 'Grid (2 columns)',
@@ -173,7 +173,7 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     ->default('grid-3'),
 
                                 Select::make('image_size')
-                                    ->label('Image Size')
+                                    ->label(__('tallcms::fields.image_size'))
                                     ->options([
                                         'small' => 'Small (200px)',
                                         'medium' => 'Medium (300px)',
@@ -182,51 +182,51 @@ class ImageGalleryBlock extends RichContentCustomBlock
                                     ])
                                     ->default('medium'),
 
-                                Section::make('Appearance')
+                                Section::make(__('tallcms::ui.t_appearance'))
                                     ->schema([
                                         static::getContentWidthField(),
 
                                         Select::make('background')
-                                            ->label('Background')
+                                            ->label(__('tallcms::fields.background'))
                                             ->options(static::getBackgroundOptions())
                                             ->default('bg-base-100'),
 
                                         Select::make('padding')
-                                            ->label('Section Padding')
+                                            ->label(__('tallcms::fields.section_padding'))
                                             ->options(static::getPaddingOptions())
                                             ->default('py-16'),
 
                                         Toggle::make('first_section')
-                                            ->label('First Section (Remove Top Padding)')
-                                            ->helperText('Overrides padding setting above')
+                                            ->label(__('tallcms::fields.first_section_remove_top_padding'))
+                                            ->helperText(__('tallcms::ui.t_overrides_padding_setting_above'))
                                             ->default(false),
                                     ])
                                     ->columns(4),
                             ]),
 
-                        Tab::make('Animation')
+                        Tab::make(__('tallcms::ui.t_animation'))
                             ->icon('heroicon-m-sparkles')
                             ->schema([
                                 Select::make('animation_type')
-                                    ->label('Entrance Animation')
+                                    ->label(__('tallcms::fields.entrance_animation'))
                                     ->options(static::getAnimationTypeOptions())
                                     ->default('')
-                                    ->helperText('Animation plays when block scrolls into view'),
+                                    ->helperText(__('tallcms::ui.t_animation_plays_when_block_scrolls_into_view')),
 
                                 Select::make('animation_duration')
-                                    ->label('Animation Speed')
+                                    ->label(__('tallcms::fields.animation_speed'))
                                     ->options(static::getAnimationDurationOptions())
                                     ->default('anim-duration-700'),
 
                                 Toggle::make('animation_stagger')
-                                    ->label('Stagger Items')
-                                    ->helperText('Animate images sequentially instead of all at once')
+                                    ->label(__('tallcms::fields.stagger_items'))
+                                    ->helperText(__('tallcms::ui.t_animate_images_sequentially_instead_of_all_at_once'))
                                     ->default(false)
                                     ->live()
                                     ->visible(fn (): bool => static::hasPro()),
 
                                 Select::make('animation_stagger_delay')
-                                    ->label('Stagger Delay')
+                                    ->label(__('tallcms::fields.stagger_delay'))
                                     ->options(static::getStaggerDelayOptions())
                                     ->default('100')
                                     ->visible(fn (Get $get): bool => static::hasPro() && $get('animation_stagger') === true),

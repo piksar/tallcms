@@ -61,24 +61,61 @@ class TemplateRegistry
     protected ?array $cachedTemplates = null;
 
     /**
+     * Theme-supplied label/description fields that must not be overwritten by package translations.
+     *
+     * @var array<string, array{label?: true, description?: true}>
+     */
+    protected array $themeTemplateFieldOverrides = [];
+
+    /**
      * Get all available templates, merging theme and package templates.
      * Theme templates take precedence over package defaults.
      */
     public function getAvailableTemplates(): array
     {
-        if ($this->cachedTemplates !== null) {
-            return $this->cachedTemplates;
+        if ($this->cachedTemplates === null) {
+            $templates = $this->defaultTemplates;
+            $this->themeTemplateFieldOverrides = [];
+
+            // Merge theme templates if available
+            $themeTemplates = $this->getThemeTemplates();
+            foreach ($themeTemplates as $slug => $config) {
+                $templates[$slug] = array_merge($templates[$slug] ?? [], $config);
+            }
+
+            $this->cachedTemplates = $templates;
         }
 
-        $templates = $this->defaultTemplates;
+        return $this->localizeTemplates($this->cachedTemplates);
+    }
 
-        // Merge theme templates if available
-        $themeTemplates = $this->getThemeTemplates();
-        foreach ($themeTemplates as $slug => $config) {
-            $templates[$slug] = array_merge($templates[$slug] ?? [], $config);
+    /**
+     * Apply package translations for built-in template labels/descriptions.
+     *
+     * Theme-provided label/description values win over package translations so
+     * theme.json overrides are preserved (theme templates take precedence).
+     *
+     * @param  array<string, array<string, mixed>>  $templates
+     * @return array<string, array<string, mixed>>
+     */
+    protected function localizeTemplates(array $templates): array
+    {
+        foreach ($templates as $slug => &$config) {
+            $labelKey = "tallcms::blocks.templates.{$slug}.label";
+            $descriptionKey = "tallcms::blocks.templates.{$slug}.description";
+
+            $themeSetLabel = (bool) ($this->themeTemplateFieldOverrides[$slug]['label'] ?? false);
+            $themeSetDescription = (bool) ($this->themeTemplateFieldOverrides[$slug]['description'] ?? false);
+
+            if (! $themeSetLabel && \Illuminate\Support\Facades\Lang::has($labelKey)) {
+                $config['label'] = __($labelKey);
+            }
+
+            if (! $themeSetDescription && \Illuminate\Support\Facades\Lang::has($descriptionKey)) {
+                $config['description'] = __($descriptionKey);
+            }
         }
-
-        $this->cachedTemplates = $templates;
+        unset($config);
 
         return $templates;
     }
@@ -172,6 +209,18 @@ class TemplateRegistry
             $themeConfig = json_decode(File::get($themeJson), true);
             if (isset($themeConfig['templates']) && is_array($themeConfig['templates'])) {
                 foreach ($themeConfig['templates'] as $slug => $config) {
+                    if (! is_array($config)) {
+                        continue;
+                    }
+
+                    // Explicit theme.json label/description must not be replaced by package i18n.
+                    if (array_key_exists('label', $config)) {
+                        $this->themeTemplateFieldOverrides[$slug]['label'] = true;
+                    }
+                    if (array_key_exists('description', $config)) {
+                        $this->themeTemplateFieldOverrides[$slug]['description'] = true;
+                    }
+
                     $templates[$slug] = array_merge($templates[$slug] ?? [], $config);
                 }
             }
@@ -211,5 +260,6 @@ class TemplateRegistry
     public function clearCache(): void
     {
         $this->cachedTemplates = null;
+        $this->themeTemplateFieldOverrides = [];
     }
 }

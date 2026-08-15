@@ -20,14 +20,14 @@ trait HasDaisyUIOptions
     protected static function getButtonVariantOptions(): array
     {
         return [
-            'btn-primary' => 'Primary',
-            'btn-secondary' => 'Secondary',
-            'btn-accent' => 'Accent',
-            'btn-neutral' => 'Neutral',
-            'btn-info' => 'Info',
-            'btn-success' => 'Success',
-            'btn-warning' => 'Warning',
-            'btn-error' => 'Error',
+            'btn-primary' => __('tallcms::blocks.options.primary'),
+            'btn-secondary' => __('tallcms::blocks.options.secondary'),
+            'btn-accent' => __('tallcms::blocks.options.accent'),
+            'btn-neutral' => __('tallcms::blocks.options.neutral'),
+            'btn-info' => __('tallcms::blocks.options.info'),
+            'btn-success' => __('tallcms::blocks.options.success'),
+            'btn-warning' => __('tallcms::blocks.options.warning'),
+            'btn-error' => __('tallcms::blocks.options.error'),
         ];
     }
 
@@ -37,12 +37,12 @@ trait HasDaisyUIOptions
     protected static function getSecondaryButtonVariantOptions(): array
     {
         return [
-            'btn-outline btn-primary' => 'Primary Outline',
-            'btn-outline btn-secondary' => 'Secondary Outline',
-            'btn-outline btn-accent' => 'Accent Outline',
-            'btn-outline btn-neutral' => 'Neutral Outline',
-            'btn-ghost' => 'Ghost',
-            'btn-link' => 'Link',
+            'btn-outline btn-primary' => __('tallcms::blocks.options.primary_outline'),
+            'btn-outline btn-secondary' => __('tallcms::blocks.options.secondary_outline'),
+            'btn-outline btn-accent' => __('tallcms::blocks.options.accent_outline'),
+            'btn-outline btn-neutral' => __('tallcms::blocks.options.neutral_outline'),
+            'btn-ghost' => __('tallcms::blocks.options.ghost'),
+            'btn-link' => __('tallcms::blocks.options.link'),
         ];
     }
 
@@ -52,10 +52,10 @@ trait HasDaisyUIOptions
     protected static function getButtonSizeOptions(): array
     {
         return [
-            'btn-xs' => 'Extra Small',
-            'btn-sm' => 'Small',
-            'btn-md' => 'Medium',
-            'btn-lg' => 'Large',
+            'btn-xs' => __('tallcms::blocks.options.extra_small'),
+            'btn-sm' => __('tallcms::blocks.options.small'),
+            'btn-md' => __('tallcms::blocks.options.medium'),
+            'btn-lg' => __('tallcms::blocks.options.large'),
         ];
     }
 
@@ -65,17 +65,17 @@ trait HasDaisyUIOptions
     protected static function getBackgroundOptions(): array
     {
         return [
-            'bg-base-100' => 'Base (Default)',
-            'bg-base-200' => 'Base Subtle',
-            'bg-base-300' => 'Base Strong',
-            'bg-primary' => 'Primary',
-            'bg-secondary' => 'Secondary',
-            'bg-accent' => 'Accent',
-            'bg-neutral' => 'Neutral',
-            'bg-info' => 'Info',
-            'bg-success' => 'Success',
-            'bg-warning' => 'Warning',
-            'bg-error' => 'Error',
+            'bg-base-100' => __('tallcms::blocks.options.base_default'),
+            'bg-base-200' => __('tallcms::blocks.options.base_subtle'),
+            'bg-base-300' => __('tallcms::blocks.options.base_strong'),
+            'bg-primary' => __('tallcms::blocks.options.primary'),
+            'bg-secondary' => __('tallcms::blocks.options.secondary'),
+            'bg-accent' => __('tallcms::blocks.options.accent'),
+            'bg-neutral' => __('tallcms::blocks.options.neutral'),
+            'bg-info' => __('tallcms::blocks.options.info'),
+            'bg-success' => __('tallcms::blocks.options.success'),
+            'bg-warning' => __('tallcms::blocks.options.warning'),
+            'bg-error' => __('tallcms::blocks.options.error'),
         ];
     }
 
@@ -85,13 +85,13 @@ trait HasDaisyUIOptions
     protected static function getCardStyleOptions(): array
     {
         return [
-            'card bg-base-100' => 'Default Card',
-            'card bg-base-100 shadow-md' => 'Card with Shadow',
-            'card bg-base-100 shadow-xl' => 'Card with Large Shadow',
-            'card bg-base-200' => 'Subtle Card',
-            'card bordered' => 'Bordered Card',
-            'card bg-primary text-primary-content' => 'Primary Card',
-            'card bg-secondary text-secondary-content' => 'Secondary Card',
+            'card bg-base-100' => __('tallcms::blocks.options.default_card'),
+            'card bg-base-100 shadow-md' => __('tallcms::blocks.options.card_shadow'),
+            'card bg-base-100 shadow-xl' => __('tallcms::blocks.options.card_large_shadow'),
+            'card bg-base-200' => __('tallcms::blocks.options.subtle_card'),
+            'card bordered' => __('tallcms::blocks.options.bordered_card'),
+            'card bg-primary text-primary-content' => __('tallcms::blocks.options.primary_card'),
+            'card bg-secondary text-secondary-content' => __('tallcms::blocks.options.secondary_card'),
         ];
     }
 
@@ -105,14 +105,14 @@ trait HasDaisyUIOptions
     protected static function getAccentColorOptions(): array
     {
         return [
-            'primary' => 'Primary',
-            'secondary' => 'Secondary',
-            'accent' => 'Accent',
-            'neutral' => 'Neutral',
-            'info' => 'Info',
-            'success' => 'Success',
-            'warning' => 'Warning',
-            'error' => 'Error',
+            'primary' => __('tallcms::blocks.options.primary'),
+            'secondary' => __('tallcms::blocks.options.secondary'),
+            'accent' => __('tallcms::blocks.options.accent'),
+            'neutral' => __('tallcms::blocks.options.neutral'),
+            'info' => __('tallcms::blocks.options.info'),
+            'success' => __('tallcms::blocks.options.success'),
+            'warning' => __('tallcms::blocks.options.warning'),
+            'error' => __('tallcms::blocks.options.error'),
         ];
     }
 
@@ -122,9 +122,9 @@ trait HasDaisyUIOptions
     protected static function getTextAlignmentOptions(): array
     {
         return [
-            'text-left' => 'Left',
-            'text-center' => 'Center',
-            'text-right' => 'Right',
+            'text-left' => __('tallcms::blocks.options.align_left'),
+            'text-center' => __('tallcms::blocks.options.align_center'),
+            'text-right' => __('tallcms::blocks.options.align_right'),
         ];
     }
 
@@ -134,23 +134,23 @@ trait HasDaisyUIOptions
     protected static function getTextColorOptions(): array
     {
         return [
-            'text-base-content' => 'Base (Default)',
-            'text-primary' => 'Primary',
-            'text-secondary' => 'Secondary',
-            'text-accent' => 'Accent',
-            'text-neutral' => 'Neutral',
-            'text-info' => 'Info',
-            'text-success' => 'Success',
-            'text-warning' => 'Warning',
-            'text-error' => 'Error',
-            'text-white' => 'White',
-            'text-white/90' => 'White (90%)',
-            'text-white/80' => 'White (80%)',
-            'text-white/70' => 'White (70%)',
-            'text-primary-content' => 'Primary Content',
-            'text-secondary-content' => 'Secondary Content',
-            'text-accent-content' => 'Accent Content',
-            'text-neutral-content' => 'Neutral Content',
+            'text-base-content' => __('tallcms::blocks.options.base_default'),
+            'text-primary' => __('tallcms::blocks.options.primary'),
+            'text-secondary' => __('tallcms::blocks.options.secondary'),
+            'text-accent' => __('tallcms::blocks.options.accent'),
+            'text-neutral' => __('tallcms::blocks.options.neutral'),
+            'text-info' => __('tallcms::blocks.options.info'),
+            'text-success' => __('tallcms::blocks.options.success'),
+            'text-warning' => __('tallcms::blocks.options.warning'),
+            'text-error' => __('tallcms::blocks.options.error'),
+            'text-white' => __('tallcms::blocks.options.white'),
+            'text-white/90' => __('tallcms::blocks.options.white_90'),
+            'text-white/80' => __('tallcms::blocks.options.white_80'),
+            'text-white/70' => __('tallcms::blocks.options.white_70'),
+            'text-primary-content' => __('tallcms::blocks.options.primary_content'),
+            'text-secondary-content' => __('tallcms::blocks.options.secondary_content'),
+            'text-accent-content' => __('tallcms::blocks.options.accent_content'),
+            'text-neutral-content' => __('tallcms::blocks.options.neutral_content'),
         ];
     }
 
@@ -160,10 +160,10 @@ trait HasDaisyUIOptions
     protected static function getPaddingOptions(): array
     {
         return [
-            'py-8' => 'Small',
-            'py-12' => 'Medium',
-            'py-16' => 'Large',
-            'py-24' => 'Extra Large',
+            'py-8' => __('tallcms::blocks.options.small'),
+            'py-12' => __('tallcms::blocks.options.medium'),
+            'py-16' => __('tallcms::blocks.options.large'),
+            'py-24' => __('tallcms::blocks.options.extra_large'),
         ];
     }
 
@@ -172,24 +172,25 @@ trait HasDaisyUIOptions
      */
     protected static function getButtonStyleSection(
         string $prefix = '',
-        string $label = 'Primary Button',
+        ?string $label = null,
         string $defaultVariant = 'btn-primary',
         string $defaultSize = 'btn-md',
         bool $showSize = true
     ): Section {
+        $label ??= __('tallcms::blocks.options.primary_button');
         $variantField = $prefix ? "{$prefix}_variant" : 'button_variant';
         $sizeField = $prefix ? "{$prefix}_size" : 'button_size';
 
         $schema = [
             Select::make($variantField)
-                ->label('Button Style')
+                ->label(__('tallcms::blocks.options.button_style'))
                 ->options(static::getButtonVariantOptions())
                 ->default($defaultVariant),
         ];
 
         if ($showSize) {
             $schema[] = Select::make($sizeField)
-                ->label('Button Size')
+                ->label(__('tallcms::blocks.options.button_size'))
                 ->options(static::getButtonSizeOptions())
                 ->default($defaultSize);
         }
@@ -205,13 +206,15 @@ trait HasDaisyUIOptions
      */
     protected static function getSecondaryButtonStyleSection(
         string $prefix = 'secondary_button',
-        string $label = 'Secondary Button',
+        ?string $label = null,
         string $defaultVariant = 'btn-outline btn-primary'
     ): Section {
+        $label ??= __('tallcms::blocks.options.secondary_button');
+
         return Section::make($label)
             ->schema([
                 Select::make("{$prefix}_variant")
-                    ->label('Button Style')
+                    ->label(__('tallcms::blocks.options.button_style'))
                     ->options(static::getSecondaryButtonVariantOptions())
                     ->default($defaultVariant),
             ])
@@ -227,18 +230,18 @@ trait HasDaisyUIOptions
     ): Section {
         $schema = [
             Select::make('background')
-                ->label('Background Color')
+                ->label(__('tallcms::blocks.options.background_color'))
                 ->options(static::getBackgroundOptions())
                 ->default($defaultBg),
         ];
 
         if ($showGradient) {
             $schema[] = Toggle::make('use_gradient')
-                ->label('Use Gradient')
+                ->label(__('tallcms::blocks.options.use_gradient'))
                 ->default(false);
         }
 
-        return Section::make('Background')
+        return Section::make(__('tallcms::blocks.options.background'))
             ->schema($schema)
             ->compact();
     }
@@ -250,15 +253,15 @@ trait HasDaisyUIOptions
         string $defaultAlignment = 'text-center',
         string $defaultPadding = 'py-12'
     ): Section {
-        return Section::make('Layout')
+        return Section::make(__('tallcms::blocks.options.layout'))
             ->schema([
                 Select::make('text_alignment')
-                    ->label('Text Alignment')
+                    ->label(__('tallcms::blocks.options.text_alignment'))
                     ->options(static::getTextAlignmentOptions())
                     ->default($defaultAlignment),
 
                 Select::make('padding')
-                    ->label('Section Padding')
+                    ->label(__('tallcms::blocks.options.section_padding'))
                     ->options(static::getPaddingOptions())
                     ->default($defaultPadding),
             ])
