@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TallCms\Cms\Services;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 
 class TemplateRegistry
@@ -107,11 +108,11 @@ class TemplateRegistry
             $themeSetLabel = (bool) ($this->themeTemplateFieldOverrides[$slug]['label'] ?? false);
             $themeSetDescription = (bool) ($this->themeTemplateFieldOverrides[$slug]['description'] ?? false);
 
-            if (! $themeSetLabel && \Illuminate\Support\Facades\Lang::has($labelKey)) {
+            if (! $themeSetLabel && Lang::has($labelKey)) {
                 $config['label'] = __($labelKey);
             }
 
-            if (! $themeSetDescription && \Illuminate\Support\Facades\Lang::has($descriptionKey)) {
+            if (! $themeSetDescription && Lang::has($descriptionKey)) {
                 $config['description'] = __($descriptionKey);
             }
         }
@@ -214,10 +215,10 @@ class TemplateRegistry
                     }
 
                     // Explicit theme.json label/description must not be replaced by package i18n.
-                    if (array_key_exists('label', $config)) {
+                    if (is_string($config['label'] ?? null) && $config['label'] !== '') {
                         $this->themeTemplateFieldOverrides[$slug]['label'] = true;
                     }
-                    if (array_key_exists('description', $config)) {
+                    if (is_string($config['description'] ?? null) && $config['description'] !== '') {
                         $this->themeTemplateFieldOverrides[$slug]['description'] = true;
                     }
 

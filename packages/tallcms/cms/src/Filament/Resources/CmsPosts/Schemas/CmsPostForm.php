@@ -200,7 +200,7 @@ class CmsPostForm
 
                                 Section::make(tallcms_label('categories', 'plural'))
                                     ->schema([
-                                        Select::make('categories')->label(__('tallcms::fields.categories'))
+                                        Select::make('categories')->label(tallcms_label('categories', 'plural'))
                                             ->multiple()
                                             ->relationship('categories', 'name')
                                             ->options(function () {

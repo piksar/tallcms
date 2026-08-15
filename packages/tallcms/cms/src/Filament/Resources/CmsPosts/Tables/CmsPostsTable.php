@@ -84,8 +84,8 @@ class CmsPostsTable
                 SelectFilter::make('is_featured')
                     ->label(__('tallcms::fields.featured'))
                     ->options([
-                        '1' => 'Featured',
-                        '0' => 'Not Featured',
+                        '1' => __('tallcms::fields.featured'),
+                        '0' => __('tallcms::fields.not_featured'),
                     ]),
 
                 SelectFilter::make('categories')

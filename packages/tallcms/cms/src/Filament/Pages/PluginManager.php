@@ -11,7 +11,10 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -90,12 +93,12 @@ class PluginManager extends Page implements HasForms
         }
 
         try {
-            $site = \Illuminate\Support\Facades\DB::table('tallcms_sites')
+            $site = DB::table('tallcms_sites')
                 ->where('id', $sessionValue)
                 ->first();
 
             return $site ? __('tallcms::ui.viewing_licenses_for', ['name' => $site->name, 'domain' => $site->domain]) : null;
-        } catch (\Illuminate\Database\QueryException) {
+        } catch (QueryException) {
             return null;
         }
     }
@@ -525,7 +528,7 @@ class PluginManager extends Page implements HasForms
                     ->body($updateCheck['message'] ?? 'A valid license is required to download updates.')
                     ->danger()
                     ->actions([
-                        \Filament\Actions\Action::make('manage_license')
+                        Action::make('manage_license')
                             ->label(__('tallcms::fields.manage_license'))
                             ->url(static::getUrl(['plugin' => $pluginSlug])),
                     ])
@@ -683,7 +686,7 @@ class PluginManager extends Page implements HasForms
                     ->body($result['message'])
                     ->warning()
                     ->actions([
-                        \Filament\Actions\Action::make('purchase')
+                        Action::make('purchase')
                             ->label(__('tallcms::fields.purchase_license'))
                             ->url($result['purchase_url'])
                             ->openUrlInNewTab(),
@@ -702,7 +705,7 @@ class PluginManager extends Page implements HasForms
 
         // Surgically update the cached update list for this plugin
         $checkInterval = config('tallcms.plugins.license.update_check_interval', 86400);
-        $updates = \Illuminate\Support\Facades\Cache::get('plugin_available_updates', []);
+        $updates = Cache::get('plugin_available_updates', []);
 
         if ($result['update_available'] ?? false) {
             $updates[$pluginSlug] = [
@@ -729,7 +732,7 @@ class PluginManager extends Page implements HasForms
                 ->send();
         }
 
-        \Illuminate\Support\Facades\Cache::put('plugin_available_updates', $updates, $checkInterval);
+        Cache::put('plugin_available_updates', $updates, $checkInterval);
 
         // Reset in-memory state so computed properties re-read the updated cache
         $this->availableUpdates = null;
@@ -1013,8 +1016,8 @@ class PluginManager extends Page implements HasForms
 
                     // Repopulate cache so badges update correctly and reset check interval
                     $checkInterval = config('tallcms.plugins.license.update_check_interval', 86400);
-                    \Illuminate\Support\Facades\Cache::put('plugin_available_updates', $updates, $checkInterval);
-                    \Illuminate\Support\Facades\Cache::put('plugin_updates_last_check', now(), $checkInterval);
+                    Cache::put('plugin_available_updates', $updates, $checkInterval);
+                    Cache::put('plugin_updates_last_check', now(), $checkInterval);
 
                     // Reset all cached/computed properties to force refresh
                     $this->availableUpdates = null;
@@ -1095,10 +1098,10 @@ class PluginManager extends Page implements HasForms
 
                         if ($isUpdate) {
                             $result = $this->getPluginManager()->update($zipPath);
-                            $actionVerb = 'updated';
+                            $actionVerb = __('tallcms::ui.t_updated');
                         } else {
                             $result = $this->getPluginManager()->installFromZip($zipPath);
-                            $actionVerb = 'installed';
+                            $actionVerb = __('tallcms::ui.t_installed');
                         }
 
                         if ($result->success) {
@@ -1112,7 +1115,9 @@ class PluginManager extends Page implements HasForms
                             }
 
                             $migrationCount = count($result->migrations);
-                            $migrationMsg = $migrationCount > 0 ? " ({$migrationCount} migration(s) ran)" : '';
+                            $migrationMsg = $migrationCount > 0
+                                ? __('tallcms::ui.n_migrations_ran_suffix', ['count' => $migrationCount])
+                                : '';
 
                             Notification::make()
                                 ->title(__('tallcms::ui.n_plugin_actionverb', ['actionverb' => $actionVerb]))
@@ -1130,7 +1135,7 @@ class PluginManager extends Page implements HasForms
                             unset($this->filteredPlugins);
                         } else {
                             Notification::make()
-                                ->title($isUpdate ? 'Update failed' : 'Installation failed')
+                                ->title($isUpdate ? __('tallcms::ui.t_update_failed') : __('tallcms::ui.t_installation_failed'))
                                 ->body(implode("\n", $result->errors))
                                 ->danger()
                                 ->send();
@@ -1143,7 +1148,7 @@ class PluginManager extends Page implements HasForms
 
                         Notification::make()
                             ->title(__('tallcms::ui.t_upload_failed'))
-                            ->body('An unexpected error occurred: '.$e->getMessage())
+                            ->body(__('tallcms::ui.t_unexpected_error_occurred').' '.$e->getMessage())
                             ->danger()
                             ->send();
                     } finally {

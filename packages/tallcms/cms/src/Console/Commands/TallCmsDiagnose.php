@@ -53,14 +53,34 @@ class TallCmsDiagnose extends Command
             'navigation' => 'Menus',
         ],
         'media' => [
-            'singular' => 'Media',
-            'plural' => 'Media',
-            'navigation' => 'Media',
+            'singular' => 'Media File',
+            'plural' => 'Media Files',
+            'navigation' => 'Media Library',
+        ],
+        'media_collections' => [
+            'singular' => 'Collection',
+            'plural' => 'Collections',
+            'navigation' => 'Collections',
+        ],
+        'comments' => [
+            'singular' => 'Comment',
+            'plural' => 'Comments',
+            'navigation' => 'Comments',
+        ],
+        'contact_submissions' => [
+            'singular' => 'Contact Submission',
+            'plural' => 'Contact Submissions',
+            'navigation' => 'Contact Submissions',
         ],
         'users' => [
             'singular' => 'User',
             'plural' => 'Users',
             'navigation' => 'Users',
+        ],
+        'site_settings' => [
+            'singular' => 'Site',
+            'plural' => 'Sites',
+            'navigation' => 'Site Settings',
         ],
     ];
 
