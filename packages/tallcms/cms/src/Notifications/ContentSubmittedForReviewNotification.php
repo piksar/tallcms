@@ -60,7 +60,7 @@ class ContentSubmittedForReviewNotification extends Notification
      */
     public function toDatabase(object $notifiable): array
     {
-        $contentType = $this->getContentTypeName();
+        $contentType = $this->getLocalizedContentTypeName();
         $submitterName = $this->content->submitter?->name ?? 'Unknown';
 
         return FilamentNotification::make()
@@ -87,9 +87,25 @@ class ContentSubmittedForReviewNotification extends Notification
     }
 
     /**
-     * Get the content type name for display
+     * Get the content type name for display in the (currently English-only) mail template.
      */
     protected function getContentTypeName(): string
+    {
+        if ($this->content instanceof CmsPost) {
+            return 'Post';
+        }
+
+        if ($this->content instanceof CmsPage) {
+            return 'Page';
+        }
+
+        return class_basename($this->content);
+    }
+
+    /**
+     * Get the localized content type name for the Filament database notification.
+     */
+    protected function getLocalizedContentTypeName(): string
     {
         if ($this->content instanceof CmsPost) {
             return tallcms_label('posts', 'singular');

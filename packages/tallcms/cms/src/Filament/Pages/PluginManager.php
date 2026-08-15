@@ -1115,7 +1115,9 @@ class PluginManager extends Page implements HasForms
                             }
 
                             $migrationCount = count($result->migrations);
-                            $migrationMsg = $migrationCount > 0 ? " ({$migrationCount} migration(s) ran)" : '';
+                            $migrationMsg = $migrationCount > 0
+                                ? __('tallcms::ui.n_migrations_ran_suffix', ['count' => $migrationCount])
+                                : '';
 
                             Notification::make()
                                 ->title(__('tallcms::ui.n_plugin_actionverb', ['actionverb' => $actionVerb]))
@@ -1146,7 +1148,7 @@ class PluginManager extends Page implements HasForms
 
                         Notification::make()
                             ->title(__('tallcms::ui.t_upload_failed'))
-                            ->body('An unexpected error occurred: '.$e->getMessage())
+                            ->body(__('tallcms::ui.t_unexpected_error_occurred').' '.$e->getMessage())
                             ->danger()
                             ->send();
                     } finally {
