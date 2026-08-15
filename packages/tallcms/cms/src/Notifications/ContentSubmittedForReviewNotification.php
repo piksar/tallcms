@@ -9,6 +9,7 @@ use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 use TallCms\Cms\Models\CmsPage;
 use TallCms\Cms\Models\CmsPost;
 
@@ -91,11 +92,11 @@ class ContentSubmittedForReviewNotification extends Notification
     protected function getContentTypeName(): string
     {
         if ($this->content instanceof CmsPost) {
-            return 'Post';
+            return tallcms_label('posts', 'singular');
         }
 
         if ($this->content instanceof CmsPage) {
-            return 'Page';
+            return tallcms_label('pages', 'singular');
         }
 
         return class_basename($this->content);
@@ -156,7 +157,7 @@ class ContentSubmittedForReviewNotification extends Notification
         }
 
         try {
-            return \Illuminate\Support\Facades\DB::table('tallcms_sites')
+            return DB::table('tallcms_sites')
                 ->where('id', $siteId)
                 ->value('name');
         } catch (\Throwable) {

@@ -96,11 +96,11 @@ class ContentApprovedNotification extends Notification
     protected function getContentTypeName(): string
     {
         if ($this->content instanceof CmsPost) {
-            return 'Post';
+            return tallcms_label('posts', 'singular');
         }
 
         if ($this->content instanceof CmsPage) {
-            return 'Page';
+            return tallcms_label('pages', 'singular');
         }
 
         return class_basename($this->content);

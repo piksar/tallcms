@@ -137,6 +137,7 @@ return [
     'feature_text' => 'Feature Text',
     'feature_title' => 'Feature Title',
     'featured' => 'Featured',
+    'not_featured' => 'Not Featured',
     'featured_card_style' => 'Featured Card Style',
     'featured_image' => 'Featured Image',
     'featured_post' => 'Featured Post',

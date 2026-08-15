@@ -137,6 +137,7 @@ return [
     'feature_text' => 'Feature-Text',
     'feature_title' => 'Feature-Titel',
     'featured' => 'Hervorgehoben',
+    'not_featured' => 'Nicht hervorgehoben',
     'featured_card_style' => 'Hervorgehobener Kartenstil',
     'featured_image' => 'Beitragsbild',
     'featured_post' => 'Hervorgehobener Beitrag',

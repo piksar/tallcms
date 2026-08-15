@@ -38,7 +38,7 @@ class CmsCategoriesTable
                     ->limit(20),
 
                 TextColumn::make('posts_count')
-                    ->label(__('tallcms::fields.posts'))
+                    ->label(tallcms_label('posts', 'plural'))
                     ->counts('posts')
                     ->badge(),
 

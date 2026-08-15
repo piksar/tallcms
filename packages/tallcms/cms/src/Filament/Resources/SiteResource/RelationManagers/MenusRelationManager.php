@@ -9,15 +9,20 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use TallCms\Cms\Filament\Pages\MenuItemsManager;
 use TallCms\Cms\Filament\Resources\TallcmsMenus\TallcmsMenuResource;
 
 class MenusRelationManager extends RelationManager
 {
     protected static string $relationship = 'menus';
 
-    protected static ?string $title = 'Menus';
-
     protected static string|\BackedEnum|null $icon = 'heroicon-o-bars-3';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return tallcms_label('menus', 'plural');
+    }
 
     public function table(Table $table): Table
     {
@@ -62,7 +67,7 @@ class MenusRelationManager extends RelationManager
                     ->label(__('tallcms::fields.manage_items'))
                     ->icon('heroicon-o-bars-3')
                     ->color('primary')
-                    ->url(fn ($record) => \TallCms\Cms\Filament\Pages\MenuItemsManager::getUrl(['activeTab' => $record->id])),
+                    ->url(fn ($record) => MenuItemsManager::getUrl(['activeTab' => $record->id])),
 
                 Action::make('edit')
                     ->label(__('tallcms::fields.edit'))

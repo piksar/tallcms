@@ -8,9 +8,11 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use TallCms\Cms\Filament\Resources\SiteResource\SiteResource;
+use Illuminate\Support\Facades\Schema;
 use TallCms\Cms\Filament\Resources\SiteResource\SiteForm;
+use TallCms\Cms\Filament\Resources\SiteResource\SiteResource;
 use TallCms\Cms\Models\Site;
+use TallCms\Cms\Models\SiteSetting;
 use TallCms\Cms\Services\SiteSettingsService;
 
 /**
@@ -29,13 +31,16 @@ class EditSite extends Page implements HasForms
 
     protected static string $resource = SiteResource::class;
 
-    protected static ?string $title = 'Site Settings';
-
     protected string $view = 'tallcms::filament.pages.site-edit';
 
     public ?array $data = [];
 
     protected ?Site $siteRecord = null;
+
+    public function getTitle(): string
+    {
+        return tallcms_label('site_settings', 'navigation');
+    }
 
     /**
      * The 20 site-scoped setting keys (stored as overrides).
@@ -175,7 +180,7 @@ class EditSite extends Page implements HasForms
         }
 
         // Clear caches
-        \TallCms\Cms\Models\SiteSetting::clearCache();
+        SiteSetting::clearCache();
 
         Notification::make()
             ->title(__('tallcms::ui.t_site_settings_saved'))
@@ -203,7 +208,7 @@ class EditSite extends Page implements HasForms
 
     protected function getFormSchema(): array
     {
-        return \TallCms\Cms\Filament\Resources\SiteResource\SiteForm::schema($this->getSiteRecord());
+        return SiteForm::schema($this->getSiteRecord());
     }
 
     /**
@@ -217,7 +222,7 @@ class EditSite extends Page implements HasForms
         }
 
         // Guard: table may not exist yet on fresh upgrades
-        if (! \Illuminate\Support\Facades\Schema::hasTable('tallcms_sites')) {
+        if (! Schema::hasTable('tallcms_sites')) {
             abort(503, 'Please run "php artisan migrate" to complete the TallCMS 4.0 upgrade.');
         }
 

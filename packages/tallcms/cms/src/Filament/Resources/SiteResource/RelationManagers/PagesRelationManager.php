@@ -9,6 +9,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use TallCms\Cms\Enums\ContentStatus;
 use TallCms\Cms\Filament\Resources\CmsPages\CmsPageResource;
 
@@ -16,9 +17,12 @@ class PagesRelationManager extends RelationManager
 {
     protected static string $relationship = 'pages';
 
-    protected static ?string $title = 'Pages';
-
     protected static string|\BackedEnum|null $icon = 'heroicon-o-document-text';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return tallcms_label('pages', 'plural');
+    }
 
     public function table(Table $table): Table
     {
