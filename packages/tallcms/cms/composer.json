@@ -2,7 +2,7 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "tallcms/cms",
     "type": "library",
-    "version": "4.7.1",
+    "version": "4.8.0",
     "description": "TallCMS - A modern CMS for Filament admin panels. Works standalone or as a plugin in existing Filament apps.",
     "keywords": [
         "cms",
