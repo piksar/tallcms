@@ -12,6 +12,17 @@ const OUTLINE_PLUGIN_KEY = new PluginKey('cmsBlockOutline')
 const SLASH_PLUGIN_KEY = new PluginKey('cmsBlockSlash')
 const INJECTED_FLAG = 'cmsChromeInjected'
 const NODE_TYPE = 'customBlock'
+const CUSTOM_BLOCK_TYPES = new Set(['customBlock', 'customBlock'])
+const INSERT_COMMANDS = new Set([
+    'insertContent',
+    'insertContentAt',
+    'insertContent',
+    'insertContentAt',
+])
+const RUN_COMMANDS_EVENTS = [
+    'run-rich-editor-commands',
+    'run-rich-editor-commands',
+]
 const OUTLINE_EVENT = 'cms-block-outline-changed'
 const ACTION_EVENT = 'cms-block-action'
 const SLASH_INSERT_EVENT = 'cms-slash-insert'
@@ -56,6 +67,142 @@ function collectOutlineItems(doc) {
     return items
 }
 
+function countCustomBlocks(doc) {
+    let count = 0
+    if (!doc) return count
+    doc.descendants((node) => {
+        if (CUSTOM_BLOCK_TYPES.has(node.type.name)) {
+            count++
+        }
+    })
+    return count
+}
+
+function cloneEditorJson(editor) {
+    return JSON.parse(JSON.stringify(editor.getJSON()))
+}
+
+function persistEditorDocument(editor) {
+    if (!editor || editor.isDestroyed) {
+        return
+    }
+
+    let json
+    try {
+        json = cloneEditorJson(editor)
+    } catch {
+        return
+    }
+
+    const alpineEl = editor.view.dom.closest('[x-data]')
+    const cmp =
+        alpineEl && window.Alpine ? window.Alpine.$data(alpineEl) : null
+
+    if (cmp) {
+        if ('shouldUpdateState' in cmp) {
+            cmp.shouldUpdateState = false
+        }
+        if ('shouldUpdateState' in cmp) {
+            cmp.shouldUpdateState = false
+        }
+        if ('state' in cmp) {
+            cmp.state = json
+        } else if ('state' in cmp) {
+            cmp.state = json
+        }
+    }
+
+    const statePath = alpineEl?.getAttribute('data-state-path')
+    if (!statePath) {
+        return
+    }
+
+    const livewireEl = editor.view.dom.closest('[wire\\:id]')
+    const livewireId = livewireEl?.getAttribute('wire:id')
+    const component =
+        livewireId && window.Livewire
+            ? window.Livewire.find(livewireId)
+            : null
+
+    if (!component) {
+        return
+    }
+
+    try {
+        if (typeof component.set === 'function') {
+            component.set(statePath, json, false)
+        } else if (component.$wire && typeof component.$wire.set === 'function') {
+            component.$wire.set(statePath, json, false)
+        }
+    } catch {
+        // Livewire may already be tearing down the page editor.
+    }
+}
+
+function schedulePersist(editor, burst = false) {
+    persistEditorDocument(editor)
+    requestAnimationFrame(() => persistEditorDocument(editor))
+
+    if (!burst) {
+        return
+    }
+
+    ;[50, 150, 400].forEach((ms) => {
+        setTimeout(() => persistEditorDocument(editor), ms)
+    })
+}
+
+function commandsInsertCustomBlock(detail) {
+    const commands = detail?.commands ?? []
+    return commands.some((command) => INSERT_COMMANDS.has(command?.name))
+}
+
+const persistingEditors = new Set()
+let livewirePersistHooked = false
+
+function ensureLivewirePersistHook() {
+    if (livewirePersistHooked || typeof window.Livewire === 'undefined') {
+        return
+    }
+
+    livewirePersistHooked = true
+
+    const persistPendingEditors = () => {
+        persistingEditors.forEach((editor) => {
+            if (!editor || editor.isDestroyed) {
+                persistingEditors.delete(editor)
+                return
+            }
+
+            if ((editor.cmsPendingPersistUntil ?? 0) < Date.now()) {
+                return
+            }
+
+            schedulePersist(editor, false)
+        })
+    }
+
+    if (typeof window.Livewire.interceptMessage === 'function') {
+        window.Livewire.interceptMessage(({ onFinish }) => {
+            onFinish(() => persistPendingEditors())
+        })
+        return
+    }
+
+    if (typeof window.Livewire.hook === 'function') {
+        window.Livewire.hook('commit', ({ succeed }) => {
+            succeed(() => persistPendingEditors())
+        })
+    }
+}
+
+function markEditorPendingPersist(editor) {
+    editor.cmsPendingPersistUntil = Date.now() + 2000
+    persistingEditors.add(editor)
+    ensureLivewirePersistHook()
+    schedulePersist(editor, true)
+}
+
 const ICONS = {
     grip: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM7 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM7 16a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM16 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM16 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM16 16a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>',
     up: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V5.612L5.29 9.77a.75.75 0 1 1-1.08-1.04l5.25-5.5a.75.75 0 0 1 1.08 0l5.25 5.5a.75.75 0 0 1-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0 1 10 17Z" clip-rule="evenodd"/></svg>',
@@ -98,9 +245,38 @@ class BlockChromeView {
     constructor(view, editor) {
         this.view = view
         this.editor = editor
+        this.customBlockCount = countCustomBlocks(view.state.doc)
         this.observer = new MutationObserver(() => this.injectAll())
         this.observer.observe(view.dom, { childList: true, subtree: true })
         this.injectAll()
+
+        this.onRunCommands = (event) => this.handleRunCommands(event)
+        RUN_COMMANDS_EVENTS.forEach((name) => {
+            window.addEventListener(name, this.onRunCommands)
+        })
+        persistingEditors.add(editor)
+        ensureLivewirePersistHook()
+    }
+
+    handleRunCommands(event) {
+        const alpineEl = this.editor.view.dom.closest('[x-data]')
+        const livewireId = alpineEl?.getAttribute('data-livewire-id')
+        const editorKey = alpineEl?.getAttribute('data-editor-key')
+        const detail = event.detail ?? {}
+
+        if (livewireId && detail.livewireId && detail.livewireId !== livewireId) {
+            return
+        }
+
+        if (editorKey && detail.key && detail.key !== editorKey) {
+            return
+        }
+
+        if (!commandsInsertCustomBlock(detail)) {
+            return
+        }
+
+        markEditorPendingPersist(this.editor)
     }
 
     injectAll() {
@@ -200,12 +376,26 @@ class BlockChromeView {
         }
     }
 
-    update() {
+    update(view, prevState) {
         this.injectAll()
+
+        const nextCount = countCustomBlocks(view.state.doc)
+        const prevCount = prevState
+            ? countCustomBlocks(prevState.doc)
+            : this.customBlockCount
+        this.customBlockCount = nextCount
+
+        if (nextCount !== prevCount) {
+            markEditorPendingPersist(this.editor)
+        }
     }
 
     destroy() {
         this.observer.disconnect()
+        RUN_COMMANDS_EVENTS.forEach((name) => {
+            window.removeEventListener(name, this.onRunCommands)
+        })
+        persistingEditors.delete(this.editor)
     }
 }
 

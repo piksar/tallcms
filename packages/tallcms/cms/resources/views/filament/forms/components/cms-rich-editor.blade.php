@@ -15,9 +15,11 @@
        with this file using diff
     2. The ONLY modified section is inside: <div x-show="isPanelActive('customBlocks')">
        Look for "Enhanced Block Panel with Search and Categories" comment
-    3. Apply any Filament changes to the unmodified sections of this view
-    4. Test block insertion, search, and category collapse functionality
-    5. Verify editorSelection variable still exists in richEditorFormComponent
+    3. Keep data-state-path, data-livewire-id, and data-editor-key on the Alpine root
+       (block-chrome.js uses them to persist TipTap JSON after custom-block insert)
+    4. Apply any Filament changes to the unmodified sections of this view
+    5. Test block insertion, search, and category collapse functionality
+    6. Verify editorSelection variable still exists in richEditorFormComponent
 
     Last synced with: Filament Forms v4.x (January 2026)
     Modified section: Lines ~180-295 (customBlocks panel)
@@ -122,6 +124,9 @@
             x-bind:class="{
                 'fi-fo-rich-editor-uploading-file': isUploadingFile,
             }"
+            data-state-path="{{ $statePath }}"
+            data-livewire-id="{{ $this->getId() }}"
+            data-editor-key="{{ $key }}"
             wire:ignore
             wire:key="{{ $livewireKey }}.{{
                 substr(md5(serialize([

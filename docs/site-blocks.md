@@ -16,7 +16,7 @@ order: 20
 
 Blocks are reusable content components that you add to pages and posts. They provide structured layouts for common content patterns like heroes, pricing tables, and testimonials.
 
-TallCMS includes 17 built-in blocks organized into categories, plus 9 additional Pro blocks available with a TallCMS Pro license.
+TallCMS includes 19 built-in blocks organized into categories, plus 9 additional Pro blocks available with a TallCMS Pro license.
 
 ---
 
@@ -32,10 +32,10 @@ TallCMS includes 17 built-in blocks organized into categories, plus 9 additional
 ### Block Picker
 
 The block picker organizes blocks by category:
-- **Content**: Hero, Content, CTA, Features, Pricing, Divider
+- **Content**: Hero, Content, Split, CTA, Features, Pricing, Divider
 - **Media**: Media Gallery, Document List, Parallax
 - **Social Proof**: Testimonials, Team, Logos, Stats
-- **Dynamic**: Posts, FAQ, Timeline
+- **Dynamic**: Posts, FAQ, How To, Timeline
 - **Forms**: Contact Form
 - **Pro**: Accordion, Tabs, Table, Comparison, Before/After, Video, Counter, Code Snippet, Map
 
@@ -53,6 +53,7 @@ Click any block for detailed documentation and live examples.
 |-------|-------------|
 | [Hero](block-hero) | Full-width section for page headers and landing pages |
 | [Content](block-content) | Rich text section with title and body |
+| [Split](block-split) | Image and rich text side by side |
 | [Call to Action](block-cta) | Promotional section to drive conversions |
 | [Features](block-features) | Grid layout for product or service features |
 | [Pricing](block-pricing) | Pricing table with plan comparison |
@@ -81,6 +82,7 @@ Click any block for detailed documentation and live examples.
 |-------|-------------|
 | [Posts](block-posts) | Display blog posts from your site |
 | [FAQ](block-faq) | Frequently asked questions accordion |
+| [How To](block-how-to) | Step-by-step instructions with HowTo schema |
 | [Timeline](block-timeline) | Chronological events or milestones |
 
 ### Form Blocks

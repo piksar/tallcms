@@ -5,13 +5,16 @@
     'tag' => 'div',
     'controller' => false,
     'useParent' => false,
+    'notProse' => null,
 ])
 
 @php
-    $hasAnimation = !empty($animation);
+    $hasAnimation = ! empty($animation);
     $delayMs = (int) $delay;
-    // Add not-prose to section tags (block roots) to prevent Tailwind Typography from overriding block styles
-    $notProseClass = $tag === 'section' ? 'not-prose' : '';
+    // Section roots opt out of a parent `.prose` wrapper so grid/hero layout
+    // is not restyled. Nested `.prose` inside `.not-prose` is ignored by
+    // Tailwind Typography — blocks that render rich text must pass false.
+    $notProseClass = ($notProse ?? $tag === 'section') ? 'not-prose' : '';
 @endphp
 
 <{{ $tag }}
