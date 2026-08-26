@@ -83,14 +83,14 @@ A default placeholder hints at the trigger on a fresh editor: *"Type / for block
 
 ## Block Categories
 
-TallCMS includes 16 custom blocks in 5 categories:
+TallCMS includes 19 custom blocks in 5 categories:
 
 | Category | Blocks | Icon |
 |----------|--------|------|
-| **Content** | Hero, Content, CTA, Features, Pricing, Divider | `heroicon-o-document-text` |
+| **Content** | Hero, Content, Split, CTA, Features, Pricing, Divider | `heroicon-o-document-text` |
 | **Media** | Media Gallery, Document List, Parallax | `heroicon-o-photo` |
 | **Social Proof** | Testimonials, Team, Logos, Stats | `heroicon-o-star` |
-| **Dynamic** | Posts, FAQ, Timeline | `heroicon-o-newspaper` |
+| **Dynamic** | Posts, FAQ, How To, Timeline | `heroicon-o-newspaper` |
 | **Forms** | Contact Form | `heroicon-o-envelope` |
 
 ---
@@ -101,6 +101,7 @@ TallCMS includes 16 custom blocks in 5 categories:
 |-------|-------------|----------|
 | **HeroBlock** | Full-width hero section with background | banner, header, landing |
 | **ContentBlock** | Rich text content with title | article, text, prose |
+| **SplitBlock** | Image and rich text side by side | split, columns, media, text |
 | **CallToActionBlock** | Promotional section with buttons | cta, button, action |
 | **FeaturesBlock** | Feature grid with icons | features, benefits, list |
 | **PricingBlock** | Pricing table with plans | plans, pricing, tiers |
@@ -111,6 +112,7 @@ TallCMS includes 16 custom blocks in 5 categories:
 | Block | Description | Keywords |
 |-------|-------------|----------|
 | **ImageGalleryBlock** | Gallery with lightbox support | images, photos, gallery |
+| **DocumentListBlock** | Downloadable documents from a collection | documents, files, downloads |
 | **ParallaxBlock** | Parallax scrolling section | scroll, background, effect |
 
 ## Social Proof Blocks
@@ -128,6 +130,7 @@ TallCMS includes 16 custom blocks in 5 categories:
 |-------|-------------|----------|
 | **PostsBlock** | Blog post listing | blog, articles, posts |
 | **FaqBlock** | FAQ accordion | faq, questions, answers |
+| **HowToBlock** | Step-by-step instructions with HowTo schema | howto, steps, tutorial |
 | **TimelineBlock** | Chronological events | history, events, chronology |
 
 ## Form Blocks

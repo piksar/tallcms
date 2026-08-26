@@ -293,12 +293,13 @@ $buttonUrl = BlockLinkResolver::resolveButtonUrl($config, 'button');
 
 ## Core Blocks Reference
 
-TallCMS includes 16 built-in blocks:
+TallCMS includes 19 built-in blocks:
 
 | Block | ID | Category |
 |-------|----|----------|
 | Hero | `hero` | Content |
 | Content | `content_block` | Content |
+| Split | `split` | Content |
 | Call to Action | `call_to_action` | Content |
 | Features | `features` | Content |
 | Pricing | `pricing` | Content |
@@ -312,6 +313,7 @@ TallCMS includes 16 built-in blocks:
 | Stats | `stats` | Social Proof |
 | Posts | `posts` | Dynamic |
 | FAQ | `faq` | Dynamic |
+| How To | `how-to` | Dynamic |
 | Timeline | `timeline` | Dynamic |
 | Contact Form | `contact_form` | Forms |
 
