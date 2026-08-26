@@ -88,7 +88,7 @@
         </div>
 
     @elseif($style === 'links')
-        <nav class="flex items-center gap-2" {{ $attributes }} aria-label="Language selector">
+        <nav class="flex items-center gap-2" {{ $attributes }} aria-label="{{ __('tallcms::frontend.language_selector') }}">
             @foreach($locales as $code => $locale)
                 @php $url = $alternateUrls[$code] ?? tallcms_localized_url(tallcms_current_slug(), $code); @endphp
                 <a
@@ -110,7 +110,7 @@
         </nav>
 
     @elseif($style === 'buttons')
-        <div class="inline-flex rounded-md shadow-sm" {{ $attributes }} role="group" aria-label="Language selector">
+        <div class="inline-flex rounded-md shadow-sm" {{ $attributes }} role="group" aria-label="{{ __('tallcms::frontend.language_selector') }}">
             @foreach($locales as $code => $locale)
                 @php $url = $alternateUrls[$code] ?? tallcms_localized_url(tallcms_current_slug(), $code); @endphp
                 <a

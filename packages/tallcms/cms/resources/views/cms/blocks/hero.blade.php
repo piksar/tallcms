@@ -156,7 +156,7 @@
                     : \TallCms\Cms\Filament\Blocks\ContactFormBlock::getDefaultFields();
                 $formId = 'hero-contact-form-' . uniqid();
                 $formButtonStyle = $form_button_style ?? 'btn-primary';
-                $formSubmitText = $form_submit_text ?? 'Get Started';
+                $formSubmitText = $form_submit_text ?? __('tallcms::frontend.get_started');
             @endphp
             {{-- Form card with explicit text-base-content to override any inherited text color --}}
             <x-tallcms::animation-wrapper

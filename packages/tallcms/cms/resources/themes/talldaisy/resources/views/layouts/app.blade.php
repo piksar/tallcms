@@ -249,7 +249,7 @@
                 </nav>
 
                 <aside>
-                    <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. All rights reserved.</p>
+                    <p>&copy; {{ date('Y') }} {{ \TallCms\Cms\Models\SiteSetting::get('site_name', config('app.name')) }}. {{ __('tallcms::frontend.all_rights_reserved') }}</p>
                     <x-tallcms::powered-by />
                 </aside>
             </footer>
@@ -258,10 +258,10 @@
 
         <!-- Theme Drawer Sidebar -->
         <div class="drawer-side z-[60]">
-            <label for="theme-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <label for="theme-drawer" aria-label="{{ __('tallcms::frontend.close_sidebar') }}" class="drawer-overlay"></label>
             <div class="bg-base-200 min-h-full w-80 p-4">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-bold">Choose Theme</h2>
+                    <h2 class="text-lg font-bold">{{ __('tallcms::frontend.choose_theme') }}</h2>
                     <label for="theme-drawer" class="btn btn-sm btn-circle btn-ghost">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

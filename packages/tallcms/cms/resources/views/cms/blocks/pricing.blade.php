@@ -78,9 +78,9 @@
                         $price = $plan['price'] ?? '0';
                         $billingPeriod = $plan['billing_period'] ?? 'month';
                         $discountText = $plan['discount_text'] ?? '';
-                        $popularBadgeText = $plan['popular_badge_text'] ?? 'Most Popular';
+                        $popularBadgeText = $plan['popular_badge_text'] ?? __('tallcms::frontend.most_popular');
                         $features = $plan['features'] ?? [];
-                        $buttonText = $plan['button_text'] ?? 'Get Started';
+                        $buttonText = $plan['button_text'] ?? __('tallcms::frontend.get_started');
                         $buttonUrl = $plan['button_url'] ?? '#';
                         $buttonStyle = $plan['button_style'] ?? 'btn-primary';
                         $trialText = $plan['trial_text'] ?? '';

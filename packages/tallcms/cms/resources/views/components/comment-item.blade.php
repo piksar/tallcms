@@ -12,7 +12,7 @@
         <div class="flex items-start justify-between">
             <div class="flex items-center gap-2 text-sm">
                 <span class="font-semibold text-base-content">
-                    {{ $comment->getAuthorName() ?? 'Anonymous' }}
+                    {{ $comment->getAuthorName() ?? __('tallcms::frontend.anonymous') }}
                 </span>
                 <span class="text-base-content/50">
                     {{ $comment->created_at->diffForHumans() }}
@@ -30,7 +30,7 @@
                     x-on:click="showReplyForm = !showReplyForm"
                 >
                     <x-heroicon-o-chat-bubble-left class="w-4 h-4" />
-                    Reply
+                    {{ __('tallcms::frontend.reply') }}
                 </button>
 
                 <div x-show="showReplyForm" x-cloak class="mt-3">

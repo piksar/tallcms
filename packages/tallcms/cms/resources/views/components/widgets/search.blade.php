@@ -8,7 +8,7 @@
             <input
                 type="search"
                 name="q"
-                placeholder="{{ __('Search...') }}"
+                placeholder="{{ __('tallcms::frontend.search_placeholder') }}"
                 class="input input-bordered join-item w-full"
                 minlength="{{ config('tallcms.search.min_query_length', 2) }}"
                 required

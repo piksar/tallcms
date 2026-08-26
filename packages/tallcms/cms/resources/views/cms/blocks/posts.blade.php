@@ -19,7 +19,7 @@
     $showAuthor = $show_author ?? false;
     $showCategories = $show_categories ?? true;
     $showReadMore = $show_read_more ?? true;
-    $emptyMessage = $empty_message ?? 'No posts found.';
+    $emptyMessage = $empty_message ?? __('tallcms::frontend.no_posts_found');
     $firstSection = $first_section ?? false;
     $sectionBackground = $background ?? 'bg-base-100';
     $sectionPaddingClass = $padding ?? 'py-16';
@@ -268,13 +268,13 @@
         {{-- Active filter indicator --}}
         @if($filterCategory)
             <div class="mb-6 flex items-center gap-2">
-                <span class="text-sm text-base-content/70">Filtering by:</span>
+                <span class="text-sm text-base-content/70">{{ __('tallcms::frontend.filtering_by') }}</span>
                 <span class="badge badge-lg gap-1" style="background-color: {{ $filterCategory->color ?? 'var(--p)' }}20; color: {{ $filterCategory->color ?? 'var(--p)' }};">
                     {{ $filterCategory->name }}
                     <a
                         href="{{ $getClearFilterUrl() }}"
                         class="ml-1 hover:opacity-70"
-                        title="Clear filter"
+                        title="{{ __('tallcms::frontend.clear_filter') }}"
                     >
                         <x-heroicon-m-x-mark class="w-4 h-4" />
                     </a>
@@ -293,9 +293,7 @@
                     <a
                         href="{{ $getClearFilterUrl() }}"
                         class="mt-4 inline-flex items-center link link-primary"
-                    >
-                        View all posts
-                    </a>
+                    >{{ __('tallcms::frontend.view_all_posts') }}</a>
                 @endif
             </div>
         @else
@@ -338,9 +336,7 @@
                                 <div class="card-body {{ $heroHasImage ? 'lg:w-1/2' : '' }}">
                                     @if($showFeaturedBadge)
                                         <span class="badge {{ $badgeClass }} gap-1 w-fit">
-                                            <x-heroicon-s-star class="w-3 h-3" />
-                                            Featured
-                                        </span>
+                                            <x-heroicon-s-star class="w-3 h-3" />{{ __('tallcms::frontend.featured') }}</span>
                                     @endif
 
                                     @if($showCategories && $heroPost->categories->isNotEmpty())
@@ -385,9 +381,7 @@
 
                                     @if($showReadMore)
                                         <div class="card-actions justify-start mt-4">
-                                            <a href="{{ $heroUrl }}" class="btn btn-primary">
-                                                Read more
-                                                <x-heroicon-m-arrow-right class="w-4 h-4" />
+                                            <a href="{{ $heroUrl }}" class="btn btn-primary">{{ __('tallcms::frontend.read_more') }}<x-heroicon-m-arrow-right class="w-4 h-4" />
                                             </a>
                                         </div>
                                     @endif
@@ -441,16 +435,12 @@
                                             </div>
                                         @elseif($featuredBadgeStyle === 'ribbon')
                                             <div class="absolute top-0 right-0 overflow-hidden w-20 h-20 z-10">
-                                                <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">
-                                                    Featured
-                                                </div>
+                                                <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">{{ __('tallcms::frontend.featured') }}</div>
                                             </div>
                                         @else
                                             <div class="absolute top-2 left-2 z-10">
                                                 <span class="badge {{ $badgeClass }} badge-sm gap-1">
-                                                    <x-heroicon-s-star class="w-3 h-3" />
-                                                    Featured
-                                                </span>
+                                                    <x-heroicon-s-star class="w-3 h-3" />{{ __('tallcms::frontend.featured') }}</span>
                                             </div>
                                         @endif
                                     @endif
@@ -513,9 +503,7 @@
 
                                         @if($showReadMore)
                                             <div class="card-actions justify-start mt-2">
-                                                <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">
-                                                    Read more
-                                                    <x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
+                                                <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">{{ __('tallcms::frontend.read_more') }}<x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
                                                 </a>
                                             </div>
                                         @endif
@@ -565,16 +553,12 @@
                                         </div>
                                     @elseif($featuredBadgeStyle === 'ribbon')
                                         <div class="absolute top-0 right-0 overflow-hidden w-20 h-20 z-10">
-                                            <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">
-                                                Featured
-                                            </div>
+                                            <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">{{ __('tallcms::frontend.featured') }}</div>
                                         </div>
                                     @else
                                         <div class="absolute top-2 left-2 z-10">
                                             <span class="badge {{ $badgeClass }} badge-sm gap-1">
-                                                <x-heroicon-s-star class="w-3 h-3" />
-                                                Featured
-                                            </span>
+                                                <x-heroicon-s-star class="w-3 h-3" />{{ __('tallcms::frontend.featured') }}</span>
                                         </div>
                                     @endif
                                 @endif
@@ -637,9 +621,7 @@
 
                                 @if($showReadMore)
                                     <div class="card-actions justify-start mt-2">
-                                        <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">
-                                            Read more
-                                            <x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
+                                        <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">{{ __('tallcms::frontend.read_more') }}<x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
                                         </a>
                                     </div>
                                 @endif
@@ -695,16 +677,12 @@
                                         </div>
                                     @elseif($featuredBadgeStyle === 'ribbon')
                                         <div class="absolute top-0 right-0 overflow-hidden w-20 h-20 z-10">
-                                            <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">
-                                                Featured
-                                            </div>
+                                            <div class="absolute transform rotate-45 {{ $bgClass }} text-xs font-bold py-1 right-[-35px] top-[15px] w-[120px] text-center shadow-sm">{{ __('tallcms::frontend.featured') }}</div>
                                         </div>
                                     @else
                                         <div class="absolute top-2 left-2 z-10">
                                             <span class="badge {{ $badgeClass }} badge-sm gap-1">
-                                                <x-heroicon-s-star class="w-3 h-3" />
-                                                Featured
-                                            </span>
+                                                <x-heroicon-s-star class="w-3 h-3" />{{ __('tallcms::frontend.featured') }}</span>
                                         </div>
                                     @endif
                                 @endif
@@ -726,9 +704,7 @@
                                 {{-- Inline featured indicator for compact list --}}
                                 @if($showFeaturedBadge && $isFeatured && $isCompact)
                                     <span class="badge {{ $badgeClass }} badge-sm gap-1 w-fit mb-1">
-                                        <x-heroicon-s-star class="w-3 h-3" />
-                                        Featured
-                                    </span>
+                                        <x-heroicon-s-star class="w-3 h-3" />{{ __('tallcms::frontend.featured') }}</span>
                                 @endif
 
                                 @if($showCategories && $post->categories->isNotEmpty() && !$isCompact)
@@ -775,9 +751,7 @@
 
                                 @if($showReadMore && !$isCompact)
                                     <div class="card-actions justify-start mt-1">
-                                        <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">
-                                            Read more
-                                            <x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
+                                        <a href="{{ $postUrl }}" class="link link-primary link-hover text-sm inline-flex items-center">{{ __('tallcms::frontend.read_more') }}<x-heroicon-m-arrow-right class="w-4 h-4 ml-1" />
                                         </a>
                                     </div>
                                 @endif

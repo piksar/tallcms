@@ -31,7 +31,7 @@
 
 <!-- Language Switcher Dropdown -->
 <div class="dropdown dropdown-end {{ $class }}">
-    <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1" aria-label="Select language">
+    <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1" aria-label="{{ __('tallcms::frontend.select_language') }}">
         <!-- Globe Icon -->
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

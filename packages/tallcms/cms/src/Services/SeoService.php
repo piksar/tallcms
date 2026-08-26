@@ -51,10 +51,10 @@ class SeoService
             ],
             // Twitter-specific data
             'twitter' => [
-                'label1' => 'Reading time',
-                'data1' => $post->reading_time.' min read',
-                'label2' => 'Written by',
-                'data2' => $author?->name ?? 'Unknown',
+                'label1' => __('tallcms::frontend.reading_time_label'),
+                'data1' => __('tallcms::frontend.min_read', ['minutes' => $post->reading_time]),
+                'label2' => __('tallcms::frontend.written_by'),
+                'data2' => $author?->name ?? __('tallcms::frontend.unknown_author'),
             ],
         ];
     }

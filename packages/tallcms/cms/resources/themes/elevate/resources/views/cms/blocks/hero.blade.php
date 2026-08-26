@@ -180,7 +180,7 @@
                                 : \TallCms\Cms\Filament\Blocks\ContactFormBlock::getDefaultFields();
                             $formId = 'hero-contact-form-' . uniqid();
                             $formButtonStyle = $form_button_style ?? 'btn-primary';
-                            $formSubmitText = $form_submit_text ?? 'Get Started';
+                            $formSubmitText = $form_submit_text ?? __('tallcms::frontend.get_started');
                         @endphp
                         <div class="card {{ $form_card_style ?? 'bg-base-100/95 backdrop-blur-sm' }} shadow-2xl shadow-primary/5 border border-base-300/30 rounded-2xl w-full max-w-md mx-auto lg:mx-0 text-base-content">
                             <div class="card-body p-6 sm:p-8 text-base-content space-y-1">
@@ -200,7 +200,7 @@
                                         $formConfig = [
                                             'fields' => $normalizedFields,
                                             'submit_button_text' => $formSubmitText,
-                                            'success_message' => $form_success_message ?? 'Thanks! We\'ll be in touch.',
+                                            'success_message' => $form_success_message ?? __('tallcms::frontend.thanks_well_be_in_touch'),
                                             'button_style' => $formButtonStyle,
                                             'redirect_page_id' => $form_redirect_page_id ?? null,
                                         ];

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Maintenance - {{ $siteName ?? config('app.name', 'Our Website') }}</title>
+    <title>{{ __('tallcms::frontend.site_maintenance') }} - {{ $siteName ?? config('app.name', __('tallcms::frontend.our_website')) }}</title>
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <style>
         * {
@@ -84,7 +84,7 @@
 
             @if($siteName ?? config('app.name'))
                 <div class="maintenance-footer">
-                    Thank you for your patience<br>
+                    {{ __('tallcms::frontend.thank_you_for_your_patience') }}<br>
                     <strong>{{ $siteName ?? config('app.name') }}</strong>
                 </div>
             @endif

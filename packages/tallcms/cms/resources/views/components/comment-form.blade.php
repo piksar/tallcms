@@ -32,14 +32,14 @@
     <form x-show="!submitted" x-on:submit.prevent="submit" class="space-y-4">
         @auth
             <p class="text-sm text-base-content/60">
-                Commenting as <span class="font-semibold">{{ auth()->user()->name }}</span>
+                {{ __('tallcms::frontend.commenting_as') }} <span class="font-semibold">{{ auth()->user()->name }}</span>
             </p>
         @else
             @if($guestCommentsAllowed)
                 <div class="{{ $compact ? 'grid grid-cols-2 gap-3' : 'grid grid-cols-1 sm:grid-cols-2 gap-4' }}">
                     <div>
                         <label for="{{ $formId }}-name" class="label">
-                            <span class="label-text">Name <span class="text-error">*</span></span>
+                            <span class="label-text">{{ __('tallcms::frontend.name') }} <span class="text-error">*</span></span>
                         </label>
                         <input
                             type="text"
@@ -55,7 +55,7 @@
                     </div>
                     <div>
                         <label for="{{ $formId }}-email" class="label">
-                            <span class="label-text">Email <span class="text-error">*</span></span>
+                            <span class="label-text">{{ __('tallcms::frontend.email') }} <span class="text-error">*</span></span>
                         </label>
                         <input
                             type="email"
@@ -89,7 +89,7 @@
                 @endphp
                 <div class="alert alert-info">
                     <x-heroicon-o-information-circle class="w-5 h-5" />
-                    <span>You must <a href="{{ $loginUrl }}" class="link">log in</a> to leave a comment.</span>
+                    <span>{!! __('tallcms::frontend.must_log_in_to_comment', ['url' => $loginUrl]) !!}</span>
                 </div>
             @endif
         @endauth
@@ -97,7 +97,7 @@
         @if(auth()->check() || $guestCommentsAllowed)
             <div>
                 <label for="{{ $formId }}-content" class="label">
-                    <span class="label-text">{{ $parentId ? 'Your Reply' : 'Your Comment' }} <span class="text-error">*</span></span>
+                    <span class="label-text">{{ $parentId ? __('tallcms::frontend.your_reply') : __('tallcms::frontend.your_comment') }} <span class="text-error">*</span></span>
                 </label>
                 <textarea
                     id="{{ $formId }}-content"
@@ -114,7 +114,7 @@
 
             {{-- Honeypot --}}
             <div class="hidden" aria-hidden="true">
-                <label for="{{ $formId }}-website">Website</label>
+                <label for="{{ $formId }}-website">{{ __('tallcms::frontend.website') }}</label>
                 <input type="text" id="{{ $formId }}-website" x-model="formData._honeypot" tabindex="-1" autocomplete="off">
             </div>
 
@@ -124,11 +124,9 @@
                     class="btn btn-primary {{ $compact ? 'btn-sm' : '' }}"
                     x-bind:disabled="submitting"
                 >
-                    <span x-show="!submitting">{{ $parentId ? 'Post Reply' : 'Post Comment' }}</span>
+                    <span x-show="!submitting">{{ $parentId ? __('tallcms::frontend.post_reply') : __('tallcms::frontend.post_comment') }}</span>
                     <span x-show="submitting" x-cloak class="inline-flex items-center">
-                        <span class="loading loading-spinner loading-sm mr-2"></span>
-                        Submitting...
-                    </span>
+                        <span class="loading loading-spinner loading-sm mr-2"></span>{{ __('tallcms::frontend.submitting') }}</span>
                 </button>
             </div>
         @endif
