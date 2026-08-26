@@ -40,11 +40,6 @@ class CmsRichEditor extends RichEditor
         // calling ->placeholder() on the field.
         $this->placeholder(__('tallcms::editor.type_for_blocks'));
 
-        // Custom-block insert updates TipTap in JS first. block-chrome.js
-        // then copies editor JSON into the Livewire snapshot; this live
-        // binding commits that snapshot so Save is not racing the modal.
-        $this->live(debounce: 750);
-
         // Use enhanced view for Filament v4.x/v5.x
         if (static::isFilamentCompatible()) {
             $this->view = 'tallcms::filament.forms.components.cms-rich-editor';

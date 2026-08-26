@@ -331,6 +331,20 @@ class SplitBlockTest extends TestCase
         $this->assertStringContainsString('items-end', $html);
     }
 
+    public function test_pack_circle_without_size_or_align_defaults_to_medium_center(): void
+    {
+        $packed = SplitBlock::packCells([
+            'cell_count' => 2,
+            'cell_1_type' => 'image',
+            'cell_1_image_shape' => 'circle',
+            'cell_2_type' => 'rich_text',
+        ]);
+
+        $this->assertSame('m', $packed['cells'][0]['image_size']);
+        $this->assertSame('center', $packed['cells'][0]['image_align']);
+        $this->assertSame('inherit', $packed['cells'][0]['image_vertical']);
+    }
+
     public function test_unpack_defaults_circle_size_to_medium(): void
     {
         $unpacked = SplitBlock::unpackCells([
@@ -345,6 +359,21 @@ class SplitBlockTest extends TestCase
         $this->assertSame('inherit', $unpacked['cell_1_image_vertical']);
         $this->assertSame('fill', $unpacked['cell_2_image_size']);
         $this->assertSame('left', $unpacked['cell_2_image_align']);
+    }
+
+    public function test_explicit_left_align_on_circle_is_kept(): void
+    {
+        $packed = SplitBlock::packCells([
+            'cell_count' => 2,
+            'cell_1_type' => 'image',
+            'cell_1_image_shape' => 'circle',
+            'cell_1_image_size' => 'm',
+            'cell_1_image_align' => 'left',
+            'cell_2_type' => 'rich_text',
+        ]);
+
+        $this->assertSame('left', $packed['cells'][0]['image_align']);
+        $this->assertSame('m', $packed['cells'][0]['image_size']);
     }
 
     public function test_unpack_defaults_non_circle_size_to_fill(): void

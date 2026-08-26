@@ -208,6 +208,7 @@ return [
     'image_shape' => 'Bildform',
     'image_size' => 'Bildgröße',
     'image_source' => 'Bildquelle',
+    'image_vertical_align' => 'Vertikale Bildausrichtung',
     'images' => 'Bilder',
     'in_reply_to' => 'Antwort auf',
     'include_full_content' => 'Vollständigen Inhalt einbeziehen',

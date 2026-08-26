@@ -13,7 +13,6 @@
         :description="$description ?? null"
         :image="isset($featuredImage) && $featuredImage ? Storage::disk(cms_media_disk())->url($featuredImage) : null"
         :type="$seoType ?? 'website'"
-        :url="$url ?? null"
         :article="$seoArticle ?? null"
         :twitter="$seoTwitter ?? null"
         :profile="$seoProfile ?? null"
@@ -28,7 +27,6 @@
     <x-tallcms::seo.structured-data
         :page="$seoPage ?? null"
         :post="$seoPost ?? null"
-        :data="$jsonLd ?? null"
         :breadcrumbs="$seoBreadcrumbs ?? null"
         :includeWebsite="$seoIncludeWebsite ?? false"
     />

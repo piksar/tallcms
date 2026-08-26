@@ -237,7 +237,7 @@ class SplitBlock extends RichContentCustomBlock
                         ])
                         ->default('none')
                         ->live()
-                        ->afterStateUpdated(function (Get $get, Set $set, mixed $state) use ($sizeField): void {
+                        ->afterStateUpdated(function (Get $get, Set $set, mixed $state) use ($sizeField, $alignField): void {
                             if ($state !== 'circle') {
                                 return;
                             }
@@ -246,6 +246,12 @@ class SplitBlock extends RichContentCustomBlock
 
                             if ($size === null || $size === '' || $size === 'fill') {
                                 $set($sizeField, 'm');
+                            }
+
+                            $align = $get($alignField);
+
+                            if ($align === null || $align === '' || $align === 'left') {
+                                $set($alignField, 'center');
                             }
                         })
                         ->visible(fn (Get $get): bool => $get($typeField) === 'image'),
@@ -259,6 +265,7 @@ class SplitBlock extends RichContentCustomBlock
                             'fill' => __('tallcms::blocks.options.split_size_fill'),
                         ])
                         ->default('fill')
+                        ->helperText(__('tallcms::ui.t_split_image_size_fraction_on_small_screens_max_width_from_large'))
                         ->visible(fn (Get $get): bool => $get($typeField) === 'image'),
 
                     Select::make($alignField)
@@ -272,7 +279,7 @@ class SplitBlock extends RichContentCustomBlock
                         ->visible(fn (Get $get): bool => $get($typeField) === 'image'),
 
                     Select::make($verticalField)
-                        ->label(__('tallcms::fields.vertical_align'))
+                        ->label(__('tallcms::fields.image_vertical_align'))
                         ->options([
                             'inherit' => __('tallcms::blocks.options.split_align_inherit'),
                             'start' => __('tallcms::blocks.options.split_align_start'),
@@ -280,6 +287,7 @@ class SplitBlock extends RichContentCustomBlock
                             'end' => __('tallcms::blocks.options.split_align_end'),
                         ])
                         ->default('inherit')
+                        ->helperText(__('tallcms::ui.t_overrides_the_row_vertical_alignment_for_this_image'))
                         ->visible(fn (Get $get): bool => $get($typeField) === 'image'),
 
                     RichEditor::make($bodyField)

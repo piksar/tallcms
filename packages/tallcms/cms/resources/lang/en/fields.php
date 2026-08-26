@@ -208,6 +208,7 @@ return [
     'image_shape' => 'Image Shape',
     'image_size' => 'Image Size',
     'image_source' => 'Image Source',
+    'image_vertical_align' => 'Image Vertical Alignment',
     'images' => 'Images',
     'in_reply_to' => 'In Reply To',
     'include_full_content' => 'Include Full Content',
